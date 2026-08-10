@@ -24,10 +24,15 @@ __omw_trim_spaces() {
 winuxsh_load_alias_asset() {
   __omw_alias_pack="$1"
   __omw_alias_file="$WINUXSH/aliases/$__omw_alias_pack.toml"
+  __omw_alias_sq="'"
+  __omw_alias_dq='"'
+  __omw_alias_cr=$(printf '\r')
 
   [ -f "$__omw_alias_file" ] || return 0
 
   while IFS= read -r __omw_alias_line || [ -n "$__omw_alias_line" ]; do
+    __omw_alias_line=${__omw_alias_line%$__omw_alias_cr}
+
     case "$__omw_alias_line" in
       ""|\#*|\[*\])
         continue
@@ -41,23 +46,19 @@ winuxsh_load_alias_asset() {
     __omw_alias_name="$(__omw_trim_spaces "$__omw_alias_name")"
     __omw_alias_value="$(__omw_trim_spaces "$__omw_alias_value")"
 
-    case "$__omw_alias_name" in
-      \"*\")
-        __omw_alias_name=${__omw_alias_name#\"}
-        __omw_alias_name=${__omw_alias_name%\"}
-        ;;
-    esac
+    if [ "${__omw_alias_name#$__omw_alias_dq}" != "$__omw_alias_name" ]; then
+      __omw_alias_name=${__omw_alias_name#$__omw_alias_dq}
+      __omw_alias_name=${__omw_alias_name%$__omw_alias_dq}
+    fi
 
-    case "$__omw_alias_value" in
-      \'*\')
-        __omw_alias_value=${__omw_alias_value#\'}
-        __omw_alias_value=${__omw_alias_value%\'}
-        ;;
-      \"*\")
-        __omw_alias_value=${__omw_alias_value#\"}
-        __omw_alias_value=${__omw_alias_value%\"}
-        ;;
-    esac
+    if [ "${__omw_alias_value#$__omw_alias_sq}" != "$__omw_alias_value" ]; then
+      __omw_alias_value=${__omw_alias_value#$__omw_alias_sq}
+      __omw_alias_value=${__omw_alias_value%$__omw_alias_sq}
+    fi
+    if [ "${__omw_alias_value#$__omw_alias_dq}" != "$__omw_alias_value" ]; then
+      __omw_alias_value=${__omw_alias_value#$__omw_alias_dq}
+      __omw_alias_value=${__omw_alias_value%$__omw_alias_dq}
+    fi
 
     [ -n "$__omw_alias_name" ] || continue
     alias "$__omw_alias_name=$__omw_alias_value"

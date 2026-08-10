@@ -81,6 +81,8 @@ expect_alias gst
 expect_alias dps
 expect_alias k
 expect_alias npmR
+expect_eq "git alias strips CRLF TOML quotes" "$(alias gl)" "alias gl='git pull'"
+expect_eq "quoted docker alias strips CRLF TOML quotes" "$(alias 'drm!')" "alias drm!='docker container rm -f'"
 expect_type groot
 expect_type dsh
 expect_type kns
@@ -92,7 +94,8 @@ expect_type path_remove
 expect_type path_dedupe
 expect_type extract
 
-smoke_dir="C:/tmp/omw-framework-smoke-$$"
+smoke_parent="${TMPDIR:-${TEMP:-${TMP:-C:/tmp}}}"
+smoke_dir="$smoke_parent/omw-framework-smoke-$$"
 mkdir -p "$smoke_dir" || exit 2
 printf "OMW_FRAMEWORK_SMOKE=ok\n" > "$smoke_dir/.env"
 cd $smoke_dir || exit 2
