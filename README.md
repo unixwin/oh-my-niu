@@ -333,3 +333,16 @@ winuxsh plugin search workflow
 
 MIT unless the Unixwin project chooses a different repository license before the
 first bundle release.
+## Source Scope
+
+`oh-my-winuxsh.winux` is meant to be sourced from an interactive Winuxsh rc file.
+Sourcing the framework updates the current shell process by registering aliases,
+functions, prompt helpers, hooks, and environment variables exported by enabled
+plugins.
+
+Sourcing does not persist configuration by itself. Changes to `WINUXSH_PLUGINS`,
+`WINUXSH_THEME`, `WINUXSH_CUSTOM`, PATH setup, or other startup policy need to
+live in the user's rc file, such as `~/.winuxshrc`, or in files sourced from that
+rc file. A plugin should only rewrite rc files through an explicit user command,
+not as a side effect of normal framework sourcing.
+
