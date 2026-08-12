@@ -8,6 +8,7 @@ Current bundle-owned definitions:
 - `docker.toml`
 - `kubectl.toml`
 - `npm.toml`
+- WinuxCmd core command definitions generated from `winuxcmd.exe <command> --help` and exported by `packs/winuxcmd-core/plugin.toml`.
 
 Each file uses the native Winuxsh TOML completion schema:
 - top-level `command = "<name>"`;

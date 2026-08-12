@@ -23,6 +23,17 @@ permissions = ["shell:source", "cwd:read", "process:run:git"]
 required_binaries = ["git"]
 
 [[packs]]
+name = "winuxcmd-core"
+version = "1.0.1"
+api = "winuxsh:plugin@0.1.0"
+kind = "builtin"
+category = "devtools"
+summary = "Static completions for WinuxCmd core command links."
+default = true
+permissions = []
+required_binaries = []
+
+[[packs]]
 name = "docker"
 version = "1.0.1"
 api = "winuxsh:plugin@0.1.0"
@@ -153,6 +164,17 @@ summary = "Prompt presets and reusable prompt segments."
 default = true
 permissions = []
 required_binaries = []
+
+[[packs]]
+name = "starship"
+version = "1.0.1"
+api = "winuxsh:plugin@0.1.0"
+kind = "source"
+category = "ux"
+summary = "Starship-backed prompt segment providers for Winuxsh."
+default = false
+permissions = ["shell:source", "cwd:read", "process:run:starship"]
+required_binaries = ["starship"]
 
 [[packs]]
 name = "themes"

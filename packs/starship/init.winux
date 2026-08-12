@@ -1,0 +1,32 @@
+# Starship segment providers for Winuxsh.
+#
+# Winuxsh themes own prompt layout. This pack only delegates selected prompt
+# segments to Starship modules, matching the OMZ-style theme/function boundary.
+
+[ -f "$WINUXSH/lib/prompt.winux" ] && . "$WINUXSH/lib/prompt.winux"
+[ -f "$WINUXSH/lib/hooks.winux" ] && . "$WINUXSH/lib/hooks.winux"
+
+: "${WINUXSH_STARSHIP_SEGMENTS:=git}"
+
+__winuxsh_starship_has_segment() {
+  case " $WINUXSH_STARSHIP_SEGMENTS " in
+    *" $1 "*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+__winuxsh_starship_precmd() {
+  if __winuxsh_starship_has_segment git; then
+    winuxsh_prompt_refresh_starship_git || true
+  fi
+}
+
+__winuxsh_starship_startup() {
+  if __winuxsh_starship_has_segment git; then
+    winuxsh_prompt_use_starship_git || true
+  fi
+}
+
+__winuxsh_starship_startup
+winuxsh_add_startup_hook __winuxsh_starship_startup
+winuxsh_add_precmd_hook __winuxsh_starship_precmd

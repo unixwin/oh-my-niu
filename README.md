@@ -222,6 +222,7 @@ plugins, and `prompt-core` owns the common prompt API.
 | `theme-spaceship` | Spaceship-style Nerd Font prompt theme plugin inspired by Oh My Posh | Off |
 | `theme-tokyonight` | Tokyo Night Nerd Font prompt theme plugin inspired by Oh My Posh | Off |
 | `git` | Git aliases, completions, and workflow helpers | On |
+| `winuxcmd-core` | Static completions for WinuxCmd core command links | On |
 | `common-aliases` | Small Oh My-style navigation/listing aliases | Off |
 | `docker` | Docker `.winux` helpers, aliases, completion metadata | Off |
 | `kubectl` | Kubernetes `.winux` helpers, aliases, completion metadata | Off |

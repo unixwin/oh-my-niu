@@ -14,6 +14,8 @@ functions = [
   "winuxsh_prompt_render_template",
   "winuxsh_prompt_render_left",
   "winuxsh_prompt_render_right",
+  "winuxsh_prompt_use_starship_git",
+  "winuxsh_prompt_refresh_starship_git",
   "winuxsh_prompt_git_info",
   "winuxsh_prompt_refresh_git_snapshot",
   "winuxsh_prompt_mark_git_snapshot_dirty",

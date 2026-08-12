@@ -1,0 +1,22 @@
+name = "starship"
+bundle = "oh-my-winuxsh"
+version = "1.0.1"
+kind = "source"
+api = "winuxsh:plugin@0.1.0"
+category = "ux"
+summary = "Starship-backed prompt segment providers for Winuxsh."
+default = false
+permissions = ["shell:source", "cwd:read", "process:run:starship"]
+required_binaries = ["starship"]
+
+[exports]
+aliases = false
+completions = []
+prompt_segments = ["git"]
+hooks = ["startup", "precmd"]
+commands = []
+keybindings = []
+themes = []
+
+[source]
+entry = "packs/starship/init.winux"

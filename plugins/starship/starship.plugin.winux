@@ -1,0 +1,31 @@
+# Starship segment providers for Winuxsh.
+# This plugin does not own the full prompt. It only fills selected prompt
+# segments while prompt-core and theme plugins keep the layout.
+
+[ -f "$WINUXSH/lib/prompt.winux" ] && . "$WINUXSH/lib/prompt.winux"
+[ -f "$WINUXSH/lib/hooks.winux" ] && . "$WINUXSH/lib/hooks.winux"
+
+: "${WINUXSH_STARSHIP_SEGMENTS:=git}"
+
+__winuxsh_starship_has_segment() {
+  case " $WINUXSH_STARSHIP_SEGMENTS " in
+    *" $1 "*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+__winuxsh_starship_refresh() {
+  if __winuxsh_starship_has_segment git; then
+    winuxsh_prompt_refresh_starship_git || true
+  fi
+}
+
+__winuxsh_starship_startup() {
+  if __winuxsh_starship_has_segment git; then
+    winuxsh_prompt_use_starship_git || true
+  fi
+}
+
+__winuxsh_starship_startup
+winuxsh_add_startup_hook __winuxsh_starship_startup
+winuxsh_add_precmd_hook __winuxsh_starship_refresh

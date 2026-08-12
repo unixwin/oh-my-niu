@@ -231,6 +231,9 @@ Current branch progress:
 - `completions/git.toml`, `completions/docker.toml`,
   `completions/kubectl.toml`, and `completions/npm.toml` now own first-party
   static completion definitions for the same devtool packs.
+- `packs/winuxcmd-core/plugin.toml` exports generated static completions for
+  WinuxCmd core command links, keeping the large completion asset set in the
+  official bundle instead of the shell runtime fallback.
 - `tools/validate_bundle.py` checks every exported completion has a matching
   parseable `completions/<name>.toml` file whose `command` matches the export.
 - `prompts/segments.toml` now owns first-party prompt segment mappings and the

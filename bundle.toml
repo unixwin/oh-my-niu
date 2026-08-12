@@ -12,9 +12,10 @@ repo = "unixwin/oh-my-winuxsh"
 asset = "oh-my-winuxsh-{version}.zip"
 
 [packs]
-default = ["git", "prompts", "keybindings", "themes"]
+default = ["git", "winuxcmd-core", "prompts", "keybindings", "themes"]
 available = [
   "git",
+  "winuxcmd-core",
   "docker",
   "kubectl",
   "npm",
@@ -27,6 +28,7 @@ available = [
   "thefuck",
   "keybindings",
   "prompts",
+  "starship",
   "themes",
 ]
 

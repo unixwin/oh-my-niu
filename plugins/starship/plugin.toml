@@ -1,0 +1,12 @@
+name = "starship"
+version = "1.0.1"
+kind = "source"
+entry = "starship.plugin.winux"
+summary = "Starship-backed prompt segment providers for Winuxsh."
+permissions = ["shell:source", "cwd:read", "process:run:starship"]
+required_binaries = ["starship"]
+
+[exports]
+functions = []
+hooks = ["startup", "precmd"]
+prompt_segments = ["git"]

@@ -6,6 +6,46 @@ winuxsh_prompt_use_template() {
   export WINUXSH_PROMPT_LEFT WINUXSH_PROMPT_RIGHT
 }
 
+winuxsh_prompt_use_starship_git() {
+  if ! command -v starship >/dev/null 2>&1; then
+    return 127
+  fi
+
+  WINUXSH_PROMPT_GIT_BACKEND=starship
+  WINUXSH_PROMPT_GIT_SOURCE=starship
+  export WINUXSH_PROMPT_GIT_BACKEND WINUXSH_PROMPT_GIT_SOURCE
+  winuxsh_prompt_refresh_starship_git
+}
+
+winuxsh_prompt_refresh_starship_git() {
+  if [ "${WINUXSH_PROMPT_GIT_BACKEND:-}" != "starship" ]; then
+    return 0
+  fi
+  if ! command -v starship >/dev/null 2>&1; then
+    return 127
+  fi
+
+  __omw_starship_status="${WINUXSH_LAST_EXIT_CODE:-${WINUXSH_LAST_STATUS:-0}}"
+  __omw_starship_width="${COLUMNS:-80}"
+  if [ -z "${STARSHIP_SESSION_KEY:-}" ]; then
+    STARSHIP_SESSION_KEY="winuxsh-$$"
+    export STARSHIP_SESSION_KEY
+  fi
+  __omw_starship_git_branch="$(STARSHIP_SHELL=winuxsh starship module git_branch --status "$__omw_starship_status" --terminal-width "$__omw_starship_width" 2>/dev/null)" || __omw_starship_git_branch=""
+  __omw_starship_git_status="$(STARSHIP_SHELL=winuxsh starship module git_status --status "$__omw_starship_status" --terminal-width "$__omw_starship_width" 2>/dev/null)" || __omw_starship_git_status=""
+
+  # Starship's default git_branch format includes "on "; Winuxsh themes own
+  # connective words around {git}, so keep this provider to branch/status only.
+  case "$__omw_starship_git_branch" in
+    on\ *) __omw_starship_git_branch="${__omw_starship_git_branch#on }" ;;
+  esac
+
+  WINUXSH_PROMPT_GIT="$__omw_starship_git_branch$__omw_starship_git_status"
+  WINUXSH_PROMPT_GIT_SOURCE=starship
+  WINUXSH_PROMPT_GIT_DIRTY=0
+  export WINUXSH_PROMPT_GIT WINUXSH_PROMPT_GIT_SOURCE WINUXSH_PROMPT_GIT_DIRTY
+}
+
 winuxsh_use_theme() {
   __omw_theme_name="$1"
 

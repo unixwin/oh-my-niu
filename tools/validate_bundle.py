@@ -145,6 +145,7 @@ EXPECTED_FRAMEWORK_PLUGINS = (
     "theme-gruvbox",
     "theme-spaceship",
     "theme-tokyonight",
+    "starship",
 )
 
 
