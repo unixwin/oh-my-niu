@@ -4,24 +4,33 @@
 # lifecycle before this becomes the only hook path. Keeping this shell-level
 # registry makes the plugin contract visible and easy to port.
 
+__winuxsh_hook_list_add() {
+  __omw_hook_var="$1"
+  __omw_hook_name="$2"
+  eval "__omw_hook_current=\${$__omw_hook_var:-}"
+  case " $__omw_hook_current " in
+    *" $__omw_hook_name "*) ;;
+    *)
+      eval "$__omw_hook_var=\"\${__omw_hook_current:+\$__omw_hook_current }\$__omw_hook_name\""
+      export "$__omw_hook_var"
+      ;;
+  esac
+}
+
 winuxsh_add_startup_hook() {
-  WINUXSH_STARTUP_HOOKS="${WINUXSH_STARTUP_HOOKS:+$WINUXSH_STARTUP_HOOKS }$1"
-  export WINUXSH_STARTUP_HOOKS
+  __winuxsh_hook_list_add WINUXSH_STARTUP_HOOKS "$1"
 }
 
 winuxsh_add_precmd_hook() {
-  WINUXSH_PRECMD_HOOKS="${WINUXSH_PRECMD_HOOKS:+$WINUXSH_PRECMD_HOOKS }$1"
-  export WINUXSH_PRECMD_HOOKS
+  __winuxsh_hook_list_add WINUXSH_PRECMD_HOOKS "$1"
 }
 
 winuxsh_add_preexec_hook() {
-  WINUXSH_PREEXEC_HOOKS="${WINUXSH_PREEXEC_HOOKS:+$WINUXSH_PREEXEC_HOOKS }$1"
-  export WINUXSH_PREEXEC_HOOKS
+  __winuxsh_hook_list_add WINUXSH_PREEXEC_HOOKS "$1"
 }
 
 winuxsh_add_chpwd_hook() {
-  WINUXSH_CHPWD_HOOKS="${WINUXSH_CHPWD_HOOKS:+$WINUXSH_CHPWD_HOOKS }$1"
-  export WINUXSH_CHPWD_HOOKS
+  __winuxsh_hook_list_add WINUXSH_CHPWD_HOOKS "$1"
 }
 
 winuxsh_run_hooks() {
