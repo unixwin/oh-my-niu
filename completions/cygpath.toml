@@ -31,7 +31,7 @@ takes_value = true
 [[flags]]
 short = "-d"
 long = "--dos"
-description = "print DOS short form of NAMEs [accepted, not implemented]"
+description = "print DOS short form of NAMEs"
 
 [[flags]]
 short = "-a"
@@ -46,7 +46,7 @@ description = "ignore missing or empty arguments"
 [[flags]]
 short = "-f"
 long = "--file"
-description = "read input paths from FILE [not implemented]"
+description = "read input paths from FILE"
 takes_value = true
 values_from = "path"
 
@@ -58,64 +58,64 @@ description = "read options from FILE as well [accepted, not implemented]"
 [[flags]]
 short = "-l"
 long = "--long-name"
-description = "print Windows long form [accepted, not implemented]"
+description = "print Windows long form"
 
 [[flags]]
 short = "-s"
 long = "--short-name"
-description = "print DOS short form [accepted, not implemented]"
+description = "print DOS short form"
 
 [[flags]]
 short = "-U"
 long = "--proc-cygdrive"
-description = "emit /proc/cygdrive paths [accepted, not implemented]"
+description = "emit /proc/cygdrive paths"
 
 [[flags]]
 short = "-C"
 long = "--codepage"
-description = "print Windows path in codepage CP [accepted, not implemented]"
+description = "print Windows path in codepage CP"
 takes_value = true
 values_from = "path"
 
 [[flags]]
 short = "-M"
 long = "--mode"
-description = "report file text/binary mode [not implemented]"
+description = "report file text/binary mode"
 
 [[flags]]
 short = "-A"
 long = "--allusers"
-description = "use All Users for special folders [not implemented]"
+description = "use All Users for special folders"
 
 [[flags]]
 short = "-D"
 long = "--desktop"
-description = "output Desktop directory [not implemented]"
+description = "output Desktop directory"
 
 [[flags]]
 short = "-H"
 long = "--homeroot"
-description = "output Profiles directory [not implemented]"
+description = "output Profiles directory"
 
 [[flags]]
 short = "-O"
 long = "--mydocs"
-description = "output My Documents directory [not implemented]"
+description = "output My Documents directory"
 
 [[flags]]
 short = "-P"
 long = "--smprograms"
-description = "output Start Menu Programs directory [not implemented]"
+description = "output Start Menu Programs directory"
 
 [[flags]]
 short = "-S"
 long = "--sysdir"
-description = "output system directory [not implemented]"
+description = "output system directory"
 
 [[flags]]
 short = "-W"
 long = "--windir"
-description = "output Windows directory [not implemented]"
+description = "output Windows directory"
 
 [[flags]]
 short = "-F"

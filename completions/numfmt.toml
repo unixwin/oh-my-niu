@@ -29,6 +29,21 @@ description = "pad numbers to width N"
 takes_value = true
 
 [[flags]]
+long = "--pad"
+description = "pad numbers to width N"
+takes_value = true
+
+[[flags]]
+long = "--suffix"
+description = "add STRING after formatted numbers"
+takes_value = true
+
+[[flags]]
+long = "--field"
+description = "replace numbers in field N"
+takes_value = true
+
+[[flags]]
 short = "-f"
 long = "--format"
 description = "use printf style floating-point FORMAT"

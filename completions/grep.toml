@@ -20,7 +20,7 @@ description = "PATTERNS are basic regular expressions"
 [[flags]]
 short = "-P"
 long = "--perl-regexp"
-description = "PATTERNS are Perl regular expressions [NOT SUPPORT]"
+description = "PATTERNS are Perl regular expressions"
 
 [[flags]]
 short = "-e"
