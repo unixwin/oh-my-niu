@@ -1,7 +1,7 @@
 [aliases]
 ll = 'ls -alF'
 la = 'ls -A'
-l = 'ls -CF'
+l = 'ls -F'
 md = 'mkdir -p'
 rd = 'rmdir'
 ".." = 'cd ..'
