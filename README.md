@@ -33,6 +33,16 @@ WINUXSH_THEME=minimal
 source "$WINUXSH/oh-my-winuxsh.winux"
 ```
 
+Starship can also own the prompt through its normal Bash init path. In that
+mode, load the `starship` plugin instead of `prompt-core`/`theme-*` prompt
+plugins so Starship controls `PROMPT_COMMAND`, `PS1`, `PS2`, and `PS0`:
+
+```sh
+WINUXSH_PLUGINS=(git starship docker zoxide)
+WINUXSH_THEME=
+source "$WINUXSH/oh-my-winuxsh.winux"
+```
+
 Managed TOML should map onto the same plugin system:
 
 ```toml
@@ -221,6 +231,7 @@ plugins, and `prompt-core` owns the common prompt API.
 | `theme-gruvbox` | Gruvbox Nerd Font prompt theme plugin inspired by Oh My Posh | Off |
 | `theme-spaceship` | Spaceship-style Nerd Font prompt theme plugin inspired by Oh My Posh | Off |
 | `theme-tokyonight` | Tokyo Night Nerd Font prompt theme plugin inspired by Oh My Posh | Off |
+| `starship` | Full Starship prompt integration through the Bash prompt contract | Off |
 | `git` | Git aliases, completions, and workflow helpers | On |
 | `winuxcmd-core` | Static completions for WinuxCmd core command links | On |
 | `common-aliases` | Small Oh My-style navigation/listing aliases | Off |

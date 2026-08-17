@@ -1,31 +1,12 @@
-# Starship segment providers for Winuxsh.
-# This plugin does not own the full prompt. It only fills selected prompt
-# segments while prompt-core and theme plugins keep the layout.
+# Full Starship prompt integration for Winuxsh.
+#
+# Winuxsh now supports the Bash prompt contract (`PROMPT_COMMAND`, `PS1`,
+# `PS2`, and `PS0`), so use Starship's official Bash init path instead of
+# adapting individual Starship modules into Winuxsh prompt segments.
 
-[ -f "$WINUXSH/lib/prompt.winux" ] && . "$WINUXSH/lib/prompt.winux"
-[ -f "$WINUXSH/lib/hooks.winux" ] && . "$WINUXSH/lib/hooks.winux"
+if ! command -v starship >/dev/null 2>&1; then
+  echo "oh-my-winuxsh: starship plugin requires 'starship' on PATH" >&2
+  return 127 2>/dev/null || exit 127
+fi
 
-: "${WINUXSH_STARSHIP_SEGMENTS:=git}"
-
-__winuxsh_starship_has_segment() {
-  case " $WINUXSH_STARSHIP_SEGMENTS " in
-    *" $1 "*) return 0 ;;
-    *) return 1 ;;
-  esac
-}
-
-__winuxsh_starship_refresh() {
-  if __winuxsh_starship_has_segment git; then
-    winuxsh_prompt_refresh_starship_git || true
-  fi
-}
-
-__winuxsh_starship_startup() {
-  if __winuxsh_starship_has_segment git; then
-    winuxsh_prompt_use_starship_git || true
-  fi
-}
-
-__winuxsh_starship_startup
-winuxsh_add_startup_hook __winuxsh_starship_startup
-winuxsh_add_precmd_hook __winuxsh_starship_refresh
+eval "$(starship init bash)"
