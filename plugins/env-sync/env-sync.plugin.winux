@@ -27,6 +27,9 @@ env-push() {
   rcfile="${HOME}/.winuxshrc"
   mkdir -p "$(dirname "$manifest")" || return 1
 
+  # WebDAV backends (e.g. Nutstore) reject copyto when the ancestor is absent.
+  rclone mkdir "$remote" 2>/dev/null
+
   wpm export --plain >"$manifest" || {
     echo "env-sync: wpm export failed." >&2
     return 1
