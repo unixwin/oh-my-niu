@@ -1,0 +1,66 @@
+# Oh My Winuxsh env-sync plugin.
+#
+# Push/pull the WinuxCmd package manifest and the interactive shell config
+# through any rclone remote, so a fresh machine can be restored with one
+# command. Binaries are never synced; packages are replayed via `wpm restore`.
+#
+# Setup (once):
+#   rclone config create nutstore webdav url https://dav.jianguoyun.com/dav/ \
+#     vendor other user <email> pass <app-password>
+#   export WINUXSH_SYNC_REMOTE=nutstore:winuxsh-env
+
+env_sync_remote() {
+  if [ -z "${WINUXSH_SYNC_REMOTE:-}" ]; then
+    echo "env-sync: WINUXSH_SYNC_REMOTE is not set." >&2
+    echo "env-sync: configure an rclone remote first, for example:" >&2
+    echo "  rclone config create nutstore webdav url https://dav.jianguoyun.com/dav/ vendor other user <email> pass <app-password>" >&2
+    echo "  export WINUXSH_SYNC_REMOTE=nutstore:winuxsh-env" >&2
+    return 1
+  fi
+  printf '%s\n' "$WINUXSH_SYNC_REMOTE"
+}
+
+env-push() {
+  local remote manifest rcfile
+  remote="$(env_sync_remote)" || return 1
+  manifest="${HOME}/.winuxsh/wpm-packages.txt"
+  rcfile="${HOME}/.winuxshrc"
+  mkdir -p "$(dirname "$manifest")" || return 1
+
+  wpm export --plain >"$manifest" || {
+    echo "env-sync: wpm export failed." >&2
+    return 1
+  }
+  rclone copyto "$manifest" "${remote}/wpm-packages.txt" || return 1
+
+  local pushed="package manifest"
+  if [ -f "$rcfile" ]; then
+    rclone copyto "$rcfile" "${remote}/winuxshrc" || return 1
+    pushed="$pushed + winuxshrc"
+  fi
+  echo "env-sync: pushed $pushed to ${remote}"
+}
+
+env-pull() {
+  local remote manifest rcfile
+  remote="$(env_sync_remote)" || return 1
+  manifest="${HOME}/.winuxsh/wpm-packages.txt"
+  rcfile="${HOME}/.winuxshrc"
+  mkdir -p "$(dirname "$manifest")" || return 1
+
+  rclone copyto "${remote}/wpm-packages.txt" "$manifest" || {
+    echo "env-sync: no wpm-packages.txt on ${remote}." >&2
+    return 1
+  }
+
+  if rclone copyto "${remote}/winuxshrc" "${rcfile}.pull" 2>/dev/null; then
+    if [ -f "$rcfile" ]; then
+      cp "$rcfile" "${rcfile}.bak-envsync" || return 1
+    fi
+    mv "${rcfile}.pull" "$rcfile"
+    echo "env-sync: restored ~/.winuxshrc (previous copy kept as ~/.winuxshrc.bak-envsync)"
+  fi
+
+  echo "env-sync: installing packages from manifest (already-installed ones are skipped)..."
+  wpm restore "$manifest"
+}

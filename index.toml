@@ -186,3 +186,14 @@ summary = "Official Winuxsh color themes for prompt and Git status styling."
 default = true
 permissions = []
 required_binaries = []
+
+[[packs]]
+name = "env-sync"
+version = "1.0.1"
+api = "winuxsh:plugin@0.1.0"
+kind = "source"
+category = "workflow"
+summary = "Push/pull the WPM package manifest and shell config via any rclone remote."
+default = false
+permissions = ["shell:source", "process:run:rclone", "process:run:wpm"]
+required_binaries = ["rclone", "wpm"]
