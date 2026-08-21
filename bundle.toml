@@ -30,7 +30,6 @@ available = [
   "prompts",
   "starship",
   "themes",
-  "env-sync",
 ]
 
 [layout]
