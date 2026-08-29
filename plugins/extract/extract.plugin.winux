@@ -1,6 +1,6 @@
 # Extract common archive formats with clear missing-tool errors.
 
-__winuxsh_extract_need() {
+__niubash_extract_need() {
   command -v "$1" >/dev/null 2>&1 || {
     echo "extract: '$1' is required for $2" >&2
     return 127
@@ -13,55 +13,55 @@ extract() {
     return 2
   }
 
-  __winuxsh_extract_status=0
-  for __winuxsh_extract_archive in "$@"; do
-    if [ ! -f "$__winuxsh_extract_archive" ]; then
-      echo "extract: not a file: $__winuxsh_extract_archive" >&2
-      __winuxsh_extract_status=1
+  __niubash_extract_status=0
+  for __niubash_extract_archive in "$@"; do
+    if [ ! -f "$__niubash_extract_archive" ]; then
+      echo "extract: not a file: $__niubash_extract_archive" >&2
+      __niubash_extract_status=1
       continue
     fi
 
-    case "$__winuxsh_extract_archive" in
+    case "$__niubash_extract_archive" in
       *.tar.gz|*.tgz)
-        __winuxsh_extract_need tar "$__winuxsh_extract_archive" && tar -xzf "$__winuxsh_extract_archive" || __winuxsh_extract_status=$?
+        __niubash_extract_need tar "$__niubash_extract_archive" && tar -xzf "$__niubash_extract_archive" || __niubash_extract_status=$?
         ;;
       *.tar.bz2|*.tbz2)
-        __winuxsh_extract_need tar "$__winuxsh_extract_archive" && tar -xjf "$__winuxsh_extract_archive" || __winuxsh_extract_status=$?
+        __niubash_extract_need tar "$__niubash_extract_archive" && tar -xjf "$__niubash_extract_archive" || __niubash_extract_status=$?
         ;;
       *.tar.xz|*.txz)
-        __winuxsh_extract_need tar "$__winuxsh_extract_archive" && tar -xJf "$__winuxsh_extract_archive" || __winuxsh_extract_status=$?
+        __niubash_extract_need tar "$__niubash_extract_archive" && tar -xJf "$__niubash_extract_archive" || __niubash_extract_status=$?
         ;;
       *.tar)
-        __winuxsh_extract_need tar "$__winuxsh_extract_archive" && tar -xf "$__winuxsh_extract_archive" || __winuxsh_extract_status=$?
+        __niubash_extract_need tar "$__niubash_extract_archive" && tar -xf "$__niubash_extract_archive" || __niubash_extract_status=$?
         ;;
       *.zip)
         if command -v unzip >/dev/null 2>&1; then
-          unzip "$__winuxsh_extract_archive" || __winuxsh_extract_status=$?
+          unzip "$__niubash_extract_archive" || __niubash_extract_status=$?
         elif command -v 7z >/dev/null 2>&1; then
-          7z x "$__winuxsh_extract_archive" || __winuxsh_extract_status=$?
+          7z x "$__niubash_extract_archive" || __niubash_extract_status=$?
         else
-          echo "extract: 'unzip' or '7z' is required for $__winuxsh_extract_archive" >&2
-          __winuxsh_extract_status=127
+          echo "extract: 'unzip' or '7z' is required for $__niubash_extract_archive" >&2
+          __niubash_extract_status=127
         fi
         ;;
       *.7z|*.rar)
-        __winuxsh_extract_need 7z "$__winuxsh_extract_archive" && 7z x "$__winuxsh_extract_archive" || __winuxsh_extract_status=$?
+        __niubash_extract_need 7z "$__niubash_extract_archive" && 7z x "$__niubash_extract_archive" || __niubash_extract_status=$?
         ;;
       *.gz)
-        __winuxsh_extract_need gzip "$__winuxsh_extract_archive" && gzip -dk "$__winuxsh_extract_archive" || __winuxsh_extract_status=$?
+        __niubash_extract_need gzip "$__niubash_extract_archive" && gzip -dk "$__niubash_extract_archive" || __niubash_extract_status=$?
         ;;
       *.bz2)
-        __winuxsh_extract_need bzip2 "$__winuxsh_extract_archive" && bzip2 -dk "$__winuxsh_extract_archive" || __winuxsh_extract_status=$?
+        __niubash_extract_need bzip2 "$__niubash_extract_archive" && bzip2 -dk "$__niubash_extract_archive" || __niubash_extract_status=$?
         ;;
       *.xz)
-        __winuxsh_extract_need xz "$__winuxsh_extract_archive" && xz -dk "$__winuxsh_extract_archive" || __winuxsh_extract_status=$?
+        __niubash_extract_need xz "$__niubash_extract_archive" && xz -dk "$__niubash_extract_archive" || __niubash_extract_status=$?
         ;;
       *)
-        echo "extract: unsupported archive: $__winuxsh_extract_archive" >&2
-        __winuxsh_extract_status=1
+        echo "extract: unsupported archive: $__niubash_extract_archive" >&2
+        __niubash_extract_status=1
         ;;
     esac
   done
-  return "$__winuxsh_extract_status"
+  return "$__niubash_extract_status"
 }
 

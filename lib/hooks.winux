@@ -1,10 +1,10 @@
 # Small hook registry for framework-loaded plugins.
 #
-# Winuxsh core still needs to call these hook runners from its interactive
+# Niubash core still needs to call these hook runners from its interactive
 # lifecycle before this becomes the only hook path. Keeping this shell-level
 # registry makes the plugin contract visible and easy to port.
 
-__winuxsh_hook_list_add() {
+__niubash_hook_list_add() {
   __omw_hook_var="$1"
   __omw_hook_name="$2"
   eval "__omw_hook_current=\${$__omw_hook_var:-}"
@@ -17,41 +17,41 @@ __winuxsh_hook_list_add() {
   esac
 }
 
-winuxsh_add_startup_hook() {
-  __winuxsh_hook_list_add WINUXSH_STARTUP_HOOKS "$1"
+niubash_add_startup_hook() {
+  __niubash_hook_list_add NIU_STARTUP_HOOKS "$1"
 }
 
-winuxsh_add_precmd_hook() {
-  __winuxsh_hook_list_add WINUXSH_PRECMD_HOOKS "$1"
+niubash_add_precmd_hook() {
+  __niubash_hook_list_add NIU_PRECMD_HOOKS "$1"
 }
 
-winuxsh_add_preexec_hook() {
-  __winuxsh_hook_list_add WINUXSH_PREEXEC_HOOKS "$1"
+niubash_add_preexec_hook() {
+  __niubash_hook_list_add NIU_PREEXEC_HOOKS "$1"
 }
 
-winuxsh_add_chpwd_hook() {
-  __winuxsh_hook_list_add WINUXSH_CHPWD_HOOKS "$1"
+niubash_add_chpwd_hook() {
+  __niubash_hook_list_add NIU_CHPWD_HOOKS "$1"
 }
 
-winuxsh_run_hooks() {
+niubash_run_hooks() {
   __omw_hook_list="$1"
   for __omw_hook_name in $__omw_hook_list; do
     "$__omw_hook_name"
   done
 }
 
-winuxsh_run_startup_hooks() {
-  winuxsh_run_hooks "$WINUXSH_STARTUP_HOOKS"
+niubash_run_startup_hooks() {
+  niubash_run_hooks "$NIU_STARTUP_HOOKS"
 }
 
-winuxsh_run_precmd_hooks() {
-  winuxsh_run_hooks "$WINUXSH_PRECMD_HOOKS"
+niubash_run_precmd_hooks() {
+  niubash_run_hooks "$NIU_PRECMD_HOOKS"
 }
 
-winuxsh_run_preexec_hooks() {
-  winuxsh_run_hooks "$WINUXSH_PREEXEC_HOOKS"
+niubash_run_preexec_hooks() {
+  niubash_run_hooks "$NIU_PREEXEC_HOOKS"
 }
 
-winuxsh_run_chpwd_hooks() {
-  winuxsh_run_hooks "$WINUXSH_CHPWD_HOOKS"
+niubash_run_chpwd_hooks() {
+  niubash_run_hooks "$NIU_CHPWD_HOOKS"
 }

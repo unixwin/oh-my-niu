@@ -1,7 +1,7 @@
-# Smoke test the directory-first Oh My Winuxsh framework with Winuxsh.
+# Smoke test the directory-first Oh My Niu framework with Niubash.
 #
 # Usage:
-#   winuxsh tools/smoke_framework.winux C:/path/to/oh-my-winuxsh
+#   niubash tools/smoke_framework.winux C:/path/to/oh-my-niu
 
 ROOT="${1:-$PWD}"
 failures=0
@@ -39,10 +39,10 @@ expect_alias() {
 }
 
 source_framework() {
-  WINUXSH="$ROOT"
-  WINUXSH_CUSTOM="$ROOT/.smoke-custom"
-  export WINUXSH WINUXSH_CUSTOM
-  . "$WINUXSH/oh-my-winuxsh.winux"
+  NIUBASH="$ROOT"
+  NIU_CUSTOM="$ROOT/.smoke-custom"
+  export NIUBASH NIU_CUSTOM
+  . "$NIUBASH/oh-my-niu.winux"
 }
 
 cd $ROOT || {
@@ -50,31 +50,31 @@ cd $ROOT || {
   exit 2
 }
 
-WINUXSH_THEME=minimal
-WINUXSH_THEME_PLUGIN=theme-minimal
-WINUXSH_PLUGINS=(prompt-core git)
+NIU_THEME=minimal
+NIU_THEME_PLUGIN=theme-minimal
+NIU_PLUGINS=(prompt-core git)
 source_framework
-expect_eq "default plugins" "${WINUXSH_PLUGINS[*]}" "prompt-core git"
-expect_eq "default theme" "$WINUXSH_ACTIVE_THEME" "minimal"
-expect_type winuxsh_prompt_render_left
-expect_type winuxsh_prompt_git_info
-expect_nonempty "minimal prompt" "$(winuxsh_prompt_render_left)"
-WINUXSH_PROMPT_GIT="git:(framework-smoke)"
-export WINUXSH_PROMPT_GIT
-expect_eq "git prompt reads host snapshot" "$(winuxsh_prompt_git_info)" "$WINUXSH_PROMPT_GIT"
+expect_eq "default plugins" "${NIU_PLUGINS[*]}" "prompt-core git"
+expect_eq "default theme" "$NIU_ACTIVE_THEME" "minimal"
+expect_type niubash_prompt_render_left
+expect_type niubash_prompt_git_info
+expect_nonempty "minimal prompt" "$(niubash_prompt_render_left)"
+NIU_PROMPT_GIT="git:(framework-smoke)"
+export NIU_PROMPT_GIT
+expect_eq "git prompt reads host snapshot" "$(niubash_prompt_git_info)" "$NIU_PROMPT_GIT"
 
 for theme in default dark light colorful minimal classic pure compact cyberpunk forest ocean agnoster avit bira clean fishy lambda p10-lean p10-classic p10-rainbow p10-pure robbyrussell dracula catppuccin-mocha gruvbox spaceship tokyonight; do
-  WINUXSH_THEME="$theme"
-  WINUXSH_THEME_PLUGIN="theme-$theme"
-  WINUXSH_PLUGINS=(prompt-core git)
+  NIU_THEME="$theme"
+  NIU_THEME_PLUGIN="theme-$theme"
+  NIU_PLUGINS=(prompt-core git)
   source_framework
-  expect_eq "theme $theme active" "$WINUXSH_ACTIVE_THEME" "$theme"
-  expect_nonempty "theme $theme prompt" "$(winuxsh_prompt_render_left)"
+  expect_eq "theme $theme active" "$NIU_ACTIVE_THEME" "$theme"
+  expect_nonempty "theme $theme prompt" "$(niubash_prompt_render_left)"
 done
 
-WINUXSH_THEME=minimal
-WINUXSH_THEME_PLUGIN=theme-minimal
-WINUXSH_PLUGINS=(prompt-core git common-aliases docker kubectl npm path-tools extract)
+NIU_THEME=minimal
+NIU_THEME_PLUGIN=theme-minimal
+NIU_PLUGINS=(prompt-core git common-aliases docker kubectl npm path-tools extract)
 source_framework
 expect_alias ll
 expect_alias gst
@@ -100,9 +100,9 @@ mkdir -p "$smoke_dir" || exit 2
 printf "OMW_FRAMEWORK_SMOKE=ok\n" > "$smoke_dir/.env"
 cd $smoke_dir || exit 2
 
-WINUXSH_THEME=minimal
-WINUXSH_THEME_PLUGIN=theme-minimal
-WINUXSH_PLUGINS=(prompt-core dotenv)
+NIU_THEME=minimal
+NIU_THEME_PLUGIN=theme-minimal
+NIU_PLUGINS=(prompt-core dotenv)
 source_framework
 expect_eq "dotenv hook" "$OMW_FRAMEWORK_SMOKE" "ok"
 

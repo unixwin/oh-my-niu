@@ -1,14 +1,14 @@
-# Oh My Winuxsh Framework Design
+# Oh My Niu Framework Design
 
 Status: active direction. This replaces the retired manifest-first bundle design
 in `docs/design-manifest-first-retired.md`.
 
 ## Product Thesis
 
-Oh My Winuxsh should be a shell plugin framework and first-party plugin
-distribution, not a thin registry over Winuxsh builtins.
+Oh My Niu should be a shell plugin framework and first-party plugin
+distribution, not a thin registry over Niubash builtins.
 
-Winuxsh may ship the official bundle, but bundled does not mean built in. A
+Niubash may ship the official bundle, but bundled does not mean built in. A
 plugin can be present by default, reviewed by default, and installed with the
 shell while still being loaded through the same plugin system that third-party
 plugins use.
@@ -44,14 +44,14 @@ PowerShell/Oh My Posh's useful idea is separation of prompt engine, themes, and
 shell profile. Prompt data can use fast native helpers, but themes and prompt
 composition should remain plugin-owned and user-overridable.
 
-The thing to avoid is making Winuxsh core the owner of every high-level feature.
+The thing to avoid is making Niubash core the owner of every high-level feature.
 That creates "builtin plugins", which defeats the point of a plugin ecosystem.
 
 ## Vocabulary
 
-- `winuxsh core`: shell host, REPL, config loader, plugin loader, permissions,
+- `niubash core`: shell host, REPL, config loader, plugin loader, permissions,
   completion frontend, prompt frontend, update/rollback, and host helper APIs.
-- `oh-my-winuxsh framework`: the sourced shell framework entry point,
+- `oh-my-niu framework`: the sourced shell framework entry point,
   framework libraries, loader conventions, and default composition.
 - `plugin`: a directory that may contain shell code, functions, completions,
   prompt/theme files, metadata, and tests.
@@ -64,9 +64,9 @@ That creates "builtin plugins", which defeats the point of a plugin ecosystem.
 The interactive setup should eventually feel like this:
 
 ```sh
-WINUXSH_PLUGINS=(git docker zoxide)
-WINUXSH_THEME=minimal
-source "$WINUXSH/oh-my-winuxsh.winux"
+NIU_PLUGINS=(git docker zoxide)
+NIU_THEME=minimal
+source "$NIUBASH/oh-my-niu.winux"
 ```
 
 The structured TOML control plane can still exist for managed installs,
@@ -77,7 +77,7 @@ user-facing product model.
 ```toml
 [plugins]
 enabled = true
-bundles = ["oh-my-winuxsh"]
+bundles = ["oh-my-niu"]
 load = ["prompt-core", "git", "docker", "zoxide"]
 
 [theme]
@@ -91,8 +91,8 @@ Both examples describe the same thing: load plugins through the framework.
 The target layout is directory-first:
 
 ```text
-oh-my-winuxsh/
-  oh-my-winuxsh.winux
+oh-my-niu/
+  oh-my-niu.winux
   lib/
     aliases.winux
     git.winux
@@ -202,7 +202,7 @@ toward plugin directories that own their own code and assets.
 
 ## No Builtin Plugin Behavior
 
-Winuxsh core may ship host primitives, but high-level plugin behavior must not
+Niubash core may ship host primitives, but high-level plugin behavior must not
 be implemented as a permanent core-owned pack. Missing official bundles or
 theme plugins should be diagnosed loudly instead of silently falling back to a
 different built-in theme.
@@ -241,14 +241,14 @@ Prompt rendering must be stable and plugin-owned.
   workflow helpers; it does not own prompt rendering.
 - Themes are plugins. A bundled theme is still a plugin, not core behavior.
 - Theme names such as `default`, `dark`, `light`, and `colorful` are official
-  `theme-*` plugins in the bundle, not Winuxsh core themes. Missing bundle
+  `theme-*` plugins in the bundle, not Niubash core themes. Missing bundle
   themes are installation/package errors.
 - Theme style TOML supports named colours, 256-colour indexes, and true-colour
   `#RRGGBB` foreground/background values, plus bold/italic/underline/dimmed
   flags.
 - The prompt subsystem needs a standard API surface so third-party themes can
   register segments, select renderers, and ask for cached status without
-  depending on Winuxsh internals.
+  depending on Niubash internals.
 
 Target split:
 
@@ -260,23 +260,23 @@ theme plugin      prompt layout, colors, selected segments
 user config       chooses plugins and theme
 ```
 
-This matches the Oh My Zsh mental model while allowing Winuxsh to keep native
+This matches the Oh My Zsh mental model while allowing Niubash to keep native
 Windows performance optimizations behind helper commands.
 
 ## Prompt API Direction
 
-Winuxsh should expose a small stable prompt API to plugins. The API belongs to
+Niubash should expose a small stable prompt API to plugins. The API belongs to
 the shell/plugin boundary, not to any specific theme:
 
-- `WINUXSH_PROMPT_LEFT` and `WINUXSH_PROMPT_RIGHT` hold the active prompt
+- `NIU_PROMPT_LEFT` and `NIU_PROMPT_RIGHT` hold the active prompt
   templates or function names.
-- `winuxsh_prompt_use_template <left> [right]` selects a simple template prompt.
-- `winuxsh_prompt_register_segment <name> <function>` registers a segment
+- `niubash_prompt_use_template <left> [right]` selects a simple template prompt.
+- `niubash_prompt_register_segment <name> <function>` registers a segment
   provider.
 - Built-in template tokens include `{cwd}`, `{cwd_base}`, `{user_host}`,
   `{git}`, `{status}`, `{time}`, `{command_execution_time}`, `{newline}`, and
   `{prompt_char}`.
-- `winuxsh_prompt_render_left` and `winuxsh_prompt_render_right` are the
+- `niubash_prompt_render_left` and `niubash_prompt_render_right` are the
   standard render entry points that the shell can call before drawing a prompt.
 - Renderers should evaluate only the segments present in the active template.
   Late or unused segment work must not print into the terminal.
@@ -285,10 +285,10 @@ the shell/plugin boundary, not to any specific theme:
 
 Current host bridge:
 
-- When the user has not set explicit TOML prompt fields, Winuxsh consumes
-  `WINUXSH_PROMPT_LEFT`, `WINUXSH_PROMPT_RIGHT`, `WINUXSH_ACTIVE_THEME`, and
-  `WINUXSH_PROMPT_SYMBOL` from `prompt-core` and the active theme plugin after
-  startup/precmd hooks run. It also consumes `WINUXSH_PROMPT_GIT` as the
+- When the user has not set explicit TOML prompt fields, Niubash consumes
+  `NIU_PROMPT_LEFT`, `NIU_PROMPT_RIGHT`, `NIU_ACTIVE_THEME`, and
+  `NIU_PROMPT_SYMBOL` from `prompt-core` and the active theme plugin after
+  startup/precmd hooks run. It also consumes `NIU_PROMPT_GIT` as the
   current complete Git prompt snapshot for `{git}`/`{git_prompt}` tokens.
 - Explicit TOML prompt configuration stays authoritative. A user-set
   `prompt_format`, `right_prompt_format`, prompt style, or segment preset must
@@ -313,9 +313,9 @@ Reducing latency is not enough; the render model must be visually stable.
 The Powerlevel10k lesson is that Git status should be served by a persistent
 service with a coherent snapshot model:
 
-- Winuxsh starts a long-lived hidden `--gitstatus-daemon` helper so Git work is
+- Niubash starts a long-lived hidden `--gitstatus-daemon` helper so Git work is
   outside the prompt draw path;
-- `prompt-core` consumes `WINUXSH_PROMPT_GIT` as the stable snapshot string
+- `prompt-core` consumes `NIU_PROMPT_GIT` as the stable snapshot string
   instead of launching Git during prompt rendering;
 - the host talks to that helper through a stable request/response API;
 - each prompt render uses the latest complete snapshot available at render
@@ -326,24 +326,24 @@ service with a coherent snapshot model:
   and status generation.
 
 This can be bundled and official without becoming a shell builtin. The daemon
-or helper may ship with Winuxsh for performance, but the behavior is owned by
+or helper may ship with Niubash for performance, but the behavior is owned by
 the `prompt-core` plugin and consumed through the prompt API.
 
 ## Loading Order
 
 The framework loader should be predictable:
 
-1. Start from user `~/.winuxshrc`, which sets plugin/theme variables and
-   sources `oh-my-winuxsh.winux`.
-2. Establish `WINUXSH`, `WINUXSH_CUSTOM`, and plugin search paths.
+1. Start from user `~/.niubashrc`, which sets plugin/theme variables and
+   sources `oh-my-niu.winux`.
+2. Establish `NIUBASH`, `NIU_CUSTOM`, and plugin search paths.
 3. Source framework libraries from `lib/*.winux`.
 4. Resolve enabled plugins from managed TOML and shell arrays.
 5. Source each plugin's `*.plugin.winux` in user-declared order.
 6. Register plugin-local functions, completions, hooks, and prompt providers.
-7. Source the selected theme plugin through `WINUXSH_THEME_PLUGIN`.
-8. Return to `~/.winuxshrc`; user code after the framework source overrides
+7. Source the selected theme plugin through `NIU_THEME_PLUGIN`.
+8. Return to `~/.niubashrc`; user code after the framework source overrides
    plugin defaults. Keep `~/.winshrc` only as the host-level legacy fallback
-   when `~/.winuxshrc` is absent.
+   when `~/.niubashrc` is absent.
 
 Disable must mean disable. If `[plugins.git].enabled = false`, the Git plugin's
 aliases, functions, completion exports, prompt segment, and theme hooks must all
@@ -380,7 +380,7 @@ It should not be the only way to express shell behavior.
 
 ## Migration Plan
 
-1. Add the framework entry point `oh-my-winuxsh.winux`.
+1. Add the framework entry point `oh-my-niu.winux`.
 2. Add directory-first plugin loading beside the current manifest loader.
 3. Move official `git` behavior into `plugins/git/`.
 4. Move official themes into `theme-*` plugins and make `themes` only a

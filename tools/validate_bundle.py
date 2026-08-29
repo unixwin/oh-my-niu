@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the oh-my-winuxsh bundle manifest layout."""
+"""Validate the oh-my-niu bundle manifest layout."""
 
 from __future__ import annotations
 
@@ -13,8 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 KNOWN_KINDS = {"builtin", "source", "wasm", "process"}
 FRAMEWORK_PLUGIN_KINDS = {"source", "bridge"}
 KNOWN_CATEGORIES = {"devtools", "environment", "workflow", "hints", "ux"}
-BUNDLE_API_VERSION = "winuxsh:plugin-bundle@0.1.0"
-INDEX_SCHEMA = "winuxsh:plugin-index@0.1.0"
+BUNDLE_API_VERSION = "niubash:plugin-bundle@0.1.0"
+INDEX_SCHEMA = "niubash:plugin-index@0.1.0"
 EXPORT_KEYS = {
     "aliases",
     "completions",
@@ -28,9 +28,9 @@ EXPORT_KEYS = {
 REQUIRED_EXPORT_KEYS = EXPORT_KEYS - {"keybindings", "providers"}
 KNOWN_PROVIDER_EXPORTS = {"command-not-found"}
 SOURCE_PLUGIN_HOOKS = {"startup", "precmd", "preexec", "chpwd"}
-PROCESS_PLUGIN_PROTOCOL = "winuxsh:process-plugin@0.1.0"
+PROCESS_PLUGIN_PROTOCOL = "niubash:process-plugin@0.1.0"
 PROCESS_PLUGIN_MAX_TIMEOUT_MILLIS = 30_000
-WASM_PLUGIN_PROTOCOL = "winuxsh:wasm-plugin@0.1.0"
+WASM_PLUGIN_PROTOCOL = "niubash:wasm-plugin@0.1.0"
 WASM_PLUGIN_MAX_TIMEOUT_MILLIS = 30_000
 WASM_PLUGIN_MAX_MEMORY_PAGES = 4096
 AUTHORING_TEMPLATE_KINDS = {
@@ -76,24 +76,24 @@ THEME_COLOR_NAMES = {
 RELEASE_DOCUMENTS = {
     "CHANGELOG.md": (
         "# Changelog",
-        "oh-my-winuxsh-{version}.zip",
-        'api = "winuxsh:plugin-bundle@0.1.0"',
-        'min_winuxsh = "{min_winuxsh}"',
+        "oh-my-niu-{version}.zip",
+        'api = "niubash:plugin-bundle@0.1.0"',
+        'min_niubash = "{min_niubash}"',
     ),
     "docs/compatibility.md": (
         "# Compatibility",
-        "winuxsh:plugin-bundle@0.1.0",
-        "winuxsh:plugin@0.1.0",
+        "niubash:plugin-bundle@0.1.0",
+        "niubash:plugin@0.1.0",
         PROCESS_PLUGIN_PROTOCOL,
         WASM_PLUGIN_PROTOCOL,
-        'min_winuxsh = "{min_winuxsh}"',
+        'min_niubash = "{min_niubash}"',
         "Patch releases",
         "Minor releases",
         "Major releases",
     ),
 }
 FRAMEWORK_FILES = (
-    "oh-my-winuxsh.winux",
+    "oh-my-niu.winux",
     "lib/hooks.winux",
     "lib/aliases.winux",
     "lib/prompt.winux",
@@ -701,12 +701,12 @@ def validate_package_index(bundle: dict, available: list, manifests: dict, error
     expect(index.get("bundle") == bundle.get("name"), "index.toml bundle must match bundle.toml name", errors)
     expect(index.get("version") == bundle.get("version"), "index.toml version must match bundle.toml version", errors)
     expect(index.get("bundle_api") == bundle.get("api"), "index.toml bundle_api must match bundle.toml api", errors)
-    expect(index.get("min_winuxsh") == bundle.get("min_winuxsh"), "index.toml min_winuxsh must match bundle.toml min_winuxsh", errors)
+    expect(index.get("min_niubash") == bundle.get("min_niubash"), "index.toml min_niubash must match bundle.toml min_niubash", errors)
     release = index.get("release")
     expect(isinstance(release, dict), "index.toml must contain [release]", errors)
     if isinstance(release, dict):
         version = bundle.get("version")
-        expected_artifact = f"oh-my-winuxsh-{version}.zip" if isinstance(version, str) else None
+        expected_artifact = f"oh-my-niu-{version}.zip" if isinstance(version, str) else None
         expected_checksum = f"{expected_artifact}.sha256" if expected_artifact else None
         expect(release.get("artifact") == expected_artifact, "index.toml release.artifact must match bundle version", errors)
         expect(release.get("checksum") == expected_checksum, "index.toml release.checksum must match bundle version", errors)
@@ -734,7 +734,7 @@ def validate_package_index(bundle: dict, available: list, manifests: dict, error
 
 def validate_release_documents(bundle: dict, errors: list[str]) -> None:
     version = bundle.get("version")
-    min_winuxsh = bundle.get("min_winuxsh")
+    min_niubash = bundle.get("min_niubash")
     for relative, required_fragments in RELEASE_DOCUMENTS.items():
         path = ROOT / relative
         expect(path.exists(), f"missing release document: {path}", errors)
@@ -747,8 +747,8 @@ def validate_release_documents(bundle: dict, errors: list[str]) -> None:
             expected = fragment
             if isinstance(version, str):
                 expected = expected.replace("{version}", version)
-            if isinstance(min_winuxsh, str):
-                expected = expected.replace("{min_winuxsh}", min_winuxsh)
+            if isinstance(min_niubash, str):
+                expected = expected.replace("{min_niubash}", min_niubash)
             expect(expected in text, f"{relative}: missing release note fragment {expected!r}", errors)
 
 
@@ -762,7 +762,7 @@ def validate() -> list[str]:
     bundle = load_toml(bundle_path)
     expect(bundle.get("api") == BUNDLE_API_VERSION, f"bundle.toml api must be {BUNDLE_API_VERSION!r}", errors)
     validate_semver("bundle.toml version", bundle.get("version"), errors)
-    validate_semver("bundle.toml min_winuxsh", bundle.get("min_winuxsh"), errors)
+    validate_semver("bundle.toml min_niubash", bundle.get("min_niubash"), errors)
     validate_release_documents(bundle, errors)
     packs_config = bundle.get("packs", {})
     layout = bundle.get("layout", {})

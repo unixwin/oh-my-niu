@@ -1,4 +1,4 @@
-# Retired: Manifest-First Oh My Winuxsh Design
+# Retired: Manifest-First Oh My Niu Design
 
 Status: retired. This document captures the old manifest-first bundle design for
 historical context only. The active design is `docs/design.md`.
@@ -15,17 +15,17 @@ Retired conclusions:
 - Themes are plugins, not a special shell-core asset category.
 - Official distribution can bundle plugins, but the shell should not own plugin
   behavior simply because a plugin ships by default.
-- The plugin framework should load and compose plugin directories, while Winuxsh
+- The plugin framework should load and compose plugin directories, while Niubash
   core should expose shell primitives and safe host APIs.
 
 # Previous Manifest-First Design
 
-`oh-my-winuxsh` is the official bundled plugin distribution for Winuxsh.
+`oh-my-niu` is the official bundled plugin distribution for Niubash.
 The execution sequence lives in [roadmap.md](roadmap.md).
 
 It follows the normal shell-plugin model where trusted plugin code can be
 sourced into the current interactive session, while keeping manifests,
-permissions, bundle updates, and rollback in Winuxsh-owned metadata.
+permissions, bundle updates, and rollback in Niubash-owned metadata.
 
 This is intentionally closer to Oh My Zsh and bash plugin collections than the
 earlier TOML-only plan. Static data still lives in TOML assets, but code-bearing
@@ -38,14 +38,14 @@ first-party shell plugins now use bundle-local `.winux` files declared through
   asset directory names.
 - `packs/<name>/plugin.toml` declares each first-party pack's runtime kind,
   permissions, exports, defaults, and required binaries.
-- `packs/<name>/init.winux` contains sourced Winuxsh shell code for
+- `packs/<name>/init.winux` contains sourced Niubash shell code for
   `kind = "source"` packs.
 - `aliases/`, `completions/`, `prompts/`, and `keybindings/` are asset
   directories. `aliases/*.toml` owns first-party alias tables,
   `completions/*.toml` owns native completion definitions,
   `prompts/segments.toml` owns prompt segment mappings and preset layouts, and
   `keybindings/*.toml` owns declarative metadata for native editor actions.
-- Winuxsh keeps compiled fallbacks so bundled releases work offline even before
+- Niubash keeps compiled fallbacks so bundled releases work offline even before
   independent bundle updates exist.
 - `docs/authoring.md` and `templates/` define the public authoring surface for
   source, builtin, process, and WASM pack manifests.
@@ -70,14 +70,14 @@ available for external-tool adapters and sandboxed providers.
 Use [Externalization Readiness](externalization-readiness.md) before changing
 pack schemas. The bundle should classify asset-only packs, mixed native packs,
 provider candidates, process adapters, and shell-effect candidates before
-deciding whether Winuxsh needs a new runtime kind or a lighter execution marker.
+deciding whether Niubash needs a new runtime kind or a lighter execution marker.
 
 ## Boundaries
 
-- Winuxsh core owns shell execution, config loading, permissions, plugin
+- Niubash core owns shell execution, config loading, permissions, plugin
   registry, and update/rollback behavior.
-- oh-my-winuxsh owns first-party pack manifests and static assets.
-- Prompt rendering and editor behavior remain native Winuxsh/Reedline code;
+- oh-my-niu owns first-party pack manifests and static assets.
+- Prompt rendering and editor behavior remain native Niubash/Reedline code;
   bundle assets only select safe presets and metadata.
 - rubash owns parser, executor, builtins, redirects, functions, pipelines, and
   shell semantics.
@@ -91,7 +91,7 @@ machine-editable:
 ```toml
 [plugins]
 enabled = true
-bundles = ["oh-my-winuxsh"]
+bundles = ["oh-my-niu"]
 load = ["git", "prompts", "keybindings"]
 ```
 
@@ -107,7 +107,7 @@ alias ll='ls -la'
 export EDITOR=vim
 
 hello() {
-  echo "hello from winuxsh"
+  echo "hello from niubash"
 }
 ```
 
@@ -121,25 +121,25 @@ through the bundle update model.
 - `source`: bundle-local `.winux` scripts sourced into the current interactive
   shell session during startup and declared `precmd`, `preexec`, or `chpwd`
   lifecycle hooks.
-- `builtin`: first-party Rust implementations inside Winuxsh, mainly fallback
+- `builtin`: first-party Rust implementations inside Niubash, mainly fallback
   and native adapters.
 - `wasm`: future third-party plugins through WASM/WASI. WASM packs declare a
   protocol, module path, SHA-256, WIT world, timeout, and memory cap in
-  `[wasm]`. Current command modules run in the Winuxsh wasmi host when enabled,
-  export `winuxsh_plugin_main() -> i32`, may write stdout/stderr, may read
+  `[wasm]`. Current command modules run in the Niubash wasmi host when enabled,
+  export `niubash_plugin_main() -> i32`, may write stdout/stderr, may read
   simple command arguments, may read cwd when `cwd:read` is declared, and may
   read explicitly allowed env values when `env:read:<NAME>` is declared through
-  the Phase 14-17 `winuxsh:plugin/host` imports; completions, prompt segments,
+  the Phase 14-17 `niubash:plugin/host` imports; completions, prompt segments,
   WASI, and shell-mutating WASM APIs remain later host surfaces.
 - `process`: compatibility and debugging adapters for existing tools. Process
   packs declare a protocol, command, arguments, timeout, and permissions in
-  `[process]`; Winuxsh validates that contract before accepting the bundle and
+  `[process]`; Niubash validates that contract before accepting the bundle and
   executes enabled command or lifecycle hook exports with deterministic IO.
 
 The runtime kind changes how a plugin executes, not the manifest or user-facing
 plugin identity.
 
-The current `builtin` packs are a transition layer. They let Winuxsh put
+The current `builtin` packs are a transition layer. They let Niubash put
 existing first-party behavior behind the same registry, permission review, and
 bundle defaults before every host API needed by external plugins exists. They
 should not imply that future plugins are limited to aliases or static data.
@@ -178,7 +178,7 @@ before they can safely become WASM/provider plugins:
 - startup/precmd/preexec/chpwd context;
 - deterministic failure and rollback behavior.
 
-Keep core shell machinery inside Winuxsh:
+Keep core shell machinery inside Niubash:
 
 - rubash parsing and execution;
 - reedline editor primitives;
@@ -197,29 +197,29 @@ Pack authors should start from `docs/authoring.md` and the templates under
 so CI fails if the public authoring entry point disappears or templates stop
 parsing as TOML.
 
-Host-side auditing stays in Winuxsh:
+Host-side auditing stays in Niubash:
 
 ```sh
-winuxsh plugin doctor [--json]
-winuxsh plugin review <pack> [--json]
+niubash plugin doctor [--json]
+niubash plugin review <pack> [--json]
 ```
 
 ## Update Model
 
-Winuxsh releases should include a baseline copy of this bundle. Later, users can
+Niubash releases should include a baseline copy of this bundle. Later, users can
 update the bundle independently:
 
 ```sh
-winuxsh plugin update oh-my-winuxsh --from dist\oh-my-winuxsh-1.0.1.zip --checksum-file dist\oh-my-winuxsh-1.0.1.zip.sha256
-winuxsh plugin rollback oh-my-winuxsh
+niubash plugin update oh-my-niu --from dist\oh-my-niu-1.0.1.zip --checksum-file dist\oh-my-niu-1.0.1.zip.sha256
+niubash plugin rollback oh-my-niu
 ```
 
 Install state should be versioned and reversible:
 
 ```text
-%LOCALAPPDATA%/Winuxsh/bundles/oh-my-winuxsh/<version>/
-%LOCALAPPDATA%/Winuxsh/bundles/oh-my-winuxsh/current
-~/.winuxsh/plugin-lock.toml
+%LOCALAPPDATA%/Niubash/bundles/oh-my-niu/<version>/
+%LOCALAPPDATA%/Niubash/bundles/oh-my-niu/current
+~/.niubash/plugin-lock.toml
 ```
 
 The lock file should include bundle version, checksum, source, active path, and
@@ -228,6 +228,6 @@ previous path for rollback.
 ## Zsh Migration
 
 Zsh may be an onboarding source, but it is not plugin identity. A migration
-command may read `.zshrc` and suggest `oh-my-winuxsh/git` or
-`oh-my-winuxsh/zoxide`. It must not claim that Winuxsh supports zsh plugins or
+command may read `.zshrc` and suggest `oh-my-niu/git` or
+`oh-my-niu/zoxide`. It must not claim that Niubash supports zsh plugins or
 ZLE.

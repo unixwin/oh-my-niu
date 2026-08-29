@@ -1,4 +1,4 @@
-# oh-my-winuxsh kubectl plugin
+# oh-my-niu kubectl plugin
 # Static aliases and completion metadata stay in bundle assets.
 
 kns() {

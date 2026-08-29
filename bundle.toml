@@ -1,15 +1,15 @@
-name = "oh-my-winuxsh"
-version = "1.0.1"
+name = "oh-my-niu"
+version = "2.0.0"
 publisher = "unixwin"
-api = "winuxsh:plugin-bundle@0.1.0"
-min_winuxsh = "0.10.0"
+api = "niubash:plugin-bundle@0.1.0"
+min_niubash = "1.0.0"
 channel = "stable"
-summary = "Official bundled plugin distribution for Winuxsh."
+summary = "Official bundled plugin distribution for Niubash."
 
 [update]
 source = "github-release"
-repo = "unixwin/oh-my-winuxsh"
-asset = "oh-my-winuxsh-{version}.zip"
+repo = "unixwin/oh-my-niu"
+asset = "oh-my-niu-{version}.zip"
 
 [packs]
 default = ["git", "winuxcmd-core", "prompts", "keybindings", "themes"]

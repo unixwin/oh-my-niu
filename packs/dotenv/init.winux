@@ -1,50 +1,50 @@
-# oh-my-winuxsh dotenv plugin
+# oh-my-niu dotenv plugin
 # Loads simple KEY=VALUE lines from .env into the current shell.
 
-__winuxsh_dotenv_load() {
+__niubash_dotenv_load() {
   [ -f .env ] || return 0
 
-  while IFS= read -r __winuxsh_dotenv_line || [ -n "$__winuxsh_dotenv_line" ]; do
-    case "$__winuxsh_dotenv_line" in
+  while IFS= read -r __niubash_dotenv_line || [ -n "$__niubash_dotenv_line" ]; do
+    case "$__niubash_dotenv_line" in
       ""|\#*)
         continue
         ;;
       export\ *)
-        __winuxsh_dotenv_line=${__winuxsh_dotenv_line#export }
+        __niubash_dotenv_line=${__niubash_dotenv_line#export }
         ;;
     esac
 
-    case "$__winuxsh_dotenv_line" in
+    case "$__niubash_dotenv_line" in
       *=*) ;;
       *) continue ;;
     esac
 
-    __winuxsh_dotenv_key=${__winuxsh_dotenv_line%%=*}
-    __winuxsh_dotenv_value=${__winuxsh_dotenv_line#*=}
+    __niubash_dotenv_key=${__niubash_dotenv_line%%=*}
+    __niubash_dotenv_value=${__niubash_dotenv_line#*=}
 
-    case "$__winuxsh_dotenv_key" in
+    case "$__niubash_dotenv_key" in
       ""|[0-9]*|*[!A-Za-z0-9_]*)
         continue
         ;;
     esac
 
-    case "$__winuxsh_dotenv_value" in
+    case "$__niubash_dotenv_value" in
       \"*\")
-        __winuxsh_dotenv_value=${__winuxsh_dotenv_value#\"}
-        __winuxsh_dotenv_value=${__winuxsh_dotenv_value%\"}
+        __niubash_dotenv_value=${__niubash_dotenv_value#\"}
+        __niubash_dotenv_value=${__niubash_dotenv_value%\"}
         ;;
       \'*\')
-        __winuxsh_dotenv_value=${__winuxsh_dotenv_value#\'}
-        __winuxsh_dotenv_value=${__winuxsh_dotenv_value%\'}
+        __niubash_dotenv_value=${__niubash_dotenv_value#\'}
+        __niubash_dotenv_value=${__niubash_dotenv_value%\'}
         ;;
     esac
 
-    export "$__winuxsh_dotenv_key=$__winuxsh_dotenv_value"
+    export "$__niubash_dotenv_key=$__niubash_dotenv_value"
   done < .env
 }
 
-case "$WINUXSH_PLUGIN_HOOK" in
+case "$NIU_PLUGIN_HOOK" in
   startup|precmd|chpwd)
-    __winuxsh_dotenv_load
+    __niubash_dotenv_load
     ;;
 esac

@@ -1,7 +1,7 @@
 # Alias Assets
 
-This directory owns first-party alias tables for builtin packs. Winuxsh loads
-these files from the active `oh-my-winuxsh` bundle first and falls back to its
+This directory owns first-party alias tables for builtin packs. Niubash loads
+these files from the active `oh-my-niu` bundle first and falls back to its
 compiled alias tables only when the bundle is absent or invalid.
 
 Each file is named after the exporting pack:

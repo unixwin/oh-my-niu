@@ -1,10 +1,10 @@
 name = "starship"
-bundle = "oh-my-winuxsh"
+bundle = "oh-my-niu"
 version = "1.0.1"
 kind = "source"
-api = "winuxsh:plugin@0.1.0"
+api = "niubash:plugin@0.1.0"
 category = "ux"
-summary = "Full Starship prompt integration for Winuxsh."
+summary = "Full Starship prompt integration for Niubash."
 default = false
 permissions = ["shell:source", "cwd:read", "process:run:starship"]
 required_binaries = ["starship"]

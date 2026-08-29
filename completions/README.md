@@ -1,7 +1,7 @@
 # Completion Assets
 
-This directory owns first-party static completion definitions that Winuxsh loads
-from the active `oh-my-winuxsh` bundle when the matching pack is enabled.
+This directory owns first-party static completion definitions that Niubash loads
+from the active `oh-my-niu` bundle when the matching pack is enabled.
 
 Current bundle-owned definitions:
 - `git.toml`
@@ -10,7 +10,7 @@ Current bundle-owned definitions:
 - `npm.toml`
 - WinuxCmd core command definitions generated from `winuxcmd.exe <command> --help` and exported by `packs/winuxcmd-core/plugin.toml`.
 
-Each file uses the native Winuxsh TOML completion schema:
+Each file uses the native Niubash TOML completion schema:
 - top-level `command = "<name>"`;
 - optional `[[flags]]` entries with `short`, `long`, `takes_value`, `values`, or
   `values_from = "path"`;

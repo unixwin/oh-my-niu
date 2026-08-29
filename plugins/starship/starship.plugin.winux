@@ -1,11 +1,11 @@
-# Full Starship prompt integration for Winuxsh.
+# Full Starship prompt integration for Niubash.
 #
-# Winuxsh now supports the Bash prompt contract (`PROMPT_COMMAND`, `PS1`,
+# Niubash now supports the Bash prompt contract (`PROMPT_COMMAND`, `PS1`,
 # `PS2`, and `PS0`), so use Starship's official Bash init path instead of
-# adapting individual Starship modules into Winuxsh prompt segments.
+# adapting individual Starship modules into Niubash prompt segments.
 
 if ! command -v starship >/dev/null 2>&1; then
-  echo "oh-my-winuxsh: starship plugin requires 'starship' on PATH" >&2
+  echo "oh-my-niu: starship plugin requires 'starship' on PATH" >&2
   return 127 2>/dev/null || exit 127
 fi
 

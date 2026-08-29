@@ -1,7 +1,7 @@
-# Oh My Winuxsh
+# Oh My Niu
 
 Official Oh My-style plugin framework and bundled plugin distribution for
-Winuxsh.
+Niubash.
 
 This repository is not a zsh runtime and does not provide zsh plugin
 compatibility. It should, however, follow the useful shape of Oh My Zsh, fish
@@ -15,11 +15,11 @@ The active direction is framework-first. See [docs/design.md](docs/design.md).
 The earlier manifest-first bundle design is retired in
 [docs/design-manifest-first-retired.md](docs/design-manifest-first-retired.md).
 
-- Winuxsh owns shell primitives, plugin loading, lifecycle dispatch, permission
+- Niubash owns shell primitives, plugin loading, lifecycle dispatch, permission
   review, update/rollback, and fast native helpers.
-- `oh-my-winuxsh` owns framework libraries, plugin directories, themes, default
+- `oh-my-niu` owns framework libraries, plugin directories, themes, default
   composition, and the official bundled distribution.
-- Bundled plugins may ship with Winuxsh, but bundled does not mean built in.
+- Bundled plugins may ship with Niubash, but bundled does not mean built in.
 - `plugin.toml` is metadata for packaging, review, and updates. It should not be
   the only way to express local trusted shell behavior.
 
@@ -28,9 +28,9 @@ The earlier manifest-first bundle design is retired in
 The target interactive setup is directory-first and familiar:
 
 ```sh
-WINUXSH_PLUGINS=(prompt-core git docker zoxide)
-WINUXSH_THEME=minimal
-source "$WINUXSH/oh-my-winuxsh.winux"
+NIU_PLUGINS=(prompt-core git docker zoxide)
+NIU_THEME=minimal
+source "$NIUBASH/oh-my-niu.winux"
 ```
 
 Starship can also own the prompt through its normal Bash init path. In that
@@ -38,9 +38,9 @@ mode, load the `starship` plugin instead of `prompt-core`/`theme-*` prompt
 plugins so Starship controls `PROMPT_COMMAND`, `PS1`, `PS2`, and `PS0`:
 
 ```sh
-WINUXSH_PLUGINS=(git starship docker zoxide)
-WINUXSH_THEME=
-source "$WINUXSH/oh-my-winuxsh.winux"
+NIU_PLUGINS=(git starship docker zoxide)
+NIU_THEME=
+source "$NIUBASH/oh-my-niu.winux"
 ```
 
 Managed TOML should map onto the same plugin system:
@@ -48,7 +48,7 @@ Managed TOML should map onto the same plugin system:
 ```toml
 [plugins]
 enabled = true
-bundles = ["oh-my-winuxsh"]
+bundles = ["oh-my-niu"]
 load = ["prompt-core", "git", "docker", "zoxide"]
 
 [theme]
@@ -59,16 +59,16 @@ enabled = true
 permissions = ["shell:source", "cwd:read", "process:run:git"]
 ```
 
-The bundle is still expected to ship with Winuxsh releases so users have an
+The bundle is still expected to ship with Niubash releases so users have an
 offline baseline, then update independently:
 
 ```sh
-winuxsh plugin update oh-my-winuxsh --from dist\oh-my-winuxsh-1.0.1.zip --checksum-file dist\oh-my-winuxsh-1.0.1.zip.sha256
-winuxsh plugin rollback oh-my-winuxsh
+niubash plugin update oh-my-niu --from dist\oh-my-niu-1.0.1.zip --checksum-file dist\oh-my-niu-1.0.1.zip.sha256
+niubash plugin rollback oh-my-niu
 ```
 
-User shell code and normal plugin/theme selection belong in `~/.winuxshrc`.
-`~/.winshrc` is only a legacy fallback when `~/.winuxshrc` is absent:
+User shell code and normal plugin/theme selection belong in `~/.niubashrc`.
+`~/.winshrc` is only a legacy fallback when `~/.niubashrc` is absent:
 
 ```sh
 alias ll='ls -la'
@@ -78,8 +78,8 @@ export EDITOR=vim
 ## Repository Layout
 
 ```text
-oh-my-winuxsh/
-  oh-my-winuxsh.winux
+oh-my-niu/
+  oh-my-niu.winux
   bundle.toml
   index.toml
   lib/
@@ -252,7 +252,7 @@ plugins, and `prompt-core` owns the common prompt API.
 ## Transitional Packs
 
 `packs/`, `aliases/`, `completions/`, `prompts/`, `keybindings/`, and
-`themes/` remain in the repository because current Winuxsh releases and release
+`themes/` remain in the repository because current Niubash releases and release
 tools still understand the manifest-first bundle layout. New behavior should
 land in `plugins/<name>/` first, then expose metadata through TOML for review,
 managed install, update, and rollback.
@@ -266,27 +266,27 @@ longer the product model for prompt and theme behavior; `prompt-core` and
 Public authoring is moving to plugin directories. During the transition,
 [docs/authoring.md](docs/authoring.md) still describes the manifest-backed
 bundle surface and templates, but new user-facing behavior should start as
-plugin-owned code/assets rather than Winuxsh `builtin` packs.
+plugin-owned code/assets rather than Niubash `builtin` packs.
 
 ```sh
 python tools/validate_bundle.py
 python tools/package_bundle.py --check
-winuxsh plugin review <pack>
-winuxsh plugin search devtools
-winuxsh plugin themes
-winuxsh plugin install git
-winuxsh plugin doctor
+niubash plugin review <pack>
+niubash plugin search devtools
+niubash plugin themes
+niubash plugin install git
+niubash plugin doctor
 ```
 
 `plugin.toml` remains useful for package metadata, permissions, exports, and
-required binaries before Winuxsh runs distributed plugin code. It should be a
+required binaries before Niubash runs distributed plugin code. It should be a
 review/install surface over plugin directories, not the product identity.
 
 ## Legacy
 
 The old repository content was a `.winsh` script framework from a previous
-WinSH era. It is preserved through the `legacy-pre-winuxsh-plugin-system`
-branch/tag; the active branch describes the official Winuxsh plugin bundle.
+WinSH era. It is preserved through the `legacy-pre-niubash-plugin-system`
+branch/tag; the active branch describes the official Niubash plugin bundle.
 
 See [docs/migration.md](docs/migration.md).
 
@@ -306,12 +306,12 @@ python tools/package_bundle.py --check
 # Windows launcher:
 py tools\validate_bundle.py
 py tools\package_bundle.py --check
-# Runtime smoke with the selected Winuxsh binary:
-winuxsh tools/smoke_framework.winux .
+# Runtime smoke with the selected Niubash binary:
+niubash tools/smoke_framework.winux .
 ```
 
 The validator checks release documents, package index drift, release checksum
-policy, bundle API and minimum Winuxsh metadata, old manifest inventory drift,
+policy, bundle API and minimum Niubash metadata, old manifest inventory drift,
 directory plugin inventory drift, plugin entry scripts, plugin metadata,
 exported asset presence, parseable alias packs, parseable completion
 definitions, prompt preset segment references, declarative keybinding metadata,
@@ -319,26 +319,26 @@ and theme TOML assets. Source manifests must declare `shell:source`, supported
 lifecycle hooks, and a bundle-local `.winux` entry. Process manifests must be
 explicit opt-in and declare protocol, command, timeout, permissions, and
 required binaries. The package script builds
-`dist/oh-my-winuxsh-{version}.zip` plus a `.sha256` checksum when run without
+`dist/oh-my-niu-{version}.zip` plus a `.sha256` checksum when run without
 `--check`.
 WASM manifests must also declare a bundle-local `.wasm` module path and SHA-256;
 the validator checks that the artifact exists, matches the digest, and has a
-valid WASM binary header. The current Winuxsh host can execute explicit command
-modules that export `winuxsh_plugin_main() -> i32`, may write stdout/stderr,
+valid WASM binary header. The current Niubash host can execute explicit command
+modules that export `niubash_plugin_main() -> i32`, may write stdout/stderr,
 may read simple command arguments, read cwd when `cwd:read` is declared, and
 read explicitly permitted env values through `env:read:<NAME>` using the Phase
-14-17 `winuxsh:plugin/host` imports; broader WASI and
+14-17 `niubash:plugin/host` imports; broader WASI and
 shell-mutating host APIs remain future work.
 
 Local release smoke test:
 
 ```sh
 py tools\package_bundle.py
-winuxsh plugin update oh-my-winuxsh --from dist\oh-my-winuxsh-1.0.1.zip --checksum-file dist\oh-my-winuxsh-1.0.1.zip.sha256
-winuxsh plugin bundle status
-winuxsh plugin search workflow
-winuxsh plugin doctor
-winuxsh plugin search workflow
+niubash plugin update oh-my-niu --from dist\oh-my-niu-1.0.1.zip --checksum-file dist\oh-my-niu-1.0.1.zip.sha256
+niubash plugin bundle status
+niubash plugin search workflow
+niubash plugin doctor
+niubash plugin search workflow
 ```
 
 ## License
@@ -347,14 +347,14 @@ MIT unless the Unixwin project chooses a different repository license before the
 first bundle release.
 ## Source Scope
 
-`oh-my-winuxsh.winux` is meant to be sourced from an interactive Winuxsh rc file.
+`oh-my-niu.winux` is meant to be sourced from an interactive Niubash rc file.
 Sourcing the framework updates the current shell process by registering aliases,
 functions, prompt helpers, hooks, and environment variables exported by enabled
 plugins.
 
-Sourcing does not persist configuration by itself. Changes to `WINUXSH_PLUGINS`,
-`WINUXSH_THEME`, `WINUXSH_CUSTOM`, PATH setup, or other startup policy need to
-live in the user's rc file, such as `~/.winuxshrc`, or in files sourced from that
+Sourcing does not persist configuration by itself. Changes to `NIU_PLUGINS`,
+`NIU_THEME`, `NIU_CUSTOM`, PATH setup, or other startup policy need to
+live in the user's rc file, such as `~/.niubashrc`, or in files sourced from that
 rc file. A plugin should only rewrite rc files through an explicit user command,
 not as a side effect of normal framework sourcing.
 

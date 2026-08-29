@@ -7,5 +7,5 @@ permissions = ["shell:source", "cwd:read", "env:write", "process:run:direnv"]
 required_binaries = ["direnv"]
 
 [exports]
-functions = ["__winuxsh_direnv_apply"]
+functions = ["__niubash_direnv_apply"]
 hooks = ["startup", "precmd", "chpwd"]

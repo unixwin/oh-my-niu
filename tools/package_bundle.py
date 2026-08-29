@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a deterministic oh-my-winuxsh release bundle zip and SHA-256 file."""
+"""Build a deterministic oh-my-niu release bundle zip and SHA-256 file."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ RELEASE_DIRS = [
     "templates",
     "tools",
 ]
-RELEASE_FILES = ["oh-my-winuxsh.winux", "bundle.toml", "index.toml", "README.md", "CHANGELOG.md"]
+RELEASE_FILES = ["oh-my-niu.winux", "bundle.toml", "index.toml", "README.md", "CHANGELOG.md"]
 
 
 def include_release_path(path: Path) -> bool:
@@ -84,7 +84,7 @@ def build(out_dir: Path, check: bool) -> tuple[Path, str, Path | None]:
         raise SystemExit("\n".join(f"error: {error}" for error in errors))
 
     version = load_version()
-    zip_path = out_dir / f"oh-my-winuxsh-{version}.zip"
+    zip_path = out_dir / f"oh-my-niu-{version}.zip"
     write_zip(zip_path)
     digest = sha256_file(zip_path)
     checksum_path = None if check else write_checksum(zip_path, digest)
@@ -98,7 +98,7 @@ def main() -> int:
     args = parser.parse_args()
 
     if args.check:
-        with tempfile.TemporaryDirectory(prefix="oh-my-winuxsh-package-") as temp:
+        with tempfile.TemporaryDirectory(prefix="oh-my-niu-package-") as temp:
             zip_path, digest, _ = build(Path(temp), check=True)
             print(f"package check ok: {zip_path.name} sha256={digest}")
         return 0

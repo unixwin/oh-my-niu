@@ -1,10 +1,10 @@
 name = "themes"
-bundle = "oh-my-winuxsh"
+bundle = "oh-my-niu"
 version = "1.0.1"
 kind = "builtin"
-api = "winuxsh:plugin@0.1.0"
+api = "niubash:plugin@0.1.0"
 category = "ux"
-summary = "Official Winuxsh color themes for prompt and Git status styling."
+summary = "Official Niubash color themes for prompt and Git status styling."
 default = true
 permissions = []
 required_binaries = []

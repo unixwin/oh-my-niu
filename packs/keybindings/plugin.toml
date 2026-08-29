@@ -1,10 +1,10 @@
 name = "keybindings"
-bundle = "oh-my-winuxsh"
+bundle = "oh-my-niu"
 version = "1.0.1"
 kind = "builtin"
-api = "winuxsh:plugin@0.1.0"
+api = "niubash:plugin@0.1.0"
 category = "ux"
-summary = "Winuxsh keybinding presets mapped to native reedline actions."
+summary = "Niubash keybinding presets mapped to native reedline actions."
 default = true
 permissions = []
 required_binaries = []

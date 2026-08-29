@@ -1,8 +1,21 @@
 # Changelog
 
-All notable changes to the official oh-my-winuxsh bundle are recorded here.
+All notable changes to the official oh-my-niu bundle are recorded here.
 Release entries describe bundle artifacts, host compatibility, permission
 changes, and user-visible asset changes.
+
+## 2.0.0 (unreleased)
+
+- Renamed the bundle from `oh-my-winuxsh` to `oh-my-niu` to match the
+  niubash 1.0.0 brand. Installed `~/.oh-my-winuxsh` directories keep
+  working: niubash discovers the pre-rename layout as a fallback.
+- Bundle/plugin API identifiers move from the `winuxsh:` prefix to
+  `niubash:` (`niubash:plugin-bundle@0.1.0`, `niubash:plugin@0.1.0`,
+  `niubash:plugin-index@0.1.0`). Manifests may declare either
+  `min_niubash` or the legacy `min_winuxsh` field.
+- Entry point renamed to `oh-my-niu.winux`; scripts now use the `NIU_*`
+  environment prefix (`NIU_PLUGINS`, `NIU_THEME`, `NIU_THEME_PLUGIN`)
+  and the `NIUBASH` bundle-root variable.
 
 ## 1.0.1 - 2026-08-02
 

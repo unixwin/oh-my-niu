@@ -1,7 +1,7 @@
 # Externalization Readiness
 This document classifies official bundle behavior during the framework-first
 migration. The active runtime target is `plugins/<name>/`; old `packs/`
-manifests remain a compatibility and review surface until Winuxsh loads
+manifests remain a compatibility and review surface until Niubash loads
 directory plugins directly.
 
 ## Current Bundle Facts
@@ -14,27 +14,27 @@ directory plugins directly.
   intentionally define aliases, functions, exports, cwd changes, or hook glue
   in the current interactive shell.
 - Bridge plugins identify features whose low-level call site is still
-  Winuxsh/Reedline-owned. They are temporary ownership markers, not a final
+  Niubash/Reedline-owned. They are temporary ownership markers, not a final
   runtime kind for third-party behavior.
 - WASM packs are command-only today. They can read args, cwd, and explicitly
   allowed env values, but they cannot act as completion, prompt, hook, or
   command-not-found or other providers yet.
-- Process packs can wrap native commands, lifecycle hooks, and Winuxsh
+- Process packs can wrap native commands, lifecycle hooks, and Niubash
   command-not-found provider binding, but they do not mutate the current shell;
   source plugins are the current shell-effect path.
 - Shell-mutating WASM/provider packs still need explicit host APIs before they
   can mutate env/cwd/history outside trusted source code.
-- Winuxsh plugin CLI review surfaces expose derived `execution_model`,
+- Niubash plugin CLI review surfaces expose derived `execution_model`,
   `externalization_class`, and readiness profile values for these rows. They
   are not bundle manifest fields.
-- `exports.providers` is a guarded provider marker. In current Winuxsh, process
+- `exports.providers` is a guarded provider marker. In current Niubash, process
   packs may use it for command-not-found with `command:diagnose`; it is not a
   new runtime kind and does not make command-style WASM act as a provider.
 
 ## Pack Matrix
 | Feature | Current surface | Classification | Target runtime / execution model | Missing host API or decision | Shell-mutating | Fallback needed |
 | --- | --- | --- | --- | --- | --- | --- |
-| `prompt-core` | `plugins/prompt-core` | Prompt API source plugin | Prompt segment registry, render entry points, `WINUXSH_PROMPT_GIT` host snapshot backed by a persistent gitstatus helper | Richer host prompt call-in | No direct mutation | Yes |
+| `prompt-core` | `plugins/prompt-core` | Prompt API source plugin | Prompt segment registry, render entry points, `NIU_PROMPT_GIT` host snapshot backed by a persistent gitstatus helper | Richer host prompt call-in | No direct mutation | Yes |
 | `git` | `plugins/git` | Source workflow helper plus declarative assets | `.winux` aliases/functions plus alias/completion assets | Remove core fallback alias injection when plugin disabled | Yes, by trusted source | Minimal |
 | `common-aliases` | `plugins/common-aliases` | Source alias helper plus declarative asset | Small Oh My-style aliases owned by the plugin directory | None for current first-party helper scope | Yes, by trusted source | Minimal |
 | `docker` | `plugins/docker` | Source helper plus declarative assets | `.winux` helpers plus alias/completion assets | None for current first-party helper scope | Yes, by trusted source | Minimal |
@@ -55,7 +55,7 @@ directory plugins directly.
 | Old `themes` pack | `packs/themes` | Transitional compatibility asset | Superseded by `theme-*` plugins, including migrated `default`/`dark`/`light`/`colorful` and p10-style themes | Keep catalog compatibility until host loads plugin themes directly | No | Minimal |
 
 ## Next Bundle Work
-1. Wire Winuxsh managed config to the same directory loader as shell arrays.
+1. Wire Niubash managed config to the same directory loader as shell arrays.
 2. Stop host fallback injection when an equivalent directory plugin is disabled.
 3. Keep reducing legacy `packs/prompts` and `packs/themes` to package-review
    metadata now that `prompt-core` and `theme-*` plugins own prompt behavior.

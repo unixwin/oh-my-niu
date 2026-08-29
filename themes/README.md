@@ -1,6 +1,6 @@
 # Theme Assets
 
-Official Winuxsh theme assets use the same TOML style schema as user themes under `~/.winuxsh/themes`.
+Official Niubash theme assets use the same TOML style schema as user themes under `~/.niubash/themes`.
 
 These files are static style data. Runtime theme behavior belongs to
 `plugins/theme-*`, where each theme selects prompt-core templates and symbols.

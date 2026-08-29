@@ -1,9 +1,9 @@
-# Oh My Winuxsh git plugin.
+# Oh My Niu git plugin.
 
-[ -f "$WINUXSH/lib/git.winux" ] && . "$WINUXSH/lib/git.winux"
-[ -f "$WINUXSH/lib/aliases.winux" ] && . "$WINUXSH/lib/aliases.winux"
+[ -f "$NIUBASH/lib/git.winux" ] && . "$NIUBASH/lib/git.winux"
+[ -f "$NIUBASH/lib/aliases.winux" ] && . "$NIUBASH/lib/aliases.winux"
 
-winuxsh_load_alias_asset git
+niubash_load_alias_asset git
 
 groot() {
   __omw_git_root="$(git rev-parse --show-toplevel 2>/dev/null)" || return

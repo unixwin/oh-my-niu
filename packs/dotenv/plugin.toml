@@ -1,10 +1,10 @@
 name = "dotenv"
-bundle = "oh-my-winuxsh"
+bundle = "oh-my-niu"
 version = "1.0.1"
 kind = "source"
-api = "winuxsh:plugin@0.1.0"
+api = "niubash:plugin@0.1.0"
 category = "environment"
-summary = "Safe .env loader on Winuxsh lifecycle hooks."
+summary = "Safe .env loader on Niubash lifecycle hooks."
 default = false
 permissions = ["shell:source", "cwd:read", "fs:read:.env", "env:write"]
 required_binaries = []

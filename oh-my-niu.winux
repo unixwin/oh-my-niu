@@ -1,0 +1,80 @@
+# Oh My Niu framework entry point.
+#
+# Source this file from an interactive Niubash rc file after setting NIUBASH to
+# this repository or installed bundle root:
+#
+#   NIUBASH=C:/Users/me/.niubash/oh-my-niu
+#   NIU_PLUGINS=(prompt-core git docker zoxide)
+#   NIU_THEME=minimal
+#   source "$NIUBASH/oh-my-niu.winux"
+
+if [ -z "${NIUBASH:-}" ]; then
+  if [ -n "${BASH_SOURCE:-}" ]; then
+    __omw_entry="${BASH_SOURCE[0]}"
+    NIUBASH="$(cd "$(dirname "$__omw_entry")" 2>/dev/null && pwd)"
+  else
+    NIUBASH="$HOME/.oh-my-niu"
+  fi
+  export NIUBASH
+fi
+
+: "${NIU_CUSTOM:=$HOME/.niubash/custom}"
+if [ -z "${NIU_THEME+x}" ]; then
+  NIU_THEME=minimal
+fi
+if [ -z "${NIU_THEME_PLUGIN+x}" ] && [ -n "${NIU_THEME:-}" ]; then
+  NIU_THEME_PLUGIN="theme-$NIU_THEME"
+fi
+
+if [ -z "${NIU_DISABLE_DEFAULT_PLUGINS:-}" ]; then
+  if [ "${#NIU_PLUGINS[@]}" -eq 0 ] 2>/dev/null; then
+    NIU_PLUGINS=(prompt-core git)
+  fi
+fi
+
+[ -f "$NIUBASH/lib/hooks.winux" ] && . "$NIUBASH/lib/hooks.winux"
+[ -f "$NIUBASH/lib/aliases.winux" ] && . "$NIUBASH/lib/aliases.winux"
+[ -f "$NIUBASH/lib/prompt.winux" ] && . "$NIUBASH/lib/prompt.winux"
+[ -f "$NIUBASH/lib/git.winux" ] && . "$NIUBASH/lib/git.winux"
+
+__omw_loaded_plugins=" "
+
+for __omw_plugin in "${NIU_PLUGINS[@]}"; do
+  if [ -n "$__omw_plugin" ]; then
+    __omw_plugin_custom="$NIU_CUSTOM/plugins/$__omw_plugin/$__omw_plugin.plugin.winux"
+    __omw_plugin_bundle="$NIUBASH/plugins/$__omw_plugin/$__omw_plugin.plugin.winux"
+
+    if [ -f "$__omw_plugin_custom" ]; then
+      . "$__omw_plugin_custom"
+    else
+      if [ -f "$__omw_plugin_bundle" ]; then
+        . "$__omw_plugin_bundle"
+      fi
+    fi
+    __omw_loaded_plugins="$__omw_loaded_plugins$__omw_plugin "
+  fi
+done
+
+if [ -n "${NIU_THEME:-}" ] && [ -n "${NIU_THEME_PLUGIN:-}" ]; then
+  case "$__omw_loaded_plugins" in
+    *" $NIU_THEME_PLUGIN "*) ;;
+    *)
+      __omw_theme_plugin_custom="$NIU_CUSTOM/plugins/$NIU_THEME_PLUGIN/$NIU_THEME_PLUGIN.plugin.winux"
+      __omw_theme_plugin_bundle="$NIUBASH/plugins/$NIU_THEME_PLUGIN/$NIU_THEME_PLUGIN.plugin.winux"
+
+      if [ -f "$__omw_theme_plugin_custom" ]; then
+        . "$__omw_theme_plugin_custom"
+      else
+        if [ -f "$__omw_theme_plugin_bundle" ]; then
+          . "$__omw_theme_plugin_bundle"
+        else
+          echo "oh-my-niu: theme plugin '$NIU_THEME_PLUGIN' not found for theme '$NIU_THEME'" >&2
+        fi
+      fi
+      ;;
+  esac
+fi
+
+niubash_run_startup_hooks 2>/dev/null || true
+
+unset __omw_lib __omw_plugin __omw_plugin_custom __omw_plugin_bundle __omw_entry __omw_theme_plugin_custom __omw_theme_plugin_bundle __omw_loaded_plugins

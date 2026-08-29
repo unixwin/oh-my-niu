@@ -1,10 +1,10 @@
 name = "direnv"
-bundle = "oh-my-winuxsh"
+bundle = "oh-my-niu"
 version = "1.0.1"
 kind = "source"
-api = "winuxsh:plugin@0.1.0"
+api = "niubash:plugin@0.1.0"
 category = "environment"
-summary = "direnv environment export on Winuxsh lifecycle hooks."
+summary = "direnv environment export on Niubash lifecycle hooks."
 default = false
 permissions = ["shell:source", "cwd:read", "env:write", "process:run:direnv"]
 required_binaries = ["direnv"]

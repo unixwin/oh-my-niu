@@ -26,10 +26,10 @@ git_prompt_info() {
   __omw_git_branch="$(git_current_branch)" || return
   [ -n "$__omw_git_branch" ] || return
 
-  __omw_git_prefix="${WINUXSH_THEME_GIT_PROMPT_PREFIX:-git:(}"
-  __omw_git_suffix="${WINUXSH_THEME_GIT_PROMPT_SUFFIX:-)}"
-  __omw_git_dirty="${WINUXSH_THEME_GIT_PROMPT_DIRTY:- *}"
-  __omw_git_clean="${WINUXSH_THEME_GIT_PROMPT_CLEAN:-}"
+  __omw_git_prefix="${NIU_THEME_GIT_PROMPT_PREFIX:-git:(}"
+  __omw_git_suffix="${NIU_THEME_GIT_PROMPT_SUFFIX:-)}"
+  __omw_git_dirty="${NIU_THEME_GIT_PROMPT_DIRTY:- *}"
+  __omw_git_clean="${NIU_THEME_GIT_PROMPT_CLEAN:-}"
 
   if parse_git_dirty; then
     __omw_git_state="$__omw_git_dirty"

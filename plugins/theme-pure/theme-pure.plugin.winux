@@ -1,10 +1,10 @@
 # Pure-inspired official theme plugin.
 
-[ -f "$WINUXSH/lib/prompt.winux" ] && . "$WINUXSH/lib/prompt.winux"
+[ -f "$NIUBASH/lib/prompt.winux" ] && . "$NIUBASH/lib/prompt.winux"
 
-WINUXSH_ACTIVE_THEME=pure
-WINUXSH_THEME_FILE="$WINUXSH/themes/pure.toml"
-WINUXSH_PROMPT_SYMBOL="${WINUXSH_PROMPT_SYMBOL:-%}"
-export WINUXSH_ACTIVE_THEME WINUXSH_THEME_FILE WINUXSH_PROMPT_SYMBOL
+NIU_ACTIVE_THEME=pure
+NIU_THEME_FILE="$NIUBASH/themes/pure.toml"
+NIU_PROMPT_SYMBOL="${NIU_PROMPT_SYMBOL:-%}"
+export NIU_ACTIVE_THEME NIU_THEME_FILE NIU_PROMPT_SYMBOL
 
-winuxsh_prompt_use_template "{cwd} {git}{newline}{prompt_char} " ""
+niubash_prompt_use_template "{cwd} {git}{newline}{prompt_char} " ""

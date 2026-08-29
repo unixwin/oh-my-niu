@@ -1,4 +1,4 @@
-# Historical Oh My Winuxsh Roadmap
+# Historical Oh My Niu Roadmap
 
 Status: historical. This roadmap describes the manifest-first bundle phases that
 were implemented before the framework-first direction reset. Keep it for
@@ -9,13 +9,13 @@ The active direction is [design.md](design.md): plugin directories first,
 themes as plugins, bundled distribution without core-owned builtin plugin
 behavior, and manifests as packaging/review metadata over the plugin system.
 
-This roadmap is synchronized with Winuxsh's plugin-system roadmap. Phase numbers
-must stay aligned with `DOCS/plugin-system-roadmap.md` in the Winuxsh repo.
+This roadmap is synchronized with Niubash's plugin-system roadmap. Phase numbers
+must stay aligned with `DOCS/plugin-system-roadmap.md` in the Niubash repo.
 
-`oh-my-winuxsh` is the official bundled plugin distribution for Winuxsh. It is
+`oh-my-niu` is the official bundled plugin distribution for Niubash. It is
 not an Oh My Zsh fork, not a zsh plugin runtime, and not the legacy `.winsh`
 script framework. It can ship reviewed bundle-local `.winux` source packs
-through the Winuxsh manifest/permission model.
+through the Niubash manifest/permission model.
 
 ## Phase 0 - Repository Reset
 
@@ -51,19 +51,19 @@ Status: done on this branch.
   - `keybindings`;
   - `prompts`.
 - Keep pack names, defaults, categories, permissions, and exports aligned with
-  Winuxsh's builtin registry.
+  Niubash's builtin registry.
 
 Done when:
 
 - All TOML files parse.
 - Every pack in `bundle.toml` has a matching `packs/<name>/plugin.toml`.
-- `winuxsh plugin list` can represent the same pack set.
+- `niubash plugin list` can represent the same pack set.
 
 ## Phase 2 - Managed Config Support
 
 Status: done on this branch.
 
-oh-my-winuxsh work:
+oh-my-niu work:
 
 - Document canonical enable/disable examples:
   - `[plugins]`;
@@ -77,25 +77,25 @@ oh-my-winuxsh work:
   - unknown runtime kind/category.
   - exported asset directory presence.
 
-Winuxsh dependency:
+Niubash dependency:
 
-- Done in the paired Winuxsh branch:
-  - `winuxsh plugin plan enable/disable <pack>`;
-  - `winuxsh plugin enable/disable <pack>`;
+- Done in the paired Niubash branch:
+  - `niubash plugin plan enable/disable <pack>`;
+  - `niubash plugin enable/disable <pack>`;
   - managed TOML block writes with backups;
   - refusal to overwrite user-authored `[plugins]`.
 
 Done when:
 
-- Manifest permissions are exactly what Winuxsh writes into managed TOML.
-- Docs tell users to use `winuxsh plugin ...`, not to edit rc for plugin state.
+- Manifest permissions are exactly what Niubash writes into managed TOML.
+- Docs tell users to use `niubash plugin ...`, not to edit rc for plugin state.
 - `python tools/validate_bundle.py` passes.
 
 ## Phase 3 - Runtime Activation Assets
 
 Status: done on this branch.
 
-oh-my-winuxsh work:
+oh-my-niu work:
 
 - Add asset directories:
   - `aliases/`;
@@ -104,27 +104,27 @@ oh-my-winuxsh work:
   - `keybindings/`.
 - Split data assets from manifests.
 - Mark which packs are pure metadata, which use `.winux` source helpers, and
-  which still need Winuxsh builtin code.
+  which still need Niubash builtin code.
 - Add tests that exported assets exist.
 
-Winuxsh dependency:
+Niubash dependency:
 
-- Done in the paired Winuxsh branch:
+- Done in the paired Niubash branch:
   - effective plugin state resolves `[plugins]`, bundle defaults, and legacy
     migration reads;
   - `git` enables/disables the official source/assets pack;
   - `docker`, `kubectl`, and `npm` source/assets packs activate from canonical
-    `[plugins]` state with Winuxsh compiled fallback data where needed;
+    `[plugins]` state with Niubash compiled fallback data where needed;
   - `zoxide` and other existing builtin shims can be activated from
     canonical `[plugins]` state;
   - explicit `keybindings` disable blocks legacy native widget presets and
     imported bindkey suggestions;
-  - explicit `prompts` disable prevents Winuxsh segment prompt presets from
+  - explicit `prompts` disable prevents Niubash segment prompt presets from
     activating while leaving the core template prompt renderer available.
 
 Done when:
 
-- Enabling a pack through `[plugins]` can activate its existing Winuxsh builtin
+- Enabling a pack through `[plugins]` can activate its existing Niubash builtin
   behavior.
 - Static assets can be loaded from the bundle when present.
 
@@ -132,7 +132,7 @@ Done when:
 
 Status: done on this branch for deterministic local release artifacts.
 
-oh-my-winuxsh work:
+oh-my-niu work:
 
 - Produce a deterministic release zip:
   - `bundle.toml`;
@@ -140,29 +140,29 @@ oh-my-winuxsh work:
   - static asset directories;
   - docs;
   - checksum.
-- Keep layout stable so Winuxsh installers can embed it.
+- Keep layout stable so Niubash installers can embed it.
 - Provide `tools/package_bundle.py` for deterministic zip and SHA-256 output.
 
-Winuxsh dependency:
+Niubash dependency:
 
 - Bundle install path and `plugin-lock.toml`.
-- `winuxsh plugin bundle status`.
+- `niubash plugin bundle status`.
 - Installed bundle manifest loading with compiled registry fallback.
 
 Done when:
 
-- A Winuxsh release can include this bundle and run offline.
+- A Niubash release can include this bundle and run offline.
 - The active bundle version can be inspected.
 - `py tools\package_bundle.py --check` passes.
 
 ## Phase 5 - Independent Update and Rollback
 
-Status: in progress on the paired Winuxsh branch.
+Status: in progress on the paired Niubash branch.
 
-oh-my-winuxsh work:
+oh-my-niu work:
 
 - Publish GitHub releases with:
-  - `oh-my-winuxsh-{version}.zip`;
+  - `oh-my-niu-{version}.zip`;
   - checksum;
   - changelog;
   - compatibility notes.
@@ -171,10 +171,10 @@ oh-my-winuxsh work:
   - minor: new pack or safe permission expansion;
   - major: breaking manifest/API change.
 
-Winuxsh dependency:
+Niubash dependency:
 
-- `winuxsh plugin update oh-my-winuxsh --from <bundle-dir-or-zip>`.
-- `winuxsh plugin rollback oh-my-winuxsh`.
+- `niubash plugin update oh-my-niu --from <bundle-dir-or-zip>`.
+- `niubash plugin rollback oh-my-niu`.
 - Atomic `plugin-lock.toml` switching with active and previous bundle paths.
 - Optional SHA-256 validation through `--checksum` or `--checksum-file`.
 
@@ -187,31 +187,31 @@ Current branch progress:
 - `tools/package_bundle.py` includes `CHANGELOG.md`; docs already ship through
   the `docs/` release directory.
 - `tools/package_bundle.py` emits the zip and `.sha256` artifacts consumed by
-  local `winuxsh plugin update`.
-- The paired Winuxsh branch can install local bundle directories or zips,
-  validate bundle API, `min_winuxsh`, manifests/API, and roll back by
+  local `niubash plugin update`.
+- The paired Niubash branch can install local bundle directories or zips,
+  validate bundle API, `min_niubash`, manifests/API, and roll back by
   switching the lock file.
-- `bundle.toml` now declares `api = "winuxsh:plugin-bundle@0.1.0"`
-  and `min_winuxsh = "0.10.0"`; the validator treats both as release
+- `bundle.toml` now declares `api = "niubash:plugin-bundle@0.1.0"`
+  and `min_niubash = "0.10.0"`; the validator treats both as release
   metadata.
-- The paired Winuxsh branch validates bundle-level API and refuses updates
-  whose `min_winuxsh` is newer than the running host.
-- The paired Winuxsh branch can download `--github-release latest|vX.Y.Z` from
-  `unixwin/oh-my-winuxsh`, fetch the matching `.sha256`, and enter the same
+- The paired Niubash branch validates bundle-level API and refuses updates
+  whose `min_niubash` is newer than the running host.
+- The paired Niubash branch can download `--github-release latest|vX.Y.Z` from
+  `unixwin/oh-my-niu`, fetch the matching `.sha256`, and enter the same
   validated local update path.
 - GitHub release publishing remains the next layer after local and downloaded
   artifact install/rollback.
 
 Done when:
 
-- Users can update this bundle without updating `winuxsh.exe`.
+- Users can update this bundle without updating `niubash.exe`.
 - Failed update verification leaves the current bundle active.
 
 ## Phase 6 - First-Party Asset Ownership
 
 Status: implemented on this branch.
 
-oh-my-winuxsh work:
+oh-my-niu work:
 
 - Own first-party alias tables, completion definitions, prompt presets, and
   keybinding metadata where safe.
@@ -225,9 +225,9 @@ Current branch progress:
   source/assets packs.
 - `tools/validate_bundle.py` checks that every pack with `exports.aliases = true`
   has a parseable non-empty `aliases/<pack>.toml` file.
-- The paired Winuxsh branch loads active bundle aliases before compiled fallback
+- The paired Niubash branch loads active bundle aliases before compiled fallback
   aliases, so a bundle release can change aliases without replacing
-  `winuxsh.exe`.
+  `niubash.exe`.
 - `completions/git.toml`, `completions/docker.toml`,
   `completions/kubectl.toml`, and `completions/npm.toml` now own first-party
   static completion definitions for the same devtool packs.
@@ -240,31 +240,31 @@ Current branch progress:
   `lean`, `classic`, `rainbow`, `pure`, and `robbyrussell` preset layouts.
 - `keybindings/common.toml`, `keybindings/emacs.toml`, and
   `keybindings/vi.toml` now own declarative keybinding metadata for native
-  Winuxsh editor actions. They do not execute ZLE widgets or shell scripts.
+  Niubash editor actions. They do not execute ZLE widgets or shell scripts.
 - `tools/validate_bundle.py` checks exported prompt segments resolve to
   declared assets, preset segment references are valid, and exported
   keybinding metadata has non-empty key/action pairs.
-- The paired Winuxsh branch loads active bundle prompt presets before compiled
+- The paired Niubash branch loads active bundle prompt presets before compiled
   fallback presets while keeping user-authored prompt element overrides
   authoritative.
-- The paired Winuxsh branch surfaces active bundle keybinding metadata through
-  `winuxsh plugin info keybindings`, proving keymap summaries and binding counts
-  can update independently from `winuxsh.exe`.
+- The paired Niubash branch surfaces active bundle keybinding metadata through
+  `niubash plugin info keybindings`, proving keymap summaries and binding counts
+  can update independently from `niubash.exe`.
 
-Winuxsh dependency:
+Niubash dependency:
 
 - Bundle asset loader with compiled fallback and user-visible metadata inspection.
 
 Done when:
 
 - A bundle release can update a first-party completion, prompt preset, or
-  keybinding metadata file without replacing Winuxsh itself.
+  keybinding metadata file without replacing Niubash itself.
 
 ## Phase 7 - Process Plugin Runtime
 
 Status: host contract documented; no official fixture pack is shipped.
 
-oh-my-winuxsh work:
+oh-my-niu work:
 
 - Add process plugin examples only when they are real user-facing packs.
 - Mark every process pack explicit opt-in.
@@ -273,16 +273,16 @@ oh-my-winuxsh work:
 Current branch progress:
 
 - The official bundle does not ship process-only test packs.
-- Winuxsh host tests keep process command and lifecycle fixtures in generated
+- Niubash host tests keep process command and lifecycle fixtures in generated
   test bundles instead of exposing them as official plugins.
 - `tools/validate_bundle.py` now rejects process packs that are default-enabled,
   omit `[process]`, omit `process:run:<command>`, exceed timeout bounds, or
   fail to export at least one command/hook.
 
-Winuxsh dependency:
+Niubash dependency:
 
 - `kind = "process"` backend with permissions and deterministic IO.
-- Current Winuxsh branch validates and surfaces the process manifest contract,
+- Current Niubash branch validates and surfaces the process manifest contract,
   executes enabled process commands, and runs enabled startup/precmd/preexec/
   chpwd process hooks without allowing shell-state mutation.
 
@@ -295,7 +295,7 @@ Done when:
 
 Status: host contract documented; no official WASM demo pack is shipped.
 
-oh-my-winuxsh work:
+oh-my-niu work:
 
 - Add a WASM pack only when it provides real sandbox/provider distribution
   value.
@@ -306,18 +306,18 @@ oh-my-winuxsh work:
 Current branch progress:
 
 - The official bundle does not ship WASM-only test packs.
-- Winuxsh host tests keep WASM command fixtures in generated test bundles
+- Niubash host tests keep WASM command fixtures in generated test bundles
   instead of exposing them as official plugins.
 - The validator rejects WASM packs that are default-enabled, omit `[wasm]`, use
   native `process:run:*` permissions, declare native required binaries, export
   lifecycle hooks, or exceed timeout/memory bounds.
 
-Winuxsh dependency:
+Niubash dependency:
 
-- Stable WASM command host API and sandbox. Current Winuxsh branch validates and
+- Stable WASM command host API and sandbox. Current Niubash branch validates and
   surfaces the manifest contract, then executes enabled command modules with
   wasmi, memory caps, fuel metering, deterministic missing-export failure, exit
-  code 124 for out-of-fuel modules, and Phase 14-17 `winuxsh:plugin/host`
+  code 124 for out-of-fuel modules, and Phase 14-17 `niubash:plugin/host`
   stdout/stderr, command-argument, and permission-gated cwd/env imports backed by
   exported module memory.
 
@@ -330,16 +330,16 @@ Done when:
 
 Status: implemented on this branch.
 
-oh-my-winuxsh work:
+oh-my-niu work:
 
 - Become the reference bundle layout.
 - Add authoring templates.
 - Add manifest schema docs.
 - Add validation scripts suitable for CI.
-- Use `winuxsh plugin doctor [--json]` as the host-side smoke diagnostic for
+- Use `niubash plugin doctor [--json]` as the host-side smoke diagnostic for
   active bundle state, enabled packs, missing required binaries, and permission
   drift while authoring manifests.
-- Use `winuxsh plugin review <pack> [--json]` as the host-side permission
+- Use `niubash plugin review <pack> [--json]` as the host-side permission
   review surface for manifest permissions, runtime kind, exported surfaces, and
   required binaries before enabling a pack.
 
@@ -361,10 +361,10 @@ Current branch progress:
 - `index.toml` now defines the Phase 9 package discovery index and is
   validated against every pack manifest before packaging.
 
-Winuxsh dependency:
+Niubash dependency:
 
 - Plugin discovery/install, permission review, and compatibility policy. Current
-  Winuxsh branch has `plugin search`, `plugin install`, `plugin doctor`, and
+  Niubash branch has `plugin search`, `plugin install`, `plugin doctor`, and
   `plugin review` surfaces.
 Done when:
 
@@ -375,7 +375,7 @@ Done when:
 
 Status: implemented on this branch.
 
-oh-my-winuxsh work:
+oh-my-niu work:
 
 - Keep the legacy tag/branch for history.
 - Keep docs clear that the active bundle does not source zsh or `.winsh`
@@ -385,28 +385,28 @@ oh-my-winuxsh work:
 
 Current branch progress:
 
-- `legacy-pre-winuxsh-plugin-system` exists as both a branch and tag for the old
+- `legacy-pre-niubash-plugin-system` exists as both a branch and tag for the old
   `.winsh` script-framework state.
 - README, design, authoring, and compatibility docs present the manifest-first
-  Winuxsh plugin model as the active surface.
+  Niubash plugin model as the active surface.
 - Remaining zsh and `.winsh` references are confined to migration, non-goals, or
   legacy preservation notes. First-party shell helpers now use `.winux`.
 
-Winuxsh dependency:
+Niubash dependency:
 
 - `[plugins]` is the primary config path.
 - Old zsh-native wording is confined to migration notes.
 
 Done when:
 
-- New users see only the Winuxsh-native plugin model.
+- New users see only the Niubash-native plugin model.
 
 ## Phase 11 - Theme Pack Assets
 
 Status: implemented on this branch as the official bundle foundation; third-party
 theme marketplace/distribution remains future work.
 
-oh-my-winuxsh work:
+oh-my-niu work:
 
 - Add a `themes` builtin UX pack with static theme assets.
 - Ship official theme style assets such as `themes/minimal.toml`,
@@ -416,11 +416,11 @@ oh-my-winuxsh work:
 - Validate exported theme files in `tools/validate_bundle.py`.
 - Include `themes/` in deterministic release artifacts.
 
-Winuxsh dependency:
+Niubash dependency:
 
-- The paired Winuxsh branch loads active official bundle themes after built-in
+- The paired Niubash branch loads active official bundle themes after built-in
   themes and user theme files, so bundle updates can add or revise official
-  themes without replacing `winuxsh.exe`.
+  themes without replacing `niubash.exe`.
 
 Done when:
 
@@ -431,8 +431,8 @@ Done when:
 Status: implemented on this branch for the official bundle index policy;
 third-party registry signing remains future work.
 
-oh-my-winuxsh work:
-- Treat `oh-my-winuxsh` as the official first-party bundle and reference layout,
+oh-my-niu work:
+- Treat `oh-my-niu` as the official first-party bundle and reference layout,
   not as the only place future plugins can live.
 - Require `index.toml` release metadata to declare `checksum_required = true`,
   `checksum_algorithm = "sha256"`, and `signature = "unsupported"` until
@@ -440,8 +440,8 @@ oh-my-winuxsh work:
 - Validate index bundle/version/API/min-host fields and pack entries against
   `bundle.toml` and every pack manifest before packaging.
 
-Winuxsh dependency:
-- The paired Winuxsh branch validates installed bundle `index.toml` before
+Niubash dependency:
+- The paired Niubash branch validates installed bundle `index.toml` before
   switching `plugin-lock.toml`.
 - Zip updates with checksum-required indexes must pass `--checksum` or
   `--checksum-file`; index drift leaves the existing active bundle untouched.
@@ -453,17 +453,17 @@ Done when:
 
 ## Phase 13 - Theme Market Discovery Surface
 
-Status: implemented on the paired Winuxsh branch as a read-only catalog
+Status: implemented on the paired Niubash branch as a read-only catalog
 foundation; theme install/apply marketplace commands remain future work.
 
-oh-my-winuxsh work:
+oh-my-niu work:
 - Keep official `themes/*` assets under the `themes` pack as the first bundle
   catalog data source.
-- Document `winuxsh plugin themes` as the read-only bridge from the official
+- Document `niubash plugin themes` as the read-only bridge from the official
   bundle into future third-party theme distribution.
 
-Winuxsh dependency:
-- The paired Winuxsh branch exposes `winuxsh plugin themes [--json]` for
+Niubash dependency:
+- The paired Niubash branch exposes `niubash plugin themes [--json]` for
   built-in, user, and active bundle theme sources.
 - The catalog preserves built-in > user > active bundle resolution order and
   does not install or select themes automatically.
@@ -483,7 +483,7 @@ shape, not the final definition of a plugin ecosystem.
 The immediate gate is [Externalization Readiness](externalization-readiness.md):
 classify every pack before changing manifest schema or moving behavior into
 WASM/process artifacts.
-oh-my-winuxsh work:
+oh-my-niu work:
 - Keep static assets in TOML where TOML is enough:
   - aliases;
   - completion definitions;
@@ -500,7 +500,7 @@ oh-my-winuxsh work:
   plugins, and do not require users to source bundle files from `~/.winshrc`.
 - Document every code-bearing pack's permissions, host API surface, timeout,
   resource limit, and rollback behavior before making it a normal pack.
-Winuxsh dependency:
+Niubash dependency:
 - WASM host APIs for more than command modules:
   - completion/provider output;
   - prompt segment output;
@@ -518,7 +518,7 @@ Candidate migration order:
 - Move simple shell helper packs through `source` when the desired behavior is
   aliases, functions, startup glue, or lifecycle effects in the current
   interactive shell.
-- Keep the implemented Winuxsh process binding for the
+- Keep the implemented Niubash process binding for the
   [command-not-found provider](command-not-found-provider-abi.md), and migrate
   the official pack only when the provider behavior is deliberate.
 - Expand next to prompt segment calculators, completion providers, and
@@ -536,12 +536,12 @@ Every pack change must update:
 - `packs/<name>/plugin.toml`;
 - README pack table;
 - this roadmap if it changes phase scope;
-- Winuxsh registry/tests if the pack is builtin.
+- Niubash registry/tests if the pack is builtin.
 
 Every release must include:
 
 - bundle version;
-- minimum Winuxsh version;
+- minimum Niubash version;
 - checksum;
 - changelog;
 - rollback-safe artifact layout.

@@ -1,8 +1,8 @@
 name = "example-process"
-bundle = "oh-my-winuxsh"
+bundle = "oh-my-niu"
 version = "1.0.1"
 kind = "process"
-api = "winuxsh:plugin@0.1.0"
+api = "niubash:plugin@0.1.0"
 category = "workflow"
 summary = "Process plugin pack template."
 default = false
@@ -20,7 +20,7 @@ themes = []
 providers = []
 
 [process]
-protocol = "winuxsh:process-plugin@0.1.0"
+protocol = "niubash:process-plugin@0.1.0"
 command = "example-tool"
 args = ["--json"]
 timeout_millis = 1000

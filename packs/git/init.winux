@@ -1,4 +1,4 @@
-# oh-my-winuxsh git plugin
+# oh-my-niu git plugin
 # Aliases and completions live in bundle assets; this file adds shell functions.
 
 groot() {

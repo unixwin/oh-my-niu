@@ -1,20 +1,20 @@
-schema = "winuxsh:plugin-index@0.1.0"
-bundle = "oh-my-winuxsh"
-version = "1.0.1"
-bundle_api = "winuxsh:plugin-bundle@0.1.0"
-min_winuxsh = "0.10.0"
+schema = "niubash:plugin-index@0.1.0"
+bundle = "oh-my-niu"
+version = "2.0.0"
+bundle_api = "niubash:plugin-bundle@0.1.0"
+min_niubash = "1.0.0"
 
 [release]
-artifact = "oh-my-winuxsh-1.0.1.zip"
-checksum = "oh-my-winuxsh-1.0.1.zip.sha256"
+artifact = "oh-my-niu-2.0.0.zip"
+checksum = "oh-my-niu-2.0.0.zip.sha256"
 checksum_algorithm = "sha256"
 checksum_required = true
 signature = "unsupported"
 
 [[packs]]
 name = "git"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "source"
 category = "devtools"
 summary = "Git aliases, completions, and prompt segments."
@@ -24,8 +24,8 @@ required_binaries = ["git"]
 
 [[packs]]
 name = "winuxcmd-core"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "builtin"
 category = "devtools"
 summary = "Static completions for WinuxCmd core command links."
@@ -35,8 +35,8 @@ required_binaries = []
 
 [[packs]]
 name = "docker"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "source"
 category = "devtools"
 summary = "Docker aliases and completion hints."
@@ -46,8 +46,8 @@ required_binaries = ["docker"]
 
 [[packs]]
 name = "kubectl"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "source"
 category = "devtools"
 summary = "Kubectl aliases and completion hints."
@@ -57,8 +57,8 @@ required_binaries = ["kubectl"]
 
 [[packs]]
 name = "npm"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "source"
 category = "devtools"
 summary = "npm aliases and runtime completion shape detection."
@@ -68,8 +68,8 @@ required_binaries = ["npm"]
 
 [[packs]]
 name = "zoxide"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "source"
 category = "workflow"
 summary = "z command shim plus directory tracking."
@@ -79,30 +79,30 @@ required_binaries = ["zoxide"]
 
 [[packs]]
 name = "direnv"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "source"
 category = "environment"
-summary = "direnv environment export on Winuxsh lifecycle hooks."
+summary = "direnv environment export on Niubash lifecycle hooks."
 default = false
 permissions = ["shell:source", "cwd:read", "env:write", "process:run:direnv"]
 required_binaries = ["direnv"]
 
 [[packs]]
 name = "dotenv"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "source"
 category = "environment"
-summary = "Safe .env loader on Winuxsh lifecycle hooks."
+summary = "Safe .env loader on Niubash lifecycle hooks."
 default = false
 permissions = ["shell:source", "cwd:read", "fs:read:.env", "env:write"]
 required_binaries = []
 
 [[packs]]
 name = "fzf"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "source"
 category = "workflow"
 summary = "Interactive directory selector commands."
@@ -112,8 +112,8 @@ required_binaries = ["fzf"]
 
 [[packs]]
 name = "command-not-found"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "builtin"
 category = "hints"
 summary = "Interactive missing-command hints for native Windows."
@@ -123,8 +123,8 @@ required_binaries = []
 
 [[packs]]
 name = "last-working-dir"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "source"
 category = "workflow"
 summary = "Last working directory cache and restore command."
@@ -134,8 +134,8 @@ required_binaries = []
 
 [[packs]]
 name = "thefuck"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "source"
 category = "workflow"
 summary = "Correction shim for the previous interactive command."
@@ -145,19 +145,19 @@ required_binaries = ["thefuck"]
 
 [[packs]]
 name = "keybindings"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "builtin"
 category = "ux"
-summary = "Winuxsh keybinding presets mapped to native reedline actions."
+summary = "Niubash keybinding presets mapped to native reedline actions."
 default = true
 permissions = []
 required_binaries = []
 
 [[packs]]
 name = "prompts"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "builtin"
 category = "ux"
 summary = "Prompt presets and reusable prompt segments."
@@ -167,30 +167,30 @@ required_binaries = []
 
 [[packs]]
 name = "starship"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "source"
 category = "ux"
-summary = "Full Starship prompt integration for Winuxsh."
+summary = "Full Starship prompt integration for Niubash."
 default = false
 permissions = ["shell:source", "cwd:read", "process:run:starship"]
 required_binaries = ["starship"]
 
 [[packs]]
 name = "themes"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "builtin"
 category = "ux"
-summary = "Official Winuxsh color themes for prompt and Git status styling."
+summary = "Official Niubash color themes for prompt and Git status styling."
 default = true
 permissions = []
 required_binaries = []
 
 [[packs]]
 name = "env-sync"
-version = "1.0.1"
-api = "winuxsh:plugin@0.1.0"
+version = "2.0.0"
+api = "niubash:plugin@0.1.0"
 kind = "source"
 category = "workflow"
 summary = "Push/pull the WPM package manifest and shell config via any rclone remote."

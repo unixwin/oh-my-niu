@@ -4,20 +4,20 @@
 # host-provided snapshot so prompt rendering never runs git or repaints the
 # active input line after a late async result.
 
-[ -f "$WINUXSH/lib/prompt.winux" ] && . "$WINUXSH/lib/prompt.winux"
+[ -f "$NIUBASH/lib/prompt.winux" ] && . "$NIUBASH/lib/prompt.winux"
 
-: "${WINUXSH_PROMPT_GIT_BACKEND:=native}"
-: "${WINUXSH_PROMPT_LEFT:={cwd} {git}{prompt_char} }"
-: "${WINUXSH_PROMPT_RIGHT:=}"
-: "${WINUXSH_PROMPT_GIT_DIRTY:=0}"
+: "${NIU_PROMPT_GIT_BACKEND:=native}"
+: "${NIU_PROMPT_LEFT:={cwd} {git}{prompt_char} }"
+: "${NIU_PROMPT_RIGHT:=}"
+: "${NIU_PROMPT_GIT_DIRTY:=0}"
 
-case "${WINUXSH_PROMPT_GIT_BACKEND:-native}" in
+case "${NIU_PROMPT_GIT_BACKEND:-native}" in
   legacy|shell)
-    [ -f "$WINUXSH/lib/git.winux" ] && . "$WINUXSH/lib/git.winux"
+    [ -f "$NIUBASH/lib/git.winux" ] && . "$NIUBASH/lib/git.winux"
     ;;
 esac
 
-winuxsh_prompt_register_segment() {
+niubash_prompt_register_segment() {
   __omw_segment_name="$1"
   __omw_segment_function="$2"
 
@@ -29,17 +29,17 @@ winuxsh_prompt_register_segment() {
       ;;
   esac
 
-  eval "WINUXSH_PROMPT_SEGMENT_$__omw_segment_name=\"$__omw_segment_function\""
-  case " ${WINUXSH_PROMPT_SEGMENTS:-} " in
+  eval "NIU_PROMPT_SEGMENT_$__omw_segment_name=\"$__omw_segment_function\""
+  case " ${NIU_PROMPT_SEGMENTS:-} " in
     *" $__omw_segment_name "*) ;;
     *)
-      WINUXSH_PROMPT_SEGMENTS="${WINUXSH_PROMPT_SEGMENTS:+$WINUXSH_PROMPT_SEGMENTS }$__omw_segment_name"
-      export WINUXSH_PROMPT_SEGMENTS
+      NIU_PROMPT_SEGMENTS="${NIU_PROMPT_SEGMENTS:+$NIU_PROMPT_SEGMENTS }$__omw_segment_name"
+      export NIU_PROMPT_SEGMENTS
       ;;
   esac
 }
 
-winuxsh_prompt_segment_value() {
+niubash_prompt_segment_value() {
   __omw_segment_name="$1"
   case "$__omw_segment_name" in
     ""|*[!A-Za-z0-9_]*)
@@ -47,22 +47,22 @@ winuxsh_prompt_segment_value() {
       ;;
   esac
 
-  eval "__omw_segment_function=\${WINUXSH_PROMPT_SEGMENT_$__omw_segment_name:-}"
+  eval "__omw_segment_function=\${NIU_PROMPT_SEGMENT_$__omw_segment_name:-}"
   [ -n "$__omw_segment_function" ] || return 1
   "$__omw_segment_function"
 }
 
-winuxsh_prompt_cwd() {
+niubash_prompt_cwd() {
   printf "%s" "$PWD"
 }
 
-winuxsh_prompt_cwd_base() {
+niubash_prompt_cwd_base() {
   __omw_cwd_base="${PWD##*/}"
   [ -n "$__omw_cwd_base" ] || __omw_cwd_base="$PWD"
   printf "%s" "$__omw_cwd_base"
 }
 
-winuxsh_prompt_user_host() {
+niubash_prompt_user_host() {
   __omw_user="${USER:-${USERNAME:-}}"
   __omw_host="${HOSTNAME:-${COMPUTERNAME:-}}"
   if [ -n "$__omw_user" ] && [ -n "$__omw_host" ]; then
@@ -72,81 +72,81 @@ winuxsh_prompt_user_host() {
   fi
 }
 
-winuxsh_prompt_git_info() {
-  case "${WINUXSH_PROMPT_GIT_BACKEND:-native}" in
+niubash_prompt_git_info() {
+  case "${NIU_PROMPT_GIT_BACKEND:-native}" in
     native|snapshot)
-      printf "%s" "${WINUXSH_PROMPT_GIT:-}"
+      printf "%s" "${NIU_PROMPT_GIT:-}"
       ;;
     legacy|shell)
       git_prompt_info
       ;;
     *)
-      printf "%s" "${WINUXSH_PROMPT_GIT:-}"
+      printf "%s" "${NIU_PROMPT_GIT:-}"
       ;;
   esac
 }
 
-winuxsh_prompt_refresh_git_snapshot() {
-  case "${WINUXSH_PROMPT_GIT_BACKEND:-native}" in
+niubash_prompt_refresh_git_snapshot() {
+  case "${NIU_PROMPT_GIT_BACKEND:-native}" in
     legacy|shell)
-      WINUXSH_PROMPT_GIT="$(git_prompt_info)" || WINUXSH_PROMPT_GIT=""
-      export WINUXSH_PROMPT_GIT
+      NIU_PROMPT_GIT="$(git_prompt_info)" || NIU_PROMPT_GIT=""
+      export NIU_PROMPT_GIT
       ;;
   esac
-  WINUXSH_PROMPT_GIT_DIRTY=0
-  export WINUXSH_PROMPT_GIT_DIRTY
+  NIU_PROMPT_GIT_DIRTY=0
+  export NIU_PROMPT_GIT_DIRTY
 }
 
-winuxsh_prompt_mark_git_snapshot_dirty() {
-  WINUXSH_PROMPT_GIT_DIRTY=1
-  export WINUXSH_PROMPT_GIT_DIRTY
+niubash_prompt_mark_git_snapshot_dirty() {
+  NIU_PROMPT_GIT_DIRTY=1
+  export NIU_PROMPT_GIT_DIRTY
 }
 
-winuxsh_prompt_preexec() {
-  case "${WINUXSH_PREEXEC_COMMAND:-}" in
+niubash_prompt_preexec() {
+  case "${NIU_PREEXEC_COMMAND:-}" in
     git|git\ *|*/git|*/git\ *|git.exe|git.exe\ *|*/git.exe|*/git.exe\ *)
-      winuxsh_prompt_mark_git_snapshot_dirty
+      niubash_prompt_mark_git_snapshot_dirty
       ;;
   esac
 }
 
-winuxsh_prompt_precmd() {
-  if [ "${WINUXSH_PROMPT_GIT_DIRTY:-0}" != "0" ]; then
-    winuxsh_prompt_refresh_git_snapshot
+niubash_prompt_precmd() {
+  if [ "${NIU_PROMPT_GIT_DIRTY:-0}" != "0" ]; then
+    niubash_prompt_refresh_git_snapshot
   fi
 }
 
-winuxsh_prompt_status() {
-  __omw_status="${WINUXSH_LAST_STATUS:-0}"
+niubash_prompt_status() {
+  __omw_status="${NIU_LAST_STATUS:-0}"
   if [ "$__omw_status" != "0" ] && [ -n "$__omw_status" ]; then
     printf "status:%s " "$__omw_status"
   fi
 }
 
-winuxsh_prompt_time() {
+niubash_prompt_time() {
   date "+%H:%M" 2>/dev/null || true
 }
 
-winuxsh_prompt_command_execution_time() {
-  [ -n "${WINUXSH_LAST_COMMAND_DURATION:-}" ] && printf "%s" "$WINUXSH_LAST_COMMAND_DURATION"
+niubash_prompt_command_execution_time() {
+  [ -n "${NIU_LAST_COMMAND_DURATION:-}" ] && printf "%s" "$NIU_LAST_COMMAND_DURATION"
 }
 
-winuxsh_prompt_char() {
-  printf "%s" "${WINUXSH_PROMPT_SYMBOL:-%}"
+niubash_prompt_char() {
+  printf "%s" "${NIU_PROMPT_SYMBOL:-%}"
 }
 
-winuxsh_prompt_render_template() {
+niubash_prompt_render_template() {
   __omw_template="$1"
   __omw_newline="
 "
 
-  for __omw_segment_name in ${WINUXSH_PROMPT_SEGMENTS:-}; do
+  for __omw_segment_name in ${NIU_PROMPT_SEGMENTS:-}; do
     case "$__omw_template" in
       *"{$__omw_segment_name}"*)
         if [ "$__omw_segment_name" = "newline" ]; then
           __omw_segment_value="$__omw_newline"
         else
-          __omw_segment_value="$(winuxsh_prompt_segment_value "$__omw_segment_name")" || __omw_segment_value=""
+          __omw_segment_value="$(niubash_prompt_segment_value "$__omw_segment_name")" || __omw_segment_value=""
         fi
         __omw_template="${__omw_template//\{$__omw_segment_name\}/$__omw_segment_value}"
         ;;
@@ -156,45 +156,45 @@ winuxsh_prompt_render_template() {
   # Compatibility tokens for early theme plugins and host TOML examples.
   case "$__omw_template" in
     *"{git_prompt}"*)
-      __omw_git_prompt_compat="$(winuxsh_prompt_git_info)" || __omw_git_prompt_compat=""
+      __omw_git_prompt_compat="$(niubash_prompt_git_info)" || __omw_git_prompt_compat=""
       __omw_template="${__omw_template//\{git_prompt\}/$__omw_git_prompt_compat}"
       ;;
   esac
   case "$__omw_template" in
     *"{symbol}"*)
-      __omw_symbol_compat="${WINUXSH_PROMPT_SYMBOL:-%}"
+      __omw_symbol_compat="${NIU_PROMPT_SYMBOL:-%}"
       __omw_template="${__omw_template//\{symbol\}/$__omw_symbol_compat}"
       ;;
   esac
   case "$__omw_template" in
     *"{cwd_base}"*)
-      __omw_cwd_base_compat="$(winuxsh_prompt_cwd_base)" || __omw_cwd_base_compat=""
+      __omw_cwd_base_compat="$(niubash_prompt_cwd_base)" || __omw_cwd_base_compat=""
       __omw_template="${__omw_template//\{cwd_base\}/$__omw_cwd_base_compat}"
       ;;
   esac
   printf "%s" "$__omw_template"
 }
 
-winuxsh_prompt_render_left() {
-  winuxsh_prompt_render_template "$WINUXSH_PROMPT_LEFT"
+niubash_prompt_render_left() {
+  niubash_prompt_render_template "$NIU_PROMPT_LEFT"
 }
 
-winuxsh_prompt_render_right() {
-  winuxsh_prompt_render_template "$WINUXSH_PROMPT_RIGHT"
+niubash_prompt_render_right() {
+  niubash_prompt_render_template "$NIU_PROMPT_RIGHT"
 }
 
-winuxsh_prompt_register_segment cwd winuxsh_prompt_cwd
-winuxsh_prompt_register_segment cwd_base winuxsh_prompt_cwd_base
-winuxsh_prompt_register_segment user_host winuxsh_prompt_user_host
-winuxsh_prompt_register_segment git winuxsh_prompt_git_info
-winuxsh_prompt_register_segment status winuxsh_prompt_status
-winuxsh_prompt_register_segment time winuxsh_prompt_time
-winuxsh_prompt_register_segment command_execution_time winuxsh_prompt_command_execution_time
-winuxsh_prompt_register_segment prompt_char winuxsh_prompt_char
-winuxsh_prompt_register_segment newline winuxsh_prompt_char
+niubash_prompt_register_segment cwd niubash_prompt_cwd
+niubash_prompt_register_segment cwd_base niubash_prompt_cwd_base
+niubash_prompt_register_segment user_host niubash_prompt_user_host
+niubash_prompt_register_segment git niubash_prompt_git_info
+niubash_prompt_register_segment status niubash_prompt_status
+niubash_prompt_register_segment time niubash_prompt_time
+niubash_prompt_register_segment command_execution_time niubash_prompt_command_execution_time
+niubash_prompt_register_segment prompt_char niubash_prompt_char
+niubash_prompt_register_segment newline niubash_prompt_char
 
-winuxsh_prompt_refresh_git_snapshot
+niubash_prompt_refresh_git_snapshot
 
-winuxsh_add_preexec_hook winuxsh_prompt_preexec
-winuxsh_add_chpwd_hook winuxsh_prompt_mark_git_snapshot_dirty
-winuxsh_add_precmd_hook winuxsh_prompt_precmd
+niubash_add_preexec_hook niubash_prompt_preexec
+niubash_add_chpwd_hook niubash_prompt_mark_git_snapshot_dirty
+niubash_add_precmd_hook niubash_prompt_precmd

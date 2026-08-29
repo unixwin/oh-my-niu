@@ -1,8 +1,8 @@
 name = "example-wasm"
-bundle = "oh-my-winuxsh"
+bundle = "oh-my-niu"
 version = "1.0.1"
 kind = "wasm"
-api = "winuxsh:plugin@0.1.0"
+api = "niubash:plugin@0.1.0"
 category = "workflow"
 summary = "WASM command plugin pack template."
 default = false
@@ -20,9 +20,9 @@ themes = []
 providers = []
 
 [wasm]
-protocol = "winuxsh:wasm-plugin@0.1.0"
+protocol = "niubash:wasm-plugin@0.1.0"
 module = "wasm/example-wasm.wasm"
 sha256 = "0000000000000000000000000000000000000000000000000000000000000000"
-wit_world = "winuxsh:plugin/example"
+wit_world = "niubash:plugin/example"
 timeout_millis = 1000
 max_memory_pages = 16

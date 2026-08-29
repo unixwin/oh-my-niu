@@ -1,4 +1,4 @@
-# Oh My Winuxsh fzf plugin.
+# Oh My Niu fzf plugin.
 
 fzf-cd() {
   command -v fzf >/dev/null 2>&1 || {
@@ -7,15 +7,15 @@ fzf-cd() {
   }
 
   if command -v fd >/dev/null 2>&1; then
-    __winuxsh_fzf_target=$(fd -t d . 2>/dev/null | fzf "$@") || return
+    __niubash_fzf_target=$(fd -t d . 2>/dev/null | fzf "$@") || return
   elif command -v find >/dev/null 2>&1; then
-    __winuxsh_fzf_target=$(find . -type d 2>/dev/null | fzf "$@") || return
+    __niubash_fzf_target=$(find . -type d 2>/dev/null | fzf "$@") || return
   else
     echo "fzf-cd requires fd or find on PATH" >&2
     return 127
   fi
 
-  [ -n "$__winuxsh_fzf_target" ] && cd "$__winuxsh_fzf_target"
+  [ -n "$__niubash_fzf_target" ] && cd "$__niubash_fzf_target"
 }
 
 cdf() {

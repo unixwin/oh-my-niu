@@ -1,8 +1,8 @@
-# Oh My Winuxsh npm plugin.
+# Oh My Niu npm plugin.
 
-[ -f "$WINUXSH/lib/aliases.winux" ] && . "$WINUXSH/lib/aliases.winux"
+[ -f "$NIUBASH/lib/aliases.winux" ] && . "$NIUBASH/lib/aliases.winux"
 
-winuxsh_load_alias_asset npm
+niubash_load_alias_asset npm
 
 nr() {
   npm run "$@"

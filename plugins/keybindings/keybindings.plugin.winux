@@ -4,6 +4,6 @@
 # the official keybinding presets visible as plugin-owned assets during the
 # migration away from host-owned builtin packs.
 
-WINUXSH_KEYBINDINGS_PLUGIN=keybindings
-WINUXSH_KEYBINDING_ASSETS="$WINUXSH/keybindings/common.toml $WINUXSH/keybindings/emacs.toml $WINUXSH/keybindings/vi.toml"
-export WINUXSH_KEYBINDINGS_PLUGIN WINUXSH_KEYBINDING_ASSETS
+NIU_KEYBINDINGS_PLUGIN=keybindings
+NIU_KEYBINDING_ASSETS="$NIUBASH/keybindings/common.toml $NIUBASH/keybindings/emacs.toml $NIUBASH/keybindings/vi.toml"
+export NIU_KEYBINDINGS_PLUGIN NIU_KEYBINDING_ASSETS

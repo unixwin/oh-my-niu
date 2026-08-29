@@ -1,8 +1,8 @@
 name = "command-not-found"
-bundle = "oh-my-winuxsh"
+bundle = "oh-my-niu"
 version = "1.0.1"
 kind = "builtin"
-api = "winuxsh:plugin@0.1.0"
+api = "niubash:plugin@0.1.0"
 category = "hints"
 summary = "Interactive missing-command hints for native Windows."
 default = false

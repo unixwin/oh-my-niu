@@ -1,5 +1,5 @@
 name = "common"
-summary = "Core Winuxsh keybindings shared by Emacs and Vi modes."
+summary = "Core Niubash keybindings shared by Emacs and Vi modes."
 keymap = "all"
 
 [[bindings]]

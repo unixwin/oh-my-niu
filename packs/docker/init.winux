@@ -1,4 +1,4 @@
-# oh-my-winuxsh docker plugin
+# oh-my-niu docker plugin
 # Static aliases and completion metadata stay in bundle assets.
 
 dsh() {

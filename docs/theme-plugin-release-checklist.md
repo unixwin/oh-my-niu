@@ -1,7 +1,7 @@
 # 0.10.0 Theme And Plugin Release Checklist
 
-This checklist tracks the remaining work before publishing Winuxsh 0.10.0 and
-oh-my-winuxsh 1.0.1. The direction is plugin-first: Winuxsh core provides
+This checklist tracks the remaining work before publishing Niubash 0.10.0 and
+oh-my-niu 1.0.1. The direction is plugin-first: Niubash core provides
 prompt/theme/plugin APIs, while visible prompt and theme behavior lives in
 bundled source plugins.
 
@@ -37,12 +37,12 @@ bundled source plugins.
 
 ## Core Tasks
 
-- [x] Keep `~/.winuxshrc` as the primary interactive entry.
+- [x] Keep `~/.niubashrc` as the primary interactive entry.
 - [x] Keep `~/.winshrc.toml` managed/legacy, not the normal user-authored path.
-- [x] Move official prompt/theme behavior into `oh-my-winuxsh/plugins/*`.
-- [x] Keep Winuxsh core limited to prompt/theme/plugin APIs and native services.
-- [x] Add `winuxsh setup` as a repeatable theme/plugin wizard.
-- [x] Backup existing `~/.winuxshrc` before wizard rewrites it.
+- [x] Move official prompt/theme behavior into `oh-my-niu/plugins/*`.
+- [x] Keep Niubash core limited to prompt/theme/plugin APIs and native services.
+- [x] Add `niubash setup` as a repeatable theme/plugin wizard.
+- [x] Backup existing `~/.niubashrc` before wizard rewrites it.
 - [x] Preview each theme choice during setup with an actual sample prompt line.
 - [x] Render prompt cwd as `~` / `~/path` by default, with configurable full path.
 - [x] Keep Git prompt refresh from repainting the input line with unthemed text.
@@ -84,8 +84,8 @@ bundled source plugins.
 
 ## Validation And Release
 
-- [x] `cargo fmt --check -p winuxsh`
-- [x] `cargo test -p winuxsh-runtime --lib --locked`
+- [x] `cargo fmt --check -p niubash`
+- [x] `cargo test -p niubash-runtime --lib --locked`
 - [x] `cargo test --test repl_command --locked`
 - [x] `cargo test --test plugin_inventory --locked`
 - [x] rubash focused path regressions:
@@ -94,17 +94,17 @@ bundled source plugins.
   - `cargo test process_substitution_command_list --locked`
 - [x] `uv run python tools/validate_bundle.py`
 - [x] `uv run python tools/package_bundle.py --check`
-- [x] `cargo build --release --locked -p winuxsh`
+- [x] `cargo build --release --locked -p niubash`
 - [x] Backup installed binary, bundle, user rc, and installed Codex skill.
-- [x] Install rebuilt binary and updated oh-my-winuxsh bundle locally.
-- [x] Smoke test installed `cat.exe ~/.winuxshrc`, `cd ~`, `winuxsh setup`, and
+- [x] Install rebuilt binary and updated oh-my-niu bundle locally.
+- [x] Smoke test installed `cat.exe ~/.niubashrc`, `cd ~`, `niubash setup`, and
   Git prompt daemon behavior.
-  - AppData binary: `Winuxsh 0.10.0`, WinuxCmd `0.14.3`.
-  - `~/tools/winuxsh.exe`: `Winuxsh 0.10.0`, WinuxCmd `0.13.0`.
-  - `cd ~; echo PWD=$PWD; pwd; cat.exe ~/.winuxshrc` prints native
+  - AppData binary: `Niubash 0.10.0`, WinuxCmd `0.14.3`.
+  - `~/tools/niubash.exe`: `Niubash 0.10.0`, WinuxCmd `0.13.0`.
+  - `cd ~; echo PWD=$PWD; pwd; cat.exe ~/.niubashrc` prints native
     `C:/Users/...` and succeeds.
-  - `winuxsh setup` generates an isolated temporary `.winuxshrc` with theme
-    previews and `WINUXSH_PROMPT_CWD_STYLE='home'`.
+  - `niubash setup` generates an isolated temporary `.niubashrc` with theme
+    previews and `NIU_PROMPT_CWD_STYLE='home'`.
   - `--gitstatus-daemon` JSONL smoke passed through the `~/tools` entry; the
     AppData binary passed direct command-mode smoke, while this Codex
     PowerShell wrapper denied AppData stdin redirection.

@@ -1,25 +1,25 @@
 # Plugin Authoring
 
-This guide is the public authoring contract for the current Winuxsh-native
+This guide is the public authoring contract for the current Niubash-native
 plugin model. It is intentionally manifest-first: plugin trust, permissions,
-runtime kind, and exported surfaces are declared in TOML before Winuxsh runs
+runtime kind, and exported surfaces are declared in TOML before Niubash runs
 anything.
 
 ## Current Scope
 
-- `oh-my-winuxsh` is the official first-party bundle and reference layout. It
+- `oh-my-niu` is the official first-party bundle and reference layout. It
   is not the whole future plugin universe; third-party registries should use
-  the same manifest/index contract and be validated by Winuxsh host policy.
-- The current local update command accepts only the `oh-my-winuxsh` bundle name.
+  the same manifest/index contract and be validated by Niubash host policy.
+- The current local update command accepts only the `oh-my-niu` bundle name.
 - `source` packs are the Oh My-style shell plugin path. They ship bundle-local
-  `.winux` code that Winuxsh sources into the current interactive session after
+  `.winux` code that Niubash sources into the current interactive session after
   plugin review and enablement.
 - `builtin` packs are first-party fallback/native adapters because the Rust
-  implementation lives in Winuxsh core.
+  implementation lives in Niubash core.
 - `process` packs are explicit opt-in adapters for existing native tools.
 - `wasm` packs are the preferred third-party direction. Current command modules
-  export `winuxsh_plugin_main() -> i32` and may use the Phase 14-17
-  `winuxsh:plugin/host` stdout/stderr, args, cwd, and env read imports.
+  export `niubash_plugin_main() -> i32` and may use the Phase 14-17
+  `niubash:plugin/host` stdout/stderr, args, cwd, and env read imports.
 - Shell-mutating WASM APIs, arbitrary zsh source, ZLE widgets, and DLL/FFI
   plugin ABIs are outside the current public contract.
 
@@ -41,11 +41,11 @@ python tools/package_bundle.py --check
 6. Smoke the host-side review surface:
 
 ```sh
-winuxsh plugin update oh-my-winuxsh --from dist\oh-my-winuxsh-1.0.1.zip --checksum-file dist\oh-my-winuxsh-1.0.1.zip.sha256
-winuxsh plugin doctor
-winuxsh plugin search <pack>
-winuxsh plugin review <pack>
-winuxsh plugin install <pack>
+niubash plugin update oh-my-niu --from dist\oh-my-niu-1.0.1.zip --checksum-file dist\oh-my-niu-1.0.1.zip.sha256
+niubash plugin doctor
+niubash plugin search <pack>
+niubash plugin review <pack>
+niubash plugin install <pack>
 ```
 
 Use `--json` on `doctor`, `list`, `search`, `info`, `review`, and `themes` when
@@ -58,8 +58,8 @@ External bundle sources are review-only in the current host; managed
 
 ## Bundle Metadata
 
-`bundle.toml` must declare `api = "winuxsh:plugin-bundle@0.1.0"` and
-`min_winuxsh` as a semantic version. Winuxsh refuses bundle updates whose
+`bundle.toml` must declare `api = "niubash:plugin-bundle@0.1.0"` and
+`min_niubash` as a semantic version. Niubash refuses bundle updates whose
 minimum host version is newer than the running shell.
 
 `index.toml` is the registry-facing release index. It must match `bundle.toml`
@@ -75,10 +75,10 @@ Every `packs/<name>/plugin.toml` must include:
 
 ```toml
 name = "example"
-bundle = "oh-my-winuxsh"
+bundle = "oh-my-niu"
 version = "1.0.1"
 kind = "source" # asset/static data may still use builtin fallback; runtime kinds include source | builtin | process | wasm
-api = "winuxsh:plugin@0.1.0"
+api = "niubash:plugin@0.1.0"
 category = "workflow" # devtools | environment | workflow | hints | ux
 summary = "Short user-facing summary."
 default = false
@@ -102,16 +102,16 @@ Field rules:
   `bundle.toml`.
 - `bundle` must match `bundle.toml` while this repository is the active
   reference bundle.
-- `api` must be `winuxsh:plugin@0.1.0` until the host bumps the contract.
+- `api` must be `niubash:plugin@0.1.0` until the host bumps the contract.
 - `default = true` is only allowed for first-party packs that are safe without
   surprising startup side effects.
 - `permissions` must exactly describe pack behavior.
 - `required_binaries` lists native commands the user must have in `PATH`.
-- `exports` declares the surfaces Winuxsh may load. Declaring an export also
+- `exports` declares the surfaces Niubash may load. Declaring an export also
   requires the matching asset or runtime contract.
 - `exports.providers` is optional and currently limited to
   `command-not-found`. Builtin packs may use it as a readiness marker, and
-  process packs may use the implemented Winuxsh command-not-found provider
+  process packs may use the implemented Niubash command-not-found provider
   binding when `command:diagnose` is declared. WASM packs must not export
   providers until a separate WASM provider ABI exists.
 
@@ -120,7 +120,7 @@ Field rules:
 ### Source
 
 Use `kind = "source"` when a pack should behave like a traditional shell
-plugin. Winuxsh sources the declared `.winux` file into the current interactive
+plugin. Niubash sources the declared `.winux` file into the current interactive
 session during REPL startup and declared lifecycle hooks. Ordinary `-c`,
 script-file, and stdin execution stay clean unless a future explicit opt-in is
 added; the `-C` one-shot REPL path loads the same interactive startup surface
@@ -138,14 +138,14 @@ Rules:
 - `exports.hooks` may contain `startup`, `precmd`, `preexec`, and `chpwd`.
 - Source plugins may define aliases, functions, exports, cwd-changing helpers,
   and shell lifecycle glue. Normal user-authored plugin lists and shell code
-  belong in `~/.winuxshrc`; plugin CLI state and permissions remain in
+  belong in `~/.niubashrc`; plugin CLI state and permissions remain in
   legacy/managed `~/.winshrc.toml`.
-- User `~/.winuxshrc` is the primary framework entry point. `~/.winshrc`
+- User `~/.niubashrc` is the primary framework entry point. `~/.winshrc`
   remains a fallback for older setups.
 
 ### Builtin
 
-Use `kind = "builtin"` only when Winuxsh core already owns the runtime behavior.
+Use `kind = "builtin"` only when Niubash core already owns the runtime behavior.
 The bundle may own static data such as aliases, completions, prompt presets, or
 keybinding metadata, but it does not ship Rust code.
 
@@ -155,7 +155,7 @@ Process packs must be explicit opt-in:
 
 ```toml
 [process]
-protocol = "winuxsh:process-plugin@0.1.0"
+protocol = "niubash:process-plugin@0.1.0"
 command = "example-tool"
 args = ["--json"]
 timeout_millis = 1000
@@ -176,10 +176,10 @@ WASM packs must also be explicit opt-in:
 
 ```toml
 [wasm]
-protocol = "winuxsh:wasm-plugin@0.1.0"
+protocol = "niubash:wasm-plugin@0.1.0"
 module = "wasm/example.wasm"
 sha256 = "<64 lowercase hex chars>"
-wit_world = "winuxsh:plugin/example"
+wit_world = "niubash:plugin/example"
 timeout_millis = 1000
 max_memory_pages = 16
 ```
@@ -191,17 +191,17 @@ Rules:
 - `permissions` must not include `process:run:*`.
 - The module path must stay bundle-local and end in `.wasm`.
 - The SHA-256 must match the checked-in artifact.
-- Command modules must export `winuxsh_plugin_main() -> i32`.
+- Command modules must export `niubash_plugin_main() -> i32`.
 - Current host imports are limited to:
-  - `winuxsh:plugin/host.stdout_write(ptr: i32, len: i32) -> i32`;
-  - `winuxsh:plugin/host.stderr_write(ptr: i32, len: i32) -> i32`;
-  - `winuxsh:plugin/host.arg_count() -> i32`;
-  - `winuxsh:plugin/host.arg_len(index: i32) -> i32`;
-  - `winuxsh:plugin/host.arg_read(index: i32, ptr: i32) -> i32`;
-  - `winuxsh:plugin/host.cwd_len() -> i32`;
-  - `winuxsh:plugin/host.cwd_read(ptr: i32) -> i32`;
-  - `winuxsh:plugin/host.env_len(name_ptr: i32, name_len: i32) -> i32`;
-  - `winuxsh:plugin/host.env_read(name_ptr: i32, name_len: i32, value_ptr: i32) -> i32`.
+  - `niubash:plugin/host.stdout_write(ptr: i32, len: i32) -> i32`;
+  - `niubash:plugin/host.stderr_write(ptr: i32, len: i32) -> i32`;
+  - `niubash:plugin/host.arg_count() -> i32`;
+  - `niubash:plugin/host.arg_len(index: i32) -> i32`;
+  - `niubash:plugin/host.arg_read(index: i32, ptr: i32) -> i32`;
+  - `niubash:plugin/host.cwd_len() -> i32`;
+  - `niubash:plugin/host.cwd_read(ptr: i32) -> i32`;
+  - `niubash:plugin/host.env_len(name_ptr: i32, name_len: i32) -> i32`;
+  - `niubash:plugin/host.env_read(name_ptr: i32, name_len: i32, value_ptr: i32) -> i32`.
 - Host imports read from or write to exported module memory and return `-1` for
   missing memory, invalid indexes, invalid pointers, out-of-bounds memory access,
   values over the host cap, cwd reads without `cwd:read`, or env reads without a
@@ -224,7 +224,7 @@ Rules:
 | `fs:write:<path>` | high | Writes files below a declared path. |
 | `command:diagnose` | low | Reads command metadata for diagnostics. |
 
-Unknown tokens are treated as manual-review permissions by Winuxsh.
+Unknown tokens are treated as manual-review permissions by Niubash.
 
 ## Asset Rules
 
@@ -235,7 +235,7 @@ Unknown tokens are treated as manual-review permissions by Winuxsh.
 - `exports.prompt_segments` requires matching segment definitions in
   `prompts/segments.toml`.
 - `exports.keybindings` requires matching files in `keybindings/<name>.toml`.
-- `exports.themes = ["ocean"]` requires `themes/ocean.toml` using the Winuxsh
+- `exports.themes = ["ocean"]` requires `themes/ocean.toml` using the Niubash
   theme style schema.
 - `exports.providers = ["command-not-found"]` is a guarded marker for the first
   provider ABI candidate and requires `command:diagnose`.
@@ -245,8 +245,8 @@ Unknown tokens are treated as manual-review permissions by Winuxsh.
 
 - `python tools/validate_bundle.py`
 - `python tools/package_bundle.py --check`
-- `winuxsh plugin doctor --json`
-- `winuxsh plugin review <pack> --json`
+- `niubash plugin doctor --json`
+- `niubash plugin review <pack> --json`
 - Changelog entry for any permission, default, runtime, or exported asset
   change.
-- Compatibility note when a pack requires a newer Winuxsh host API.
+- Compatibility note when a pack requires a newer Niubash host API.

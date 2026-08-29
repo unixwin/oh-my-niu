@@ -1,8 +1,8 @@
 name = "git"
-bundle = "oh-my-winuxsh"
+bundle = "oh-my-niu"
 version = "1.0.1"
 kind = "source"
-api = "winuxsh:plugin@0.1.0"
+api = "niubash:plugin@0.1.0"
 category = "devtools"
 summary = "Git aliases, completions, and prompt segments."
 default = true

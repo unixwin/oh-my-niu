@@ -1,4 +1,4 @@
-# Oh My Winuxsh env-sync plugin.
+# Oh My Niu env-sync plugin.
 #
 # Push/pull the WinuxCmd package manifest and the interactive shell config
 # through any rclone remote, so a fresh machine can be restored with one
@@ -7,24 +7,24 @@
 # Setup (once):
 #   rclone config create nutstore webdav url https://dav.jianguoyun.com/dav/ \
 #     vendor other user <email> pass <app-password>
-#   export WINUXSH_SYNC_REMOTE=nutstore:winuxsh-env
+#   export NIU_SYNC_REMOTE=nutstore:niubash-env
 
 env_sync_remote() {
-  if [ -z "${WINUXSH_SYNC_REMOTE:-}" ]; then
-    echo "env-sync: WINUXSH_SYNC_REMOTE is not set." >&2
+  if [ -z "${NIU_SYNC_REMOTE:-}" ]; then
+    echo "env-sync: NIU_SYNC_REMOTE is not set." >&2
     echo "env-sync: configure an rclone remote first, for example:" >&2
     echo "  rclone config create nutstore webdav url https://dav.jianguoyun.com/dav/ vendor other user <email> pass <app-password>" >&2
-    echo "  export WINUXSH_SYNC_REMOTE=nutstore:winuxsh-env" >&2
+    echo "  export NIU_SYNC_REMOTE=nutstore:niubash-env" >&2
     return 1
   fi
-  printf '%s\n' "$WINUXSH_SYNC_REMOTE"
+  printf '%s\n' "$NIU_SYNC_REMOTE"
 }
 
 env-push() {
   local remote manifest rcfile
   remote="$(env_sync_remote)" || return 1
-  manifest="${HOME}/.winuxsh/wpm-packages.txt"
-  rcfile="${HOME}/.winuxshrc"
+  manifest="${HOME}/.niubash/wpm-packages.txt"
+  rcfile="${HOME}/.niubashrc"
   mkdir -p "$(dirname "$manifest")" || return 1
 
   # WebDAV backends (e.g. Nutstore) reject copyto when the ancestor is absent.
@@ -38,8 +38,8 @@ env-push() {
 
   local pushed="package manifest"
   if [ -f "$rcfile" ]; then
-    rclone copyto "$rcfile" "${remote}/winuxshrc" || return 1
-    pushed="$pushed + winuxshrc"
+    rclone copyto "$rcfile" "${remote}/niubashrc" || return 1
+    pushed="$pushed + niubashrc"
   fi
   echo "env-sync: pushed $pushed to ${remote}"
 }
@@ -47,8 +47,8 @@ env-push() {
 env-pull() {
   local remote manifest rcfile
   remote="$(env_sync_remote)" || return 1
-  manifest="${HOME}/.winuxsh/wpm-packages.txt"
-  rcfile="${HOME}/.winuxshrc"
+  manifest="${HOME}/.niubash/wpm-packages.txt"
+  rcfile="${HOME}/.niubashrc"
   mkdir -p "$(dirname "$manifest")" || return 1
 
   rclone copyto "${remote}/wpm-packages.txt" "$manifest" || {
@@ -56,12 +56,12 @@ env-pull() {
     return 1
   }
 
-  if rclone copyto "${remote}/winuxshrc" "${rcfile}.pull" 2>/dev/null; then
+  if rclone copyto "${remote}/niubashrc" "${rcfile}.pull" 2>/dev/null; then
     if [ -f "$rcfile" ]; then
       cp "$rcfile" "${rcfile}.bak-envsync" || return 1
     fi
     mv "${rcfile}.pull" "$rcfile"
-    echo "env-sync: restored ~/.winuxshrc (previous copy kept as ~/.winuxshrc.bak-envsync)"
+    echo "env-sync: restored ~/.niubashrc (previous copy kept as ~/.niubashrc.bak-envsync)"
   fi
 
   echo "env-sync: installing packages from manifest (already-installed ones are skipped)..."

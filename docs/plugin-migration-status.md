@@ -6,21 +6,21 @@ plugin directory.
 
 ## Goal
 
-Oh My Winuxsh should feel like Oh My Zsh, fish plugin collections, and Oh My
+Oh My Niu should feel like Oh My Zsh, fish plugin collections, and Oh My
 Posh where that helps users:
 
 - plugins are directories;
 - themes are plugins;
 - prompt support is a plugin API plus official prompt-core plugin;
 - bundle metadata packages plugins but does not define all behavior;
-- Winuxsh core exposes stable host APIs instead of owning high-level plugin
+- Niubash core exposes stable host APIs instead of owning high-level plugin
   behavior.
 
 ## Current Plugin Directory Coverage
 
 | Feature | Directory Plugin | Status | Notes |
 | --- | --- | --- | --- |
-| Prompt API / Git status prompt | `plugins/prompt-core` | Directory + host bridge + gitstatus helper landed | Owns prompt API and Git prompt entry points; Winuxsh consumes plugin-selected prompt templates and host-provided Git snapshots when TOML prompt fields are unset. |
+| Prompt API / Git status prompt | `plugins/prompt-core` | Directory + host bridge + gitstatus helper landed | Owns prompt API and Git prompt entry points; Niubash consumes plugin-selected prompt templates and host-provided Git snapshots when TOML prompt fields are unset. |
 | Git workflow | `plugins/git` | Directory landed | Owns aliases/functions/completion metadata reference; no longer claims prompt ownership. |
 | Common aliases | `plugins/common-aliases` | Started | Small Oh My-style navigation/listing aliases with matching alias asset metadata. |
 | Docker | `plugins/docker` | Started | Loads alias asset and shell helpers. |
@@ -52,25 +52,25 @@ Posh where that helps users:
 | Robby Russell theme | `plugins/theme-robbyrussell` | Started | Oh My-style default-theme analogue as an official plugin. |
 | Keybindings | `plugins/keybindings` | Bridge | Reedline application still host-bound; plugin owns asset identity. |
 | command-not-found | `plugins/command-not-found` | Bridge | Provider still host-bound; plugin owns feature identity. |
-| Completion frontend | none | Host-bound | Keep in Winuxsh/Reedline until a stable completion-provider plugin API exists. |
-| Syntax highlighting | none | Host-bound | Keep in Winuxsh/Reedline until a stable highlighter plugin API exists. |
+| Completion frontend | none | Host-bound | Keep in Niubash/Reedline until a stable completion-provider plugin API exists. |
+| Syntax highlighting | none | Host-bound | Keep in Niubash/Reedline until a stable highlighter plugin API exists. |
 
 ## Current Cut
 
-- `oh-my-winuxsh.winux` is now the framework entry point.
+- `oh-my-niu.winux` is now the framework entry point.
 - `plugins/` is the active runtime surface for official plugins and themes.
 - `plugins/theme-*` replaces the old idea of one `themes` builtin plugin.
 - Theme names `default`, `dark`, `light`, and `colorful` are matching official
-  theme plugins in the bundle. Winuxsh core exposes theme APIs and loaders; it
+  theme plugins in the bundle. Niubash core exposes theme APIs and loaders; it
   does not own these themes.
 - Theme assets now support true-colour `#RRGGBB`, background colours, and
   additional style flags so theme plugins can be tuned at finer granularity.
 - `plugins/git` is workflow-only; prompt Git status belongs to
   `plugins/prompt-core`.
 - `plugins/keybindings` and `plugins/command-not-found` are bridge plugins so
-  users and docs see plugin-owned identity while Winuxsh still owns the
+  users and docs see plugin-owned identity while Niubash still owns the
   Reedline/provider call sites.
-- Current Winuxsh core can read `plugins/<name>/plugin.toml` directly from the
+- Current Niubash core can read `plugins/<name>/plugin.toml` directly from the
   bundle. Directory plugins replace same-named legacy packs, `prompt-core`
   replaces the old `prompts` pack surface, and `theme-*` replaces the old
   `themes` pack surface in the active inventory.
@@ -78,19 +78,19 @@ Posh where that helps users:
   definitions. Disabling `git` removes both the alias pack and Git completion
   definitions; external bundles no longer borrow official compiled aliases when
   their own alias assets are missing.
-- Winuxsh host prompt startup now consumes `WINUXSH_PROMPT_LEFT`,
-  `WINUXSH_PROMPT_RIGHT`, `WINUXSH_ACTIVE_THEME`, and
-  `WINUXSH_PROMPT_SYMBOL` exported by `prompt-core`/theme plugins when the user
+- Niubash host prompt startup now consumes `NIU_PROMPT_LEFT`,
+  `NIU_PROMPT_RIGHT`, `NIU_ACTIVE_THEME`, and
+  `NIU_PROMPT_SYMBOL` exported by `prompt-core`/theme plugins when the user
   has not set explicit TOML prompt fields. Native TOML prompt configuration
   remains authoritative.
-- Winuxsh now starts a persistent `--gitstatus-daemon` helper behind the host
-  prompt bridge. `prompt-core` consumes `WINUXSH_PROMPT_GIT` as the stable
+- Niubash now starts a persistent `--gitstatus-daemon` helper behind the host
+  prompt bridge. `prompt-core` consumes `NIU_PROMPT_GIT` as the stable
   snapshot for `{git}`/`{git_prompt}`; late Git work warms a later prompt
   instead of repainting the active input line.
 - The old manifest-first `packs/` tree remains only as compatibility and
   package-review metadata during migration.
 - `tools/smoke_framework.winux` verifies the directory loader, official themes,
-  devtool aliases/functions, and hook plugins with an installed Winuxsh binary.
+  devtool aliases/functions, and hook plugins with an installed Niubash binary.
   Runtime findings are tracked in `docs/framework-smoke-notes.md`.
 
 ## Next Work

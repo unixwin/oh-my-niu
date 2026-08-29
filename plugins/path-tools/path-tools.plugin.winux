@@ -1,31 +1,31 @@
-# PATH helpers inspired by fish's path ergonomics, using Winuxsh's Windows
+# PATH helpers inspired by fish's path ergonomics, using Niubash's Windows
 # process PATH separator by default.
 
-__winuxsh_path_sep() {
+__niubash_path_sep() {
   case "$PATH" in
     *";"*) printf "%s" ";" ;;
     *) printf "%s" ":" ;;
   esac
 }
 
-__winuxsh_path_contains() {
-  __winuxsh_path_target="$1"
-  [ -n "$__winuxsh_path_target" ] || return 1
-  __winuxsh_path_sep_value="$(__winuxsh_path_sep)"
-  case "${__winuxsh_path_sep_value}${PATH}${__winuxsh_path_sep_value}" in
-    *"${__winuxsh_path_sep_value}${__winuxsh_path_target}${__winuxsh_path_sep_value}"*) return 0 ;;
+__niubash_path_contains() {
+  __niubash_path_target="$1"
+  [ -n "$__niubash_path_target" ] || return 1
+  __niubash_path_sep_value="$(__niubash_path_sep)"
+  case "${__niubash_path_sep_value}${PATH}${__niubash_path_sep_value}" in
+    *"${__niubash_path_sep_value}${__niubash_path_target}${__niubash_path_sep_value}"*) return 0 ;;
     *) return 1 ;;
   esac
 }
 
 path_list() {
-  __winuxsh_path_sep_value="$(__winuxsh_path_sep)"
-  __winuxsh_old_ifs="$IFS"
-  IFS="$__winuxsh_path_sep_value"
-  for __winuxsh_path_entry in $PATH; do
-    [ -n "$__winuxsh_path_entry" ] && printf "%s\n" "$__winuxsh_path_entry"
+  __niubash_path_sep_value="$(__niubash_path_sep)"
+  __niubash_old_ifs="$IFS"
+  IFS="$__niubash_path_sep_value"
+  for __niubash_path_entry in $PATH; do
+    [ -n "$__niubash_path_entry" ] && printf "%s\n" "$__niubash_path_entry"
   done
-  IFS="$__winuxsh_old_ifs"
+  IFS="$__niubash_old_ifs"
 }
 
 path_prepend() {
@@ -33,10 +33,10 @@ path_prepend() {
     echo "usage: path_prepend <directory>" >&2
     return 2
   }
-  __winuxsh_path_target="$1"
-  __winuxsh_path_contains "$__winuxsh_path_target" && return 0
-  __winuxsh_path_sep_value="$(__winuxsh_path_sep)"
-  PATH="$__winuxsh_path_target${PATH:+$__winuxsh_path_sep_value$PATH}"
+  __niubash_path_target="$1"
+  __niubash_path_contains "$__niubash_path_target" && return 0
+  __niubash_path_sep_value="$(__niubash_path_sep)"
+  PATH="$__niubash_path_target${PATH:+$__niubash_path_sep_value$PATH}"
   export PATH
 }
 
@@ -45,10 +45,10 @@ path_append() {
     echo "usage: path_append <directory>" >&2
     return 2
   }
-  __winuxsh_path_target="$1"
-  __winuxsh_path_contains "$__winuxsh_path_target" && return 0
-  __winuxsh_path_sep_value="$(__winuxsh_path_sep)"
-  PATH="${PATH:+$PATH$__winuxsh_path_sep_value}$__winuxsh_path_target"
+  __niubash_path_target="$1"
+  __niubash_path_contains "$__niubash_path_target" && return 0
+  __niubash_path_sep_value="$(__niubash_path_sep)"
+  PATH="${PATH:+$PATH$__niubash_path_sep_value}$__niubash_path_target"
   export PATH
 }
 
@@ -57,42 +57,42 @@ path_remove() {
     echo "usage: path_remove <directory>" >&2
     return 2
   }
-  __winuxsh_path_target="$1"
-  __winuxsh_path_sep_value="$(__winuxsh_path_sep)"
-  __winuxsh_old_ifs="$IFS"
-  __winuxsh_new_path=""
-  IFS="$__winuxsh_path_sep_value"
-  for __winuxsh_path_entry in $PATH; do
-    [ "$__winuxsh_path_entry" = "$__winuxsh_path_target" ] && continue
-    if [ -z "$__winuxsh_new_path" ]; then
-      __winuxsh_new_path="$__winuxsh_path_entry"
+  __niubash_path_target="$1"
+  __niubash_path_sep_value="$(__niubash_path_sep)"
+  __niubash_old_ifs="$IFS"
+  __niubash_new_path=""
+  IFS="$__niubash_path_sep_value"
+  for __niubash_path_entry in $PATH; do
+    [ "$__niubash_path_entry" = "$__niubash_path_target" ] && continue
+    if [ -z "$__niubash_new_path" ]; then
+      __niubash_new_path="$__niubash_path_entry"
     else
-      __winuxsh_new_path="$__winuxsh_new_path$__winuxsh_path_sep_value$__winuxsh_path_entry"
+      __niubash_new_path="$__niubash_new_path$__niubash_path_sep_value$__niubash_path_entry"
     fi
   done
-  IFS="$__winuxsh_old_ifs"
-  PATH="$__winuxsh_new_path"
+  IFS="$__niubash_old_ifs"
+  PATH="$__niubash_new_path"
   export PATH
 }
 
 path_dedupe() {
-  __winuxsh_path_sep_value="$(__winuxsh_path_sep)"
-  __winuxsh_old_ifs="$IFS"
-  __winuxsh_new_path=""
-  IFS="$__winuxsh_path_sep_value"
-  for __winuxsh_path_entry in $PATH; do
-    [ -n "$__winuxsh_path_entry" ] || continue
-    case "$__winuxsh_path_sep_value$__winuxsh_new_path$__winuxsh_path_sep_value" in
-      *"$__winuxsh_path_sep_value$__winuxsh_path_entry$__winuxsh_path_sep_value"*) continue ;;
+  __niubash_path_sep_value="$(__niubash_path_sep)"
+  __niubash_old_ifs="$IFS"
+  __niubash_new_path=""
+  IFS="$__niubash_path_sep_value"
+  for __niubash_path_entry in $PATH; do
+    [ -n "$__niubash_path_entry" ] || continue
+    case "$__niubash_path_sep_value$__niubash_new_path$__niubash_path_sep_value" in
+      *"$__niubash_path_sep_value$__niubash_path_entry$__niubash_path_sep_value"*) continue ;;
     esac
-    if [ -z "$__winuxsh_new_path" ]; then
-      __winuxsh_new_path="$__winuxsh_path_entry"
+    if [ -z "$__niubash_new_path" ]; then
+      __niubash_new_path="$__niubash_path_entry"
     else
-      __winuxsh_new_path="$__winuxsh_new_path$__winuxsh_path_sep_value$__winuxsh_path_entry"
+      __niubash_new_path="$__niubash_new_path$__niubash_path_sep_value$__niubash_path_entry"
     fi
   done
-  IFS="$__winuxsh_old_ifs"
-  PATH="$__winuxsh_new_path"
+  IFS="$__niubash_old_ifs"
+  PATH="$__niubash_new_path"
   export PATH
 }
 

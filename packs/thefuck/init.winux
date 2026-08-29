@@ -1,4 +1,4 @@
-# oh-my-winuxsh thefuck plugin
+# oh-my-niu thefuck plugin
 # Executes the correction returned by thefuck in the current shell.
 
 fuck() {
@@ -7,6 +7,6 @@ fuck() {
     return 127
   }
 
-  __winuxsh_thefuck_command=$(thefuck "$@") || return
-  [ -n "$__winuxsh_thefuck_command" ] && eval "$__winuxsh_thefuck_command"
+  __niubash_thefuck_command=$(thefuck "$@") || return
+  [ -n "$__niubash_thefuck_command" ] && eval "$__niubash_thefuck_command"
 }
