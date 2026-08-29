@@ -1,5 +1,10 @@
 # Oh My Niu
 
+<p align="center">
+  <img src=".github/assets/banner.png" alt="oh-my-niu - official plugin bundle for niubash" width="100%">
+</p>
+
+
 Official Oh My-style plugin framework and bundled plugin distribution for
 Niubash.
 
