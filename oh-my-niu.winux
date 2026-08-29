@@ -7,6 +7,11 @@
 #   NIU_PLUGINS=(prompt-core git docker zoxide)
 #   NIU_THEME=minimal
 #   source "$NIUBASH/oh-my-niu.winux"
+#
+# The entry point is re-entrant: sourcing it again (for example from a nested
+# shell or a re-dot rc) is a no-op. Force a full reload with:
+#
+#   source "$NIUBASH/oh-my-niu.winux" --reload
 
 if [ -z "${NIUBASH:-}" ]; then
   if [ -n "${BASH_SOURCE:-}" ]; then
@@ -17,6 +22,14 @@ if [ -z "${NIUBASH:-}" ]; then
   fi
   export NIUBASH
 fi
+
+# Re-entrancy guard: remember which tree is loaded. `--reload` (or pointing
+# NIUBASH at a different checkout) runs the full load again.
+if [ "${NIU_OMW_LOADED:-}" = "$NIUBASH" ] && [ "${1:-}" != "--reload" ]; then
+  return 0
+fi
+NIU_OMW_LOADED="$NIUBASH"
+export NIU_OMW_LOADED
 
 : "${NIU_CUSTOM:=$HOME/.niubash/custom}"
 if [ -z "${NIU_THEME+x}" ]; then
@@ -36,6 +49,7 @@ fi
 [ -f "$NIUBASH/lib/aliases.winux" ] && . "$NIUBASH/lib/aliases.winux"
 [ -f "$NIUBASH/lib/prompt.winux" ] && . "$NIUBASH/lib/prompt.winux"
 [ -f "$NIUBASH/lib/git.winux" ] && . "$NIUBASH/lib/git.winux"
+[ -f "$NIUBASH/lib/moo.winux" ] && . "$NIUBASH/lib/moo.winux"
 
 __omw_loaded_plugins=" "
 
@@ -76,5 +90,11 @@ if [ -n "${NIU_THEME:-}" ] && [ -n "${NIU_THEME_PLUGIN:-}" ]; then
 fi
 
 niubash_run_startup_hooks 2>/dev/null || true
+
+# Optional startup banner: set NIU_BANNER=1 in .niubashrc to greet with the
+# block-letter mark and the niubash bull. niu_moo is always available.
+if [ "${NIU_BANNER:-0}" = "1" ]; then
+  niu_banner
+fi
 
 unset __omw_lib __omw_plugin __omw_plugin_custom __omw_plugin_bundle __omw_entry __omw_theme_plugin_custom __omw_theme_plugin_bundle __omw_loaded_plugins

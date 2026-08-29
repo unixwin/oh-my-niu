@@ -9,6 +9,21 @@ plugin managers, and PowerShell prompt frameworks: plugins are directories,
 themes are plugins, and the shell core provides loader primitives instead of
 owning high-level plugin behavior.
 
+## Moo
+
+The niubash bull ships with the bundle. Source `oh-my-niu.winux` from your
+`~/.niubashrc` and it can talk:
+
+```sh
+niu_moo "Bash, native on Windows."   # cowsay-style bubble
+niu_banner                           # block-letter NIUBASH mark
+```
+
+Set `NIU_BANNER=1` in `~/.niubashrc` to greet every interactive shell with
+the banner. The entry point is re-entrant: sourcing `oh-my-niu.winux` twice
+is a no-op; force a full reload with
+`source "$NIUBASH/oh-my-niu.winux" --reload`.
+
 ## Status
 
 The active direction is framework-first. See [docs/design.md](docs/design.md).

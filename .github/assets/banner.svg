@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#181E30"/>
+      <stop offset="1" stop-color="#382C64"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFDB7A"/>
+      <stop offset="1" stop-color="#F17D2C"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="300" fill="url(#bg)"/>
+  <g transform="translate(490,18) scale(220,190)" fill="url(#gold)">
+    <polygon points="0.4940,0.4000 0.4150,0.4080 0.3300,0.3880 0.2550,0.3300 0.2050,0.2480 0.1800,0.1600 0.1720,0.0920 0.2120,0.1180 0.2350,0.1950 0.2800,0.2680 0.3450,0.3180 0.4200,0.3420 0.4940,0.3460"/>
+    <polygon points="0.5060,0.4000 0.5850,0.4080 0.6700,0.3880 0.7450,0.3300 0.7950,0.2480 0.8200,0.1600 0.8280,0.0920 0.7880,0.1180 0.7650,0.1950 0.7200,0.2680 0.6550,0.3180 0.5800,0.3420 0.5060,0.3460"/>
+  </g>
+  <text x="790" y="175" font-family="Consolas, 'Cascadia Mono', monospace" font-weight="bold" font-size="110" fill="#EEF2FA">oh-my-niu</text>
+  <text x="792" y="235" font-family="Consolas, monospace" font-size="30" fill="#9BA6C4">official plugin bundle for niubash — Mo-o-o!</text>
+</svg>
