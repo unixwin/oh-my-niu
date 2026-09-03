@@ -8,8 +8,10 @@
 #   NIU_THEME=minimal
 #   source "$NIUBASH/oh-my-niu.winux"
 #
-# The entry point is re-entrant: sourcing it again (for example from a nested
-# shell or a re-dot rc) is a no-op. Force a full reload with:
+# The entry point is re-entrant within one shell: sourcing it again in the
+# same process is a no-op. The loaded marker is deliberately NOT exported, so
+# nested shells and child processes run the full load for themselves. Force a
+# full reload in the current shell with:
 #
 #   source "$NIUBASH/oh-my-niu.winux" --reload
 
@@ -23,13 +25,17 @@ if [ -z "${NIUBASH:-}" ]; then
   export NIUBASH
 fi
 
-# Re-entrancy guard: remember which tree is loaded. `--reload` (or pointing
-# NIUBASH at a different checkout) runs the full load again.
-if [ "${NIU_OMW_LOADED:-}" = "$NIUBASH" ] && [ "${1:-}" != "--reload" ]; then
+# Re-entrancy guard: remember which tree is loaded in THIS shell only. The
+# here-marker is a fresh process-local name that is never exported, so a
+# NIU_OMW_LOADED value inherited from a parent shell can never convince this
+# child it has already loaded; child shells always run the full load for
+# themselves. `--reload` (or pointing NIUBASH at a different checkout) forces
+# a full load.
+if [ -n "${__omw_loaded_here:-}" ] && [ "${NIU_OMW_LOADED:-}" = "$NIUBASH" ] && [ "${1:-}" != "--reload" ]; then
   return 0
 fi
 NIU_OMW_LOADED="$NIUBASH"
-export NIU_OMW_LOADED
+__omw_loaded_here=1
 
 : "${NIU_CUSTOM:=$HOME/.niubash/custom}"
 if [ -z "${NIU_THEME+x}" ]; then
