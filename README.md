@@ -83,8 +83,8 @@ The bundle is still expected to ship with Niubash releases so users have an
 offline baseline, then update independently:
 
 ```sh
-niubash plugin update oh-my-niu --from dist\oh-my-niu-1.0.1.zip --checksum-file dist\oh-my-niu-1.0.1.zip.sha256
-niubash plugin rollback oh-my-niu
+niu plugin update oh-my-niu --from dist\oh-my-niu-1.0.1.zip --checksum-file dist\oh-my-niu-1.0.1.zip.sha256
+niu plugin rollback oh-my-niu
 ```
 
 User shell code and normal plugin/theme selection belong in `~/.niubashrc`.
@@ -291,11 +291,10 @@ plugin-owned code/assets rather than Niubash `builtin` packs.
 ```sh
 python tools/validate_bundle.py
 python tools/package_bundle.py --check
-niubash plugin review <pack>
-niubash plugin search devtools
-niubash plugin themes
-niubash plugin install git
-niubash plugin doctor
+niu plugin review <pack>
+niu plugin search devtools
+niu plugin themes
+niu plugin doctor
 ```
 
 `plugin.toml` remains useful for package metadata, permissions, exports, and
@@ -327,7 +326,7 @@ python tools/package_bundle.py --check
 py tools\validate_bundle.py
 py tools\package_bundle.py --check
 # Runtime smoke with the selected Niubash binary:
-niubash tools/smoke_framework.winux .
+niu tools/smoke_framework.winux .
 ```
 
 The validator checks release documents, package index drift, release checksum
@@ -354,11 +353,10 @@ Local release smoke test:
 
 ```sh
 py tools\package_bundle.py
-niubash plugin update oh-my-niu --from dist\oh-my-niu-1.0.1.zip --checksum-file dist\oh-my-niu-1.0.1.zip.sha256
-niubash plugin bundle status
-niubash plugin search workflow
-niubash plugin doctor
-niubash plugin search workflow
+niu plugin update oh-my-niu --from dist\oh-my-niu-1.0.1.zip --checksum-file dist\oh-my-niu-1.0.1.zip.sha256
+niu plugin bundle status
+niu plugin search workflow
+niu plugin doctor
 ```
 
 ## License

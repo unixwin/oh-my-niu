@@ -30,6 +30,10 @@ available = [
   "prompts",
   "starship",
   "themes",
+  "command-timer",
+  "auto-env",
+  "dirmarks",
+  "git-fetch-reminder",
 ]
 
 [layout]

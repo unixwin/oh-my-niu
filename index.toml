@@ -197,3 +197,47 @@ summary = "Push/pull the WPM package manifest and shell config via any rclone re
 default = false
 permissions = ["shell:source", "process:run:rclone", "process:run:wpm"]
 required_binaries = ["rclone", "wpm"]
+
+[[packs]]
+name = "command-timer"
+version = "1.0.0"
+api = "niubash:plugin@0.1.0"
+kind = "source"
+category = "workflow"
+summary = "Report duration and exit code after every interactive command."
+default = false
+permissions = ["shell:source"]
+required_binaries = []
+
+[[packs]]
+name = "auto-env"
+version = "1.0.0"
+api = "niubash:plugin@0.1.0"
+kind = "source"
+category = "environment"
+summary = "Activate the local .venv when entering a directory, deactivate on leave."
+default = false
+permissions = ["shell:source", "cwd:read", "env:write"]
+required_binaries = []
+
+[[packs]]
+name = "dirmarks"
+version = "1.0.0"
+api = "niubash:plugin@0.1.0"
+kind = "source"
+category = "workflow"
+summary = "Bookmark directories (mark/jump/marks/unmark) and jump back anywhere."
+default = false
+permissions = ["shell:source", "cwd:read"]
+required_binaries = []
+
+[[packs]]
+name = "git-fetch-reminder"
+version = "1.0.0"
+api = "niubash:plugin@0.1.0"
+kind = "source"
+category = "workflow"
+summary = "Periodic reminder when the git branch diverged from its upstream."
+default = false
+permissions = ["shell:source", "cwd:read", "process:run:git"]
+required_binaries = ["git"]
