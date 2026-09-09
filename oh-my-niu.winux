@@ -51,11 +51,39 @@ if [ -z "${NIU_DISABLE_DEFAULT_PLUGINS:-}" ]; then
   fi
 fi
 
-[ -f "$NIUBASH/lib/hooks.winux" ] && . "$NIUBASH/lib/hooks.winux"
-[ -f "$NIUBASH/lib/aliases.winux" ] && . "$NIUBASH/lib/aliases.winux"
-[ -f "$NIUBASH/lib/prompt.winux" ] && . "$NIUBASH/lib/prompt.winux"
-[ -f "$NIUBASH/lib/git.winux" ] && . "$NIUBASH/lib/git.winux"
-[ -f "$NIUBASH/lib/moo.winux" ] && . "$NIUBASH/lib/moo.winux"
+# Load the framework libs relative to THIS entry file, not $NIUBASH: a
+# stale NIUBASH inherited from the environment (or a bundle layout whose
+# NIUBASH points at the app root) used to make these `[ -f ]` checks fail
+# silently, after which every plugin's niubash_add_*_hook call spammed
+# "command not found" (most visible in non-interactive -C sessions).
+__omw_lib_root="$NIUBASH"
+if [ -n "${BASH_SOURCE[0]:-}" ]; then
+  __omw_entry_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)"
+  if [ -n "$__omw_entry_dir" ]; then
+    __omw_lib_root="$__omw_entry_dir"
+  fi
+fi
+[ -f "$__omw_lib_root/lib/hooks.winux" ] && . "$__omw_lib_root/lib/hooks.winux"
+[ -f "$__omw_lib_root/lib/aliases.winux" ] && . "$__omw_lib_root/lib/aliases.winux"
+[ -f "$__omw_lib_root/lib/prompt.winux" ] && . "$__omw_lib_root/lib/prompt.winux"
+[ -f "$__omw_lib_root/lib/git.winux" ] && . "$__omw_lib_root/lib/git.winux"
+[ -f "$__omw_lib_root/lib/moo.winux" ] && . "$__omw_lib_root/lib/moo.winux"
+unset __omw_lib_root __omw_entry_dir
+
+# Safety net: if the hook registry could not be loaded (slim bundle layout,
+# non-interactive -C tree), degrade to no-op registration and runners so
+# plugin initialization stays silent instead of erroring per plugin.
+if [ "$(command -v niubash_add_precmd_hook 2>/dev/null)" = "" ] ||
+  [ "$(command -v niubash_run_precmd_hooks 2>/dev/null)" = "" ]; then
+  __niubash_hook_list_add() { :; }
+  for __omw_phase in startup precmd preexec postcmd chpwd period \
+    zshaddhistory zshexit greeting title trapdebug traperr trapint \
+    trapwinch trapusr1 trapusr2 trappipe trapterm trapchld trapzerr; do
+    eval "niubash_add_${__omw_phase}_hook() { :; }"
+    eval "niubash_run_${__omw_phase}_hooks() { :; }"
+  done
+  unset __omw_phase
+fi
 
 __omw_loaded_plugins=" "
 
