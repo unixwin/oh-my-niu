@@ -104,13 +104,13 @@ RELEASE_DOCUMENTS = {
     ),
 }
 FRAMEWORK_FILES = (
-    "oh-my-niu.winux",
-    "lib/hooks.winux",
-    "lib/aliases.winux",
-    "lib/prompt.winux",
-    "lib/git.winux",
+    "oh-my-niu.niu",
+    "lib/hooks.niu",
+    "lib/aliases.niu",
+    "lib/prompt.niu",
+    "lib/git.niu",
     "plugins/README.md",
-    "tools/smoke_framework.winux",
+    "tools/smoke_framework.niu",
 )
 EXPECTED_FRAMEWORK_PLUGINS = (
     "prompt-core",
@@ -485,7 +485,7 @@ def validate_source_manifest(pack_name: str, manifest: dict, errors: list[str]) 
     expect(valid_manifest_token(entry), f"{pack_name}: source.entry must be a non-empty single-line string", errors)
     if valid_manifest_token(entry):
         entry_path = Path(str(entry))
-        expect(str(entry).endswith(".winux"), f"{pack_name}: source.entry must point to a .winux script", errors)
+        expect(str(entry).endswith(".niu"), f"{pack_name}: source.entry must point to a .niu script", errors)
         expect(not entry_path.is_absolute() and ".." not in entry_path.parts, f"{pack_name}: source.entry must be relative inside the bundle", errors)
         expect((ROOT / entry_path).is_file(), f"{pack_name}: missing source entry {ROOT / entry_path}", errors)
     permissions = manifest.get("permissions")
@@ -582,9 +582,9 @@ def validate_framework_plugin_manifest(
     expect(valid_manifest_token(entry), f"framework plugin {plugin_name}: entry must be a non-empty single-line string", errors)
     if valid_manifest_token(entry):
         entry_path = Path(str(entry))
-        expect(str(entry).endswith(".winux"), f"framework plugin {plugin_name}: entry must point to a .winux script", errors)
+        expect(str(entry).endswith(".niu"), f"framework plugin {plugin_name}: entry must point to a .niu script", errors)
         expect(not entry_path.is_absolute() and ".." not in entry_path.parts, f"framework plugin {plugin_name}: entry must be relative inside the plugin directory", errors)
-        expect(str(entry) == f"{plugin_name}.plugin.winux", f"framework plugin {plugin_name}: entry must follow <name>.plugin.winux", errors)
+        expect(str(entry) == f"{plugin_name}.plugin.niu", f"framework plugin {plugin_name}: entry must follow <name>.plugin.niu", errors)
         expect((plugin_dir / entry_path).is_file(), f"framework plugin {plugin_name}: missing entry {plugin_dir / entry_path}", errors)
 
     summary = manifest.get("summary")
@@ -907,15 +907,56 @@ def validate() -> list[str]:
     return errors
 
 
+def validate_env_packs(errors: list[str]) -> None:
+    envs_dir = ROOT / "envs"
+    if not envs_dir.is_dir():
+        expect(False, "missing envs/ directory", errors)
+        return
+
+    plugin_names = {path.name for path in (ROOT / "plugins").iterdir() if path.is_dir()}
+    for env_path in sorted(envs_dir.glob("*.toml")):
+        context = f"env {env_path.name}"
+        env = safe_load_toml(env_path, "envs", errors)
+        if env is None:
+            continue
+
+        description = env.get("meta", {}).get("description")
+        expect(isinstance(description, str) and bool(description.strip()), f"{context}: meta.description must be a non-empty string", errors)
+
+        packages = env.get("packages", {}).get("wpm")
+        expect(isinstance(packages, list), f"{context}: packages.wpm must be a list", errors)
+        if isinstance(packages, list):
+            expect(len(packages) > 0, f"{context}: packages.wpm must not be empty", errors)
+            for name in packages:
+                expect(isinstance(name, str) and bool(name.strip()), f"{context}: packages.wpm entries must be non-empty strings", errors)
+
+        enable = env.get("plugins", {}).get("enable", [])
+        expect(isinstance(enable, list), f"{context}: plugins.enable must be a list", errors)
+        if isinstance(enable, list):
+            for name in enable:
+                expect(isinstance(name, str) and bool(name.strip()), f"{context}: plugins.enable entries must be non-empty strings", errors)
+                if isinstance(name, str) and name.strip():
+                    expect(name in plugin_names, f"{context}: plugin '{name}' has no matching plugins/{name} directory", errors)
+
+        env_vars = env.get("env", {})
+        expect(isinstance(env_vars, dict), f"{context}: env must be a table", errors)
+        if isinstance(env_vars, dict):
+            for key, value in env_vars.items():
+                expect(isinstance(key, str) and key.isidentifier(), f"{context}: env key '{key}' must be a valid identifier", errors)
+                expect(isinstance(value, str), f"{context}: env '{key}' must be a string", errors)
+
+
 def main() -> int:
     errors = validate()
+    validate_env_packs(errors)
     if errors:
         for error in errors:
             print(f"error: {error}", file=sys.stderr)
         return 1
 
     pack_count = len(load_toml(ROOT / "bundle.toml")["packs"]["available"])
-    print(f"bundle validation ok: {pack_count} packs")
+    env_count = len(list((ROOT / "envs").glob("*.toml"))) if (ROOT / "envs").is_dir() else 0
+    print(f"bundle validation ok: {pack_count} packs, {env_count} envs")
     return 0
 
 

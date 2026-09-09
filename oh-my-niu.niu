@@ -6,14 +6,14 @@
 #   NIUBASH=C:/Users/me/.niubash/oh-my-niu
 #   NIU_PLUGINS=(prompt-core git docker zoxide)
 #   NIU_THEME=minimal
-#   source "$NIUBASH/oh-my-niu.winux"
+#   source "$NIUBASH/oh-my-niu.niu"
 #
 # The entry point is re-entrant within one shell: sourcing it again in the
 # same process is a no-op. The loaded marker is deliberately NOT exported, so
 # nested shells and child processes run the full load for themselves. Force a
 # full reload in the current shell with:
 #
-#   source "$NIUBASH/oh-my-niu.winux" --reload
+#   source "$NIUBASH/oh-my-niu.niu" --reload
 
 if [ -z "${NIUBASH:-}" ]; then
   if [ -n "${BASH_SOURCE:-}" ]; then
@@ -63,11 +63,12 @@ if [ -n "${BASH_SOURCE[0]:-}" ]; then
     __omw_lib_root="$__omw_entry_dir"
   fi
 fi
-[ -f "$__omw_lib_root/lib/hooks.winux" ] && . "$__omw_lib_root/lib/hooks.winux"
-[ -f "$__omw_lib_root/lib/aliases.winux" ] && . "$__omw_lib_root/lib/aliases.winux"
-[ -f "$__omw_lib_root/lib/prompt.winux" ] && . "$__omw_lib_root/lib/prompt.winux"
-[ -f "$__omw_lib_root/lib/git.winux" ] && . "$__omw_lib_root/lib/git.winux"
-[ -f "$__omw_lib_root/lib/moo.winux" ] && . "$__omw_lib_root/lib/moo.winux"
+[ -f "$__omw_lib_root/lib/hooks.niu" ] && . "$__omw_lib_root/lib/hooks.niu"
+[ -f "$__omw_lib_root/lib/aliases.niu" ] && . "$__omw_lib_root/lib/aliases.niu"
+[ -f "$__omw_lib_root/lib/prompt.niu" ] && . "$__omw_lib_root/lib/prompt.niu"
+[ -f "$__omw_lib_root/lib/git.niu" ] && . "$__omw_lib_root/lib/git.niu"
+[ -f "$__omw_lib_root/lib/moo.niu" ] && . "$__omw_lib_root/lib/moo.niu"
+[ -f "$__omw_lib_root/lib/env.niu" ] && . "$__omw_lib_root/lib/env.niu"
 unset __omw_lib_root __omw_entry_dir
 
 # Safety net: if the hook registry could not be loaded (slim bundle layout,
@@ -89,8 +90,8 @@ __omw_loaded_plugins=" "
 
 for __omw_plugin in "${NIU_PLUGINS[@]}"; do
   if [ -n "$__omw_plugin" ]; then
-    __omw_plugin_custom="$NIU_CUSTOM/plugins/$__omw_plugin/$__omw_plugin.plugin.winux"
-    __omw_plugin_bundle="$NIUBASH/plugins/$__omw_plugin/$__omw_plugin.plugin.winux"
+    __omw_plugin_custom="$NIU_CUSTOM/plugins/$__omw_plugin/$__omw_plugin.plugin.niu"
+    __omw_plugin_bundle="$NIUBASH/plugins/$__omw_plugin/$__omw_plugin.plugin.niu"
 
     if [ -f "$__omw_plugin_custom" ]; then
       . "$__omw_plugin_custom"
@@ -107,8 +108,8 @@ if [ -n "${NIU_THEME:-}" ] && [ -n "${NIU_THEME_PLUGIN:-}" ]; then
   case "$__omw_loaded_plugins" in
     *" $NIU_THEME_PLUGIN "*) ;;
     *)
-      __omw_theme_plugin_custom="$NIU_CUSTOM/plugins/$NIU_THEME_PLUGIN/$NIU_THEME_PLUGIN.plugin.winux"
-      __omw_theme_plugin_bundle="$NIUBASH/plugins/$NIU_THEME_PLUGIN/$NIU_THEME_PLUGIN.plugin.winux"
+      __omw_theme_plugin_custom="$NIU_CUSTOM/plugins/$NIU_THEME_PLUGIN/$NIU_THEME_PLUGIN.plugin.niu"
+      __omw_theme_plugin_bundle="$NIUBASH/plugins/$NIU_THEME_PLUGIN/$NIU_THEME_PLUGIN.plugin.niu"
 
       if [ -f "$__omw_theme_plugin_custom" ]; then
         . "$__omw_theme_plugin_custom"

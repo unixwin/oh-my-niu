@@ -16,7 +16,7 @@ owning high-level plugin behavior.
 
 ## Moo
 
-The niubash bull ships with the bundle. Source `oh-my-niu.winux` from your
+The niubash bull ships with the bundle. Source `oh-my-niu.niu` from your
 `~/.niubashrc` and it can talk:
 
 ```sh
@@ -25,9 +25,9 @@ niu_banner                           # block-letter NIUBASH mark
 ```
 
 Set `NIU_BANNER=1` in `~/.niubashrc` to greet every interactive shell with
-the banner. The entry point is re-entrant: sourcing `oh-my-niu.winux` twice
+the banner. The entry point is re-entrant: sourcing `oh-my-niu.niu` twice
 is a no-op; force a full reload with
-`source "$NIUBASH/oh-my-niu.winux" --reload`.
+`source "$NIUBASH/oh-my-niu.niu" --reload`.
 
 ## Status
 
@@ -50,7 +50,7 @@ The target interactive setup is directory-first and familiar:
 ```sh
 NIU_PLUGINS=(prompt-core git docker zoxide)
 NIU_THEME=minimal
-source "$NIUBASH/oh-my-niu.winux"
+source "$NIUBASH/oh-my-niu.niu"
 ```
 
 Starship can also own the prompt through its normal Bash init path. In that
@@ -60,7 +60,7 @@ plugins so Starship controls `PROMPT_COMMAND`, `PS1`, `PS2`, and `PS0`:
 ```sh
 NIU_PLUGINS=(git starship docker zoxide)
 NIU_THEME=
-source "$NIUBASH/oh-my-niu.winux"
+source "$NIUBASH/oh-my-niu.niu"
 ```
 
 Managed TOML should map onto the same plugin system:
@@ -95,29 +95,68 @@ alias ll='ls -la'
 export EDITOR=vim
 ```
 
+## Environment Packs
+
+Environment packs ("envs") provision a ready-to-use tool environment. An env
+is a small TOML file (not a plugin kind) that declares which WPM packages to
+install, which shell plugins to enable, and which environment variables to
+export. wpm owns package installation; `lib/env.niu` only orchestrates.
+
+```sh
+niu env list          # list built-in and custom envs
+niu env show git      # inspect without changing anything
+niu env use git       # install packages, enable plugins, export variables
+```
+
+An env file looks like this:
+
+```toml
+[meta]
+description = "Native Git toolchain with pager, diff, and fetch reminders"
+
+[packages]
+wpm = ["git", "delta"]
+
+[plugins]
+enable = ["git", "git-fetch-reminder"]
+
+[env]
+GIT_PAGER = "less -R"
+```
+
+`niu env use` accepts a name under `envs/` (or `~/.niubash/custom/envs/`), a
+path to any `.toml` file, or an `http(s)://` URL, so third parties can ship
+their own env files without publishing them in this repository. CI containers
+that do not source the framework can call `wpm install --from <file|URL>`
+directly; the `[packages]` section is consumed by wpm itself.
+
 ## Repository Layout
 
 ```text
 oh-my-niu/
-  oh-my-niu.winux
+  oh-my-niu.niu
   bundle.toml
   index.toml
+  envs/
+    git.toml
+    cicd.toml
   lib/
-    aliases.winux
-    git.winux
-    prompt.winux
-    hooks.winux
-  plugins/
+    aliases.niu
+    git.niu
+    prompt.niu
+    hooks.niu
+    env.niu
+plugins/
     prompt-core/
-      prompt-core.plugin.winux
+      prompt-core.plugin.niu
       plugin.toml
     git/
-      git.plugin.winux
+      git.plugin.niu
       plugin.toml
       functions/
       completions/
     theme-minimal/
-      theme-minimal.plugin.winux
+      theme-minimal.plugin.niu
       plugin.toml
     theme-default/
     theme-dark/
@@ -211,7 +250,7 @@ oh-my-niu/
   templates/
     builtin/plugin.toml
     source/plugin.toml
-    source/init.winux
+    source/init.niu
     process/plugin.toml
     wasm/plugin.toml
 ```
@@ -255,17 +294,17 @@ plugins, and `prompt-core` owns the common prompt API.
 | `git` | Git aliases, completions, and workflow helpers | On |
 | `winuxcmd-core` | Static completions for WinuxCmd core command links | On |
 | `common-aliases` | Small Oh My-style navigation/listing aliases | Off |
-| `docker` | Docker `.winux` helpers, aliases, completion metadata | Off |
-| `kubectl` | Kubernetes `.winux` helpers, aliases, completion metadata | Off |
-| `npm` | npm `.winux` helpers, aliases, runtime completion shape | Off |
+| `docker` | Docker `.niu` helpers, aliases, completion metadata | Off |
+| `kubectl` | Kubernetes `.niu` helpers, aliases, completion metadata | Off |
+| `npm` | npm `.niu` helpers, aliases, runtime completion shape | Off |
 | `path-tools` | PATH inspection and edit helpers inspired by fish ergonomics | Off |
 | `extract` | Archive extraction helper for common compressed formats | Off |
-| `zoxide` | `.winux` `z`/`zi` helpers plus directory tracking hooks | Off |
-| `direnv` | `.winux` lifecycle adapter for `direnv export bash` | Off |
-| `dotenv` | `.winux` `.env` loader for current project directory | Off |
-| `fzf` | `.winux` directory selector command shims | Off |
-| `last-working-dir` | `.winux` last-directory cache and restore hooks | Off |
-| `thefuck` | `.winux` correction shim for the previous command | Off |
+| `zoxide` | `.niu` `z`/`zi` helpers plus directory tracking hooks | Off |
+| `direnv` | `.niu` lifecycle adapter for `direnv export bash` | Off |
+| `dotenv` | `.niu` `.env` loader for current project directory | Off |
+| `fzf` | `.niu` directory selector command shims | Off |
+| `last-working-dir` | `.niu` last-directory cache and restore hooks | Off |
+| `thefuck` | `.niu` correction shim for the previous command | Off |
 | `keybindings` | Bridge plugin for official Reedline keybinding assets | On |
 | `command-not-found` | Bridge plugin for the missing-command provider identity | Off |
 
@@ -326,7 +365,7 @@ python tools/package_bundle.py --check
 py tools\validate_bundle.py
 py tools\package_bundle.py --check
 # Runtime smoke with the selected Niubash binary:
-niu tools/smoke_framework.winux .
+niu tools/smoke_framework.niu .
 ```
 
 The validator checks release documents, package index drift, release checksum
@@ -335,7 +374,7 @@ directory plugin inventory drift, plugin entry scripts, plugin metadata,
 exported asset presence, parseable alias packs, parseable completion
 definitions, prompt preset segment references, declarative keybinding metadata,
 and theme TOML assets. Source manifests must declare `shell:source`, supported
-lifecycle hooks, and a bundle-local `.winux` entry. Process manifests must be
+lifecycle hooks, and a bundle-local `.niu` entry. Process manifests must be
 explicit opt-in and declare protocol, command, timeout, permissions, and
 required binaries. The package script builds
 `dist/oh-my-niu-{version}.zip` plus a `.sha256` checksum when run without
@@ -365,7 +404,7 @@ MIT unless the Unixwin project chooses a different repository license before the
 first bundle release.
 ## Source Scope
 
-`oh-my-niu.winux` is meant to be sourced from an interactive Niubash rc file.
+`oh-my-niu.niu` is meant to be sourced from an interactive Niubash rc file.
 Sourcing the framework updates the current shell process by registering aliases,
 functions, prompt helpers, hooks, and environment variables exported by enabled
 plugins.
