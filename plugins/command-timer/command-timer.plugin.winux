@@ -4,9 +4,9 @@
 # duration and exit code after it finishes. Quiet by default: commands that
 # finish in under one second with a zero exit status print nothing.
 #
-# Note: SECONDS is copied into a plain variable before arithmetic because
-# rubash's $(( )) expansion does not resolve special variables (SECONDS
-# evaluates as 0 inside arithmetic).
+# Note: SECONDS is copied into a plain variable before arithmetic. Fixed
+# upstream in rubash 821612ca (arithmetic now resolves SECONDS), but the
+# copy keeps the plugin working with older rubash builds too.
 
 [ -f "$NIUBASH/lib/hooks.winux" ] && . "$NIUBASH/lib/hooks.winux"
 
