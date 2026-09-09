@@ -6,6 +6,8 @@ changes, and user-visible asset changes.
 
 ## 2.0.0 (unreleased)
 
+- Release artifact: `oh-my-niu-2.0.0.zip` (`api = "niubash:plugin-bundle@0.1.0"`,
+  `min_niubash = "1.0.0"`).
 - Renamed the bundle from `oh-my-winuxsh` to `oh-my-niu` to match the
   niubash 1.0.0 brand. Installed `~/.oh-my-winuxsh` directories keep
   working: niubash discovers the pre-rename layout as a fallback.
@@ -16,6 +18,13 @@ changes, and user-visible asset changes.
 - Entry point renamed to `oh-my-niu.winux`; scripts now use the `NIU_*`
   environment prefix (`NIU_PLUGINS`, `NIU_THEME`, `NIU_THEME_PLUGIN`)
   and the `NIUBASH` bundle-root variable.
+- New first-party plugins: `command-timer` (per-command duration and exit
+  code), `auto-env` (automatic `.venv` activation per directory),
+  `dirmarks` (directory bookmarks), `git-fetch-reminder` (upstream
+  divergence notices), and `env-sync` (push/pull shell config and the WPM
+  package manifest through any rclone remote).
+- All first-party pack manifests move to version 2.0.0 to match the
+  bundle release.
 
 ## 1.0.1 - 2026-08-02
 

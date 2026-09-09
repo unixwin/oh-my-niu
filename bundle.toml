@@ -30,6 +30,7 @@ available = [
   "prompts",
   "starship",
   "themes",
+  "env-sync",
   "command-timer",
   "auto-env",
   "dirmarks",

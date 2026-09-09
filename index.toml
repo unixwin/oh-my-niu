@@ -228,7 +228,7 @@ kind = "source"
 category = "workflow"
 summary = "Bookmark directories (mark/jump/marks/unmark) and jump back anywhere."
 default = false
-permissions = ["shell:source", "cwd:read"]
+permissions = ["shell:source", "cwd:read", "fs:write:~/.niubash/marks"]
 required_binaries = []
 
 [[packs]]

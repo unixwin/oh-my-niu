@@ -1,22 +1,22 @@
-name = "dotenv"
+name = "auto-env"
 bundle = "oh-my-niu"
-version = "2.0.0"
+version = "1.0.0"
 kind = "source"
 api = "niubash:plugin@0.1.0"
 category = "environment"
-summary = "Safe .env loader on Niubash lifecycle hooks."
+summary = "Activate the local .venv when entering a directory, deactivate on leave."
 default = false
-permissions = ["shell:source", "cwd:read", "fs:read:.env", "env:write"]
+permissions = ["shell:source", "cwd:read", "env:write"]
 required_binaries = []
 
 [exports]
 aliases = false
 completions = []
 prompt_segments = []
-hooks = ["startup", "precmd", "chpwd"]
+hooks = ["startup", "chpwd"]
 commands = []
 keybindings = []
 themes = []
 
 [source]
-entry = "packs/dotenv/init.winux"
+entry = "packs/auto-env/init.winux"

@@ -6,9 +6,9 @@ oh-my-niu bundle.
 ## Current Release
 
 - Bundle name: `oh-my-niu`
-- Bundle version: `1.0.1`
+- Bundle version: `2.0.0`
 - Release channel: `stable`
-- Minimum host: `min_niubash = "0.10.0"`
+- Minimum host: `min_niubash = "1.0.0"`
 - Bundle API: `niubash:plugin-bundle@0.1.0`
 - Pack manifest API: `niubash:plugin@0.1.0`
 - Source plugin script suffix: `.winux`
@@ -22,8 +22,9 @@ bundle safely.
 ## Runtime Surface
 
 - `source` packs load bundle-local `.winux` scripts into the current
-  interactive Niubash session during `startup`, `precmd`, `preexec`, and
-  `chpwd` lifecycle hooks. They are active for the interactive REPL and `-C`;
+  interactive Niubash session during the `startup`, `precmd`, `preexec`,
+  `postcmd`, `chpwd`, `period`, `zshaddhistory`, `zshexit`, `greeting`, and
+  `title` lifecycle hooks. They are active for the interactive REPL and `-C`;
   ordinary `-c`, script-file, and stdin execution stay clean by default.
 - `builtin` packs load first-party native behavior that still lives in Niubash
   core. Official prompt and theme behavior belongs to source plugins.

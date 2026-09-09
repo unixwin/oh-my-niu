@@ -1,6 +1,6 @@
 name = "npm"
 bundle = "oh-my-niu"
-version = "1.0.1"
+version = "2.0.0"
 kind = "source"
 api = "niubash:plugin@0.1.0"
 category = "devtools"

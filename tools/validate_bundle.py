@@ -27,7 +27,18 @@ EXPORT_KEYS = {
 }
 REQUIRED_EXPORT_KEYS = EXPORT_KEYS - {"keybindings", "providers"}
 KNOWN_PROVIDER_EXPORTS = {"command-not-found"}
-SOURCE_PLUGIN_HOOKS = {"startup", "precmd", "preexec", "chpwd"}
+SOURCE_PLUGIN_HOOKS = {
+    "startup",
+    "precmd",
+    "preexec",
+    "postcmd",
+    "chpwd",
+    "period",
+    "zshaddhistory",
+    "zshexit",
+    "greeting",
+    "title",
+}
 PROCESS_PLUGIN_PROTOCOL = "niubash:process-plugin@0.1.0"
 PROCESS_PLUGIN_MAX_TIMEOUT_MILLIS = 30_000
 WASM_PLUGIN_PROTOCOL = "niubash:wasm-plugin@0.1.0"
@@ -113,11 +124,16 @@ EXPECTED_FRAMEWORK_PLUGINS = (
     "zoxide",
     "direnv",
     "dotenv",
+    "env-sync",
     "fzf",
     "last-working-dir",
     "thefuck",
     "keybindings",
     "command-not-found",
+    "command-timer",
+    "auto-env",
+    "dirmarks",
+    "git-fetch-reminder",
     "theme-default",
     "theme-dark",
     "theme-light",
