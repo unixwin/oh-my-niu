@@ -1,6 +1,6 @@
 # Powerlevel-style pure official theme plugin.
 
-[ -f "$NIUBASH/lib/prompt.winux" ] && . "$NIUBASH/lib/prompt.winux"
+[ -f "$NIUBASH/lib/prompt.niu" ] && . "$NIUBASH/lib/prompt.niu"
 
 NIU_ACTIVE_THEME=p10-pure
 NIU_THEME_FILE="$NIUBASH/themes/p10-pure.toml"

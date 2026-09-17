@@ -19,7 +19,7 @@ keybindings = []
 themes = []
 
 [source]
-entry = "packs/git/init.winux"
+entry = "packs/git/init.niu"
 
 [settings]
 show_dirty = true

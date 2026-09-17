@@ -1,6 +1,6 @@
 # Oh My Niu direnv plugin.
 
-[ -f "$NIUBASH/lib/hooks.winux" ] && . "$NIUBASH/lib/hooks.winux"
+[ -f "$NIUBASH/lib/hooks.niu" ] && . "$NIUBASH/lib/hooks.niu"
 
 __niubash_direnv_apply() {
   command -v direnv >/dev/null 2>&1 || return 0

@@ -28,7 +28,7 @@ RELEASE_DIRS = [
     "templates",
     "tools",
 ]
-RELEASE_FILES = ["oh-my-niu.winux", "bundle.toml", "index.toml", "README.md", "CHANGELOG.md"]
+RELEASE_FILES = ["oh-my-niu.niu", "bundle.toml", "index.toml", "README.md", "CHANGELOG.md"]
 
 
 def include_release_path(path: Path) -> bool:

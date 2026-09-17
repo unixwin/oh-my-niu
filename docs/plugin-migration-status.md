@@ -57,7 +57,7 @@ Posh where that helps users:
 
 ## Current Cut
 
-- `oh-my-niu.winux` is now the framework entry point.
+- `oh-my-niu.niu` is now the framework entry point.
 - `plugins/` is the active runtime surface for official plugins and themes.
 - `plugins/theme-*` replaces the old idea of one `themes` builtin plugin.
 - Theme names `default`, `dark`, `light`, and `colorful` are matching official
@@ -89,7 +89,7 @@ Posh where that helps users:
   instead of repainting the active input line.
 - The old manifest-first `packs/` tree remains only as compatibility and
   package-review metadata during migration.
-- `tools/smoke_framework.winux` verifies the directory loader, official themes,
+- `tools/smoke_framework.niu` verifies the directory loader, official themes,
   devtool aliases/functions, and hook plugins with an installed Niubash binary.
   Runtime findings are tracked in `docs/framework-smoke-notes.md`.
 

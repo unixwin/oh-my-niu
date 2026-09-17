@@ -1,4 +1,4 @@
-# lib/moo.winux — niubash mascot helpers (startup banner + moo).
+# lib/moo.niu — niubash mascot helpers (startup banner + moo).
 #
 # Safe to re-source: everything here is a function definition.
 #   niu_banner    print the NIUBASH block-letter banner + tagline

@@ -19,4 +19,4 @@ keybindings = []
 themes = []
 
 [source]
-entry = "packs/thefuck/init.winux"
+entry = "packs/thefuck/init.niu"

@@ -66,7 +66,7 @@ The interactive setup should eventually feel like this:
 ```sh
 NIU_PLUGINS=(git docker zoxide)
 NIU_THEME=minimal
-source "$NIUBASH/oh-my-niu.winux"
+source "$NIUBASH/oh-my-niu.niu"
 ```
 
 The structured TOML control plane can still exist for managed installs,
@@ -92,88 +92,88 @@ The target layout is directory-first:
 
 ```text
 oh-my-niu/
-  oh-my-niu.winux
+  oh-my-niu.niu
   lib/
-    aliases.winux
-    git.winux
-    prompt.winux
-    hooks.winux
+    aliases.niu
+    git.niu
+    prompt.niu
+    hooks.niu
   plugins/
     prompt-core/
-      prompt-core.plugin.winux
+      prompt-core.plugin.niu
       plugin.toml
     git/
-      git.plugin.winux
+      git.plugin.niu
       functions/
       completions/
       plugin.toml
       README.md
     docker/
-      docker.plugin.winux
+      docker.plugin.niu
       completions/
       plugin.toml
     common-aliases/
-      common-aliases.plugin.winux
+      common-aliases.plugin.niu
       plugin.toml
     path-tools/
-      path-tools.plugin.winux
+      path-tools.plugin.niu
       plugin.toml
     extract/
-      extract.plugin.winux
+      extract.plugin.niu
       plugin.toml
     theme-minimal/
-      theme-minimal.plugin.winux
+      theme-minimal.plugin.niu
       plugin.toml
     theme-default/
-      theme-default.plugin.winux
+      theme-default.plugin.niu
       plugin.toml
     theme-dark/
-      theme-dark.plugin.winux
+      theme-dark.plugin.niu
       plugin.toml
     theme-light/
-      theme-light.plugin.winux
+      theme-light.plugin.niu
       plugin.toml
     theme-colorful/
-      theme-colorful.plugin.winux
+      theme-colorful.plugin.niu
       plugin.toml
     theme-classic/
-      theme-classic.plugin.winux
+      theme-classic.plugin.niu
       plugin.toml
     theme-pure/
-      theme-pure.plugin.winux
+      theme-pure.plugin.niu
       plugin.toml
     theme-compact/
-      theme-compact.plugin.winux
+      theme-compact.plugin.niu
       plugin.toml
     theme-cyberpunk/
-      theme-cyberpunk.plugin.winux
+      theme-cyberpunk.plugin.niu
       plugin.toml
     theme-forest/
-      theme-forest.plugin.winux
+      theme-forest.plugin.niu
       plugin.toml
     theme-ocean/
-      theme-ocean.plugin.winux
+      theme-ocean.plugin.niu
       plugin.toml
     theme-p10-lean/
-      theme-p10-lean.plugin.winux
+      theme-p10-lean.plugin.niu
       plugin.toml
     theme-p10-classic/
-      theme-p10-classic.plugin.winux
+      theme-p10-classic.plugin.niu
       plugin.toml
     theme-p10-rainbow/
-      theme-p10-rainbow.plugin.winux
+      theme-p10-rainbow.plugin.niu
       plugin.toml
     theme-p10-pure/
-      theme-p10-pure.plugin.winux
+      theme-p10-pure.plugin.niu
       plugin.toml
     theme-robbyrussell/
-      theme-robbyrussell.plugin.winux
+      theme-robbyrussell.plugin.niu
       plugin.toml
     keybindings/
-      keybindings.plugin.winux
+      keybindings.plugin.niu
       plugin.toml
     command-not-found/
-      command-not-found.plugin.winux
+      command-not-found.plugin.niu
       plugin.toml
   themes/
     default.toml
@@ -334,11 +334,11 @@ the `prompt-core` plugin and consumed through the prompt API.
 The framework loader should be predictable:
 
 1. Start from user `~/.niubashrc`, which sets plugin/theme variables and
-   sources `oh-my-niu.winux`.
+   sources `oh-my-niu.niu`.
 2. Establish `NIUBASH`, `NIU_CUSTOM`, and plugin search paths.
-3. Source framework libraries from `lib/*.winux`.
+3. Source framework libraries from `lib/*.niu`.
 4. Resolve enabled plugins from managed TOML and shell arrays.
-5. Source each plugin's `*.plugin.winux` in user-declared order.
+5. Source each plugin's `*.plugin.niu` in user-declared order.
 6. Register plugin-local functions, completions, hooks, and prompt providers.
 7. Source the selected theme plugin through `NIU_THEME_PLUGIN`.
 8. Return to `~/.niubashrc`; user code after the framework source overrides
@@ -361,7 +361,7 @@ A useful third-party plugin should start with a directory and one shell file,
 not a manifest ceremony:
 
 ```text
-plugins/example/example.plugin.winux
+plugins/example/example.plugin.niu
 ```
 
 `plugin.toml` remains valuable for package metadata, permissions, review, and
@@ -380,7 +380,7 @@ It should not be the only way to express shell behavior.
 
 ## Migration Plan
 
-1. Add the framework entry point `oh-my-niu.winux`.
+1. Add the framework entry point `oh-my-niu.niu`.
 2. Add directory-first plugin loading beside the current manifest loader.
 3. Move official `git` behavior into `plugins/git/`.
 4. Move official themes into `theme-*` plugins and make `themes` only a

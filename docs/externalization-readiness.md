@@ -8,8 +8,8 @@ directory plugins directly.
 - Static bundle assets still cover aliases, completion tables, prompt presets,
   keybinding metadata, and theme style TOML.
 - Directory plugins are now the product surface. `plugin.toml` describes
-  package/review metadata; `<name>.plugin.winux` owns runtime behavior.
-- Source plugins are reviewed bundle-local `.winux` startup and lifecycle
+  package/review metadata; `<name>.plugin.niu` owns runtime behavior.
+- Source plugins are reviewed bundle-local `.niu` startup and lifecycle
   scripts. They are the Oh My-style path for first-party shell helpers that
   intentionally define aliases, functions, exports, cwd changes, or hook glue
   in the current interactive shell.
@@ -35,19 +35,19 @@ directory plugins directly.
 | Feature | Current surface | Classification | Target runtime / execution model | Missing host API or decision | Shell-mutating | Fallback needed |
 | --- | --- | --- | --- | --- | --- | --- |
 | `prompt-core` | `plugins/prompt-core` | Prompt API source plugin | Prompt segment registry, render entry points, `NIU_PROMPT_GIT` host snapshot backed by a persistent gitstatus helper | Richer host prompt call-in | No direct mutation | Yes |
-| `git` | `plugins/git` | Source workflow helper plus declarative assets | `.winux` aliases/functions plus alias/completion assets | Remove core fallback alias injection when plugin disabled | Yes, by trusted source | Minimal |
+| `git` | `plugins/git` | Source workflow helper plus declarative assets | `.niu` aliases/functions plus alias/completion assets | Remove core fallback alias injection when plugin disabled | Yes, by trusted source | Minimal |
 | `common-aliases` | `plugins/common-aliases` | Source alias helper plus declarative asset | Small Oh My-style aliases owned by the plugin directory | None for current first-party helper scope | Yes, by trusted source | Minimal |
-| `docker` | `plugins/docker` | Source helper plus declarative assets | `.winux` helpers plus alias/completion assets | None for current first-party helper scope | Yes, by trusted source | Minimal |
-| `kubectl` | `plugins/kubectl` | Source helper plus declarative assets | `.winux` helpers plus alias/completion assets | None for current first-party helper scope | Yes, by trusted source | Minimal |
-| `npm` | `plugins/npm` | Source helper plus declarative assets | `.winux` helpers plus assets; dynamic completion can move later | Completion/provider ABI | Yes, by trusted source | Yes |
+| `docker` | `plugins/docker` | Source helper plus declarative assets | `.niu` helpers plus alias/completion assets | None for current first-party helper scope | Yes, by trusted source | Minimal |
+| `kubectl` | `plugins/kubectl` | Source helper plus declarative assets | `.niu` helpers plus alias/completion assets | None for current first-party helper scope | Yes, by trusted source | Minimal |
+| `npm` | `plugins/npm` | Source helper plus declarative assets | `.niu` helpers plus assets; dynamic completion can move later | Completion/provider ABI | Yes, by trusted source | Yes |
 | `path-tools` | `plugins/path-tools` | Source shell-effect helper | PATH list/prepend/append/remove/dedupe functions | Structured env-effect API only if sandboxed provider is needed | Yes, by trusted source | Minimal |
 | `extract` | `plugins/extract` | Source external-tool helper | Archive extraction function with explicit tool checks | Optional command/provider ABI for sandboxed archive helpers | Yes, by trusted source | Minimal |
-| `zoxide` | `plugins/zoxide` | Source shell-effect helper | `.winux` `z`/`zi` helpers plus startup/precmd/chpwd tracking | Future sandboxed cwd effect API only if needed | Yes, by trusted source | Minimal |
-| `direnv` | `plugins/direnv` | Source shell-effect helper | `.winux` lifecycle adapter around `direnv export bash` | Future structured env-effect API only if sandboxed/runtime provider is needed | Yes, by trusted source | Minimal |
-| `dotenv` | `plugins/dotenv` | Source shell-effect helper | `.winux` scoped `.env` loader on startup/precmd/chpwd | Future parser hardening and sandboxed file/env effect API | Yes, by trusted source | Minimal |
-| `fzf` | `plugins/fzf` | Source shell-effect helper | `.winux` directory selector functions that `cd` in-session | Interactive provider policy only if moving away from source | Yes, by trusted source | Minimal |
-| `last-working-dir` | `plugins/last-working-dir` | Source shell-effect helper | `.winux` startup restore plus chpwd cache write | Future structured cache/cwd effect API only if sandboxed runtime is needed | Yes, by trusted source | Minimal |
-| `thefuck` | `plugins/thefuck` | Source external-tool helper | `.winux` function that evaluates reviewed `thefuck` output in-session | Better history context/provider API for richer suggestions | Yes, by trusted source | Minimal |
+| `zoxide` | `plugins/zoxide` | Source shell-effect helper | `.niu` `z`/`zi` helpers plus startup/precmd/chpwd tracking | Future sandboxed cwd effect API only if needed | Yes, by trusted source | Minimal |
+| `direnv` | `plugins/direnv` | Source shell-effect helper | `.niu` lifecycle adapter around `direnv export bash` | Future structured env-effect API only if sandboxed/runtime provider is needed | Yes, by trusted source | Minimal |
+| `dotenv` | `plugins/dotenv` | Source shell-effect helper | `.niu` scoped `.env` loader on startup/precmd/chpwd | Future parser hardening and sandboxed file/env effect API | Yes, by trusted source | Minimal |
+| `fzf` | `plugins/fzf` | Source shell-effect helper | `.niu` directory selector functions that `cd` in-session | Interactive provider policy only if moving away from source | Yes, by trusted source | Minimal |
+| `last-working-dir` | `plugins/last-working-dir` | Source shell-effect helper | `.niu` startup restore plus chpwd cache write | Future structured cache/cwd effect API only if sandboxed runtime is needed | Yes, by trusted source | Minimal |
+| `thefuck` | `plugins/thefuck` | Source external-tool helper | `.niu` function that evaluates reviewed `thefuck` output in-session | Better history context/provider API for richer suggestions | Yes, by trusted source | Minimal |
 | `theme-*` | `plugins/theme-*` | Source theme plugins plus style assets | Theme plugin selects layout, symbol, colors, prompt template, and true-colour style data | Richer prompt style/render API | No | Minimal |
 | `keybindings` | `plugins/keybindings` | Bridge over Reedline assets | Directory plugin identity; Reedline still applies native actions | Completion of keybinding plugin API or asset-only schema | No | Minimal |
 | `command-not-found` | `plugins/command-not-found` | Bridge over host provider | Directory plugin identity; provider can later move to process/WASM provider ABI | Provider entrypoint and migration decision | No | Yes |

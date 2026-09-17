@@ -7,7 +7,7 @@ Status: living runtime QA notes for the directory-first framework.
 Run with the selected installed Niubash binary:
 
 ```sh
-niubash tools/smoke_framework.winux C:/path/to/oh-my-niu
+niubash tools/smoke_framework.niu C:/path/to/oh-my-niu
 ```
 
 The smoke currently verifies:

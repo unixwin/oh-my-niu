@@ -1,7 +1,7 @@
 name = "theme-gruvbox"
 version = "1.0.1"
 kind = "source"
-entry = "theme-gruvbox.plugin.winux"
+entry = "theme-gruvbox.plugin.niu"
 summary = "Gruvbox Nerd Font prompt theme plugin inspired by Oh My Posh."
 permissions = ["shell:source"]
 required_binaries = []

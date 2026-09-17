@@ -1,7 +1,7 @@
 name = "git"
 version = "1.0.1"
 kind = "source"
-entry = "git.plugin.winux"
+entry = "git.plugin.niu"
 summary = "Git aliases, completions, and workflow helper functions."
 permissions = ["shell:source", "cwd:read", "process:run:git"]
 required_binaries = ["git"]

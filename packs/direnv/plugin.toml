@@ -19,4 +19,4 @@ keybindings = []
 themes = []
 
 [source]
-entry = "packs/direnv/init.winux"
+entry = "packs/direnv/init.niu"

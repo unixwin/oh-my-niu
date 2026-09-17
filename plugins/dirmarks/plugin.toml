@@ -1,7 +1,7 @@
 name = "dirmarks"
 version = "1.0.0"
 kind = "source"
-entry = "dirmarks.plugin.winux"
+entry = "dirmarks.plugin.niu"
 summary = "Bookmark directories (mark/jump/marks/unmark) and jump back anywhere."
 permissions = ["shell:source", "cwd:read", "fs:write:~/.niubash/marks"]
 required_binaries = []

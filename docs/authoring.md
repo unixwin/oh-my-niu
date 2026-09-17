@@ -12,7 +12,7 @@ anything.
   the same manifest/index contract and be validated by Niubash host policy.
 - The current local update command accepts only the `oh-my-niu` bundle name.
 - `source` packs are the Oh My-style shell plugin path. They ship bundle-local
-  `.winux` code that Niubash sources into the current interactive session after
+  `.niu` code that Niubash sources into the current interactive session after
   plugin review and enablement.
 - `builtin` packs are first-party fallback/native adapters because the Rust
   implementation lives in Niubash core.
@@ -30,7 +30,7 @@ anything.
 3. Put the manifest at `packs/<name>/plugin.toml`.
 4. Add any exported assets under `aliases/`, `completions/`, `prompts/`,
    `keybindings/`, `themes/`, or `wasm/`; source packs also add
-   `packs/<name>/init.winux`.
+   `packs/<name>/init.niu`.
 5. Run the CI-safe checks:
 
 ```sh
@@ -120,7 +120,7 @@ Field rules:
 ### Source
 
 Use `kind = "source"` when a pack should behave like a traditional shell
-plugin. Niubash sources the declared `.winux` file into the current interactive
+plugin. Niubash sources the declared `.niu` file into the current interactive
 session during REPL startup and declared lifecycle hooks. Ordinary `-c`,
 script-file, and stdin execution stay clean unless a future explicit opt-in is
 added; the `-C` one-shot REPL path loads the same interactive startup surface
@@ -128,13 +128,13 @@ when the host supports it.
 
 ```toml
 [source]
-entry = "packs/example/init.winux"
+entry = "packs/example/init.niu"
 ```
 
 Rules:
 
 - `permissions` must include `shell:source`.
-- `source.entry` must be a bundle-local relative path ending in `.winux`.
+- `source.entry` must be a bundle-local relative path ending in `.niu`.
 - `exports.hooks` may contain `startup`, `precmd`, `preexec`, and `chpwd`.
 - Source plugins may define aliases, functions, exports, cwd-changing helpers,
   and shell lifecycle glue. Normal user-authored plugin lists and shell code
@@ -216,7 +216,7 @@ Rules:
 | --- | --- | --- |
 | `cwd:read` | low | Reads the current working directory or path context. |
 | `env:read:<NAME>` | low | Reads one explicitly named environment variable. |
-| `shell:source` | high | Sources bundle-owned `.winux` code into the current interactive session and lifecycle hooks. |
+| `shell:source` | high | Sources bundle-owned `.niu` code into the current interactive session and lifecycle hooks. |
 | `process:run:<cmd>` | high | Runs a native command such as `git` or `zoxide`. |
 | `shell:cwd:write` | medium | Requests a native cwd change through a host-owned shim. |
 | `env:write` | high | Requests environment variable changes. |

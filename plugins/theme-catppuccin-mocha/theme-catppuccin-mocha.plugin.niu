@@ -1,6 +1,6 @@
 # Catppuccin Mocha official theme plugin.
 
-[ -f "$NIUBASH/lib/prompt.winux" ] && . "$NIUBASH/lib/prompt.winux"
+[ -f "$NIUBASH/lib/prompt.niu" ] && . "$NIUBASH/lib/prompt.niu"
 
 NIU_ACTIVE_THEME=catppuccin-mocha
 NIU_THEME_FILE="$NIUBASH/themes/catppuccin-mocha.toml"

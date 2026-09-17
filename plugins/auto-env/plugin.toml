@@ -1,7 +1,7 @@
 name = "auto-env"
 version = "1.0.0"
 kind = "source"
-entry = "auto-env.plugin.winux"
+entry = "auto-env.plugin.niu"
 summary = "Activate the local .venv when entering a directory, deactivate on leave."
 category = "environment"
 permissions = ["shell:source", "cwd:read", "env:write"]

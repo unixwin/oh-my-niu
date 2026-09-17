@@ -19,4 +19,4 @@ keybindings = []
 themes = []
 
 [source]
-entry = "packs/command-timer/init.winux"
+entry = "packs/command-timer/init.niu"

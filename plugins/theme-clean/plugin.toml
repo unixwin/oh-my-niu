@@ -1,7 +1,7 @@
 name = "theme-clean"
 version = "1.0.1"
 kind = "source"
-entry = "theme-clean.plugin.winux"
+entry = "theme-clean.plugin.niu"
 summary = "Clean Oh My Zsh prompt theme plugin."
 permissions = ["shell:source"]
 required_binaries = []

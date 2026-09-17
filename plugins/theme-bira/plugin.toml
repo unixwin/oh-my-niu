@@ -1,7 +1,7 @@
 name = "theme-bira"
 version = "1.0.1"
 kind = "source"
-entry = "theme-bira.plugin.winux"
+entry = "theme-bira.plugin.niu"
 summary = "Bira-style two-line Oh My Zsh prompt theme plugin."
 permissions = ["shell:source"]
 required_binaries = []

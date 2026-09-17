@@ -1,7 +1,7 @@
 name = "keybindings"
 version = "1.0.1"
 kind = "bridge"
-entry = "keybindings.plugin.winux"
+entry = "keybindings.plugin.niu"
 summary = "Bridge for official Reedline keybinding preset assets."
 permissions = []
 required_binaries = []

@@ -19,4 +19,4 @@ keybindings = []
 themes = []
 
 [source]
-entry = "packs/kubectl/init.winux"
+entry = "packs/kubectl/init.niu"
