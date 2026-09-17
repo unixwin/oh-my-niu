@@ -4,7 +4,7 @@
 # host-provided snapshot so prompt rendering never runs git or repaints the
 # active input line after a late async result.
 
-[ -f "$NIUBASH/lib/prompt.winux" ] && . "$NIUBASH/lib/prompt.winux"
+[ -f "$NIUBASH/lib/prompt.niu" ] && . "$NIUBASH/lib/prompt.niu"
 
 : "${NIU_PROMPT_GIT_BACKEND:=native}"
 : "${NIU_PROMPT_LEFT:={cwd} {git}{prompt_char} }"
@@ -13,7 +13,7 @@
 
 case "${NIU_PROMPT_GIT_BACKEND:-native}" in
   legacy|shell)
-    [ -f "$NIUBASH/lib/git.winux" ] && . "$NIUBASH/lib/git.winux"
+    [ -f "$NIUBASH/lib/git.niu" ] && . "$NIUBASH/lib/git.niu"
     ;;
 esac
 

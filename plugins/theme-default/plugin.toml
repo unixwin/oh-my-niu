@@ -1,7 +1,7 @@
 name = "theme-default"
 version = "1.0.1"
 kind = "source"
-entry = "theme-default.plugin.winux"
+entry = "theme-default.plugin.niu"
 summary = "Default official prompt theme plugin."
 permissions = ["shell:source"]
 required_binaries = []

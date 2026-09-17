@@ -1,6 +1,6 @@
 # Oh My Niu zoxide plugin.
 
-[ -f "$NIUBASH/lib/hooks.winux" ] && . "$NIUBASH/lib/hooks.winux"
+[ -f "$NIUBASH/lib/hooks.niu" ] && . "$NIUBASH/lib/hooks.niu"
 
 __niubash_zoxide_available() {
   command -v zoxide >/dev/null 2>&1

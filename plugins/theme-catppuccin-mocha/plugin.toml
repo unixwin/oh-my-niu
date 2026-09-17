@@ -1,7 +1,7 @@
 name = "theme-catppuccin-mocha"
 version = "1.0.1"
 kind = "source"
-entry = "theme-catppuccin-mocha.plugin.winux"
+entry = "theme-catppuccin-mocha.plugin.niu"
 summary = "Catppuccin Mocha Nerd Font prompt theme plugin inspired by Oh My Posh."
 permissions = ["shell:source"]
 required_binaries = []

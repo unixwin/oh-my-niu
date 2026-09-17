@@ -1,7 +1,7 @@
 name = "docker"
 version = "1.0.1"
 kind = "source"
-entry = "docker.plugin.winux"
+entry = "docker.plugin.niu"
 summary = "Docker aliases, completions, and shell helpers."
 permissions = ["shell:source", "cwd:read", "process:run:docker"]
 required_binaries = ["docker"]

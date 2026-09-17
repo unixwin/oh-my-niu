@@ -8,7 +8,7 @@
 # upstream in rubash 821612ca (arithmetic now resolves SECONDS), but the
 # copy keeps the plugin working with older rubash builds too.
 
-[ -f "$NIUBASH/lib/hooks.winux" ] && . "$NIUBASH/lib/hooks.winux"
+[ -f "$NIUBASH/lib/hooks.niu" ] && . "$NIUBASH/lib/hooks.niu"
 
 NIU_TIMER_THRESHOLD=${NIU_TIMER_THRESHOLD:-1}
 export NIU_TIMER_THRESHOLD

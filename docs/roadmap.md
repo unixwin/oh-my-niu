@@ -14,7 +14,7 @@ must stay aligned with `DOCS/plugin-system-roadmap.md` in the Niubash repo.
 
 `oh-my-niu` is the official bundled plugin distribution for Niubash. It is
 not an Oh My Zsh fork, not a zsh plugin runtime, and not the legacy `.winsh`
-script framework. It can ship reviewed bundle-local `.winux` source packs
+script framework. It can ship reviewed bundle-local `.niu` source packs
 through the Niubash manifest/permission model.
 
 ## Phase 0 - Repository Reset
@@ -103,7 +103,7 @@ oh-my-niu work:
   - `prompts/`;
   - `keybindings/`.
 - Split data assets from manifests.
-- Mark which packs are pure metadata, which use `.winux` source helpers, and
+- Mark which packs are pure metadata, which use `.niu` source helpers, and
   which still need Niubash builtin code.
 - Add tests that exported assets exist.
 
@@ -381,7 +381,7 @@ oh-my-niu work:
 - Keep docs clear that the active bundle does not source zsh or `.winsh`
   plugins.
 - Remove any remaining active-surface references to arbitrary sourced plugin
-  scripts; keep only reviewed `.winux` source packs.
+  scripts; keep only reviewed `.niu` source packs.
 
 Current branch progress:
 
@@ -390,7 +390,7 @@ Current branch progress:
 - README, design, authoring, and compatibility docs present the manifest-first
   Niubash plugin model as the active surface.
 - Remaining zsh and `.winsh` references are confined to migration, non-goals, or
-  legacy preservation notes. First-party shell helpers now use `.winux`.
+  legacy preservation notes. First-party shell helpers now use `.niu`.
 
 Niubash dependency:
 
@@ -478,7 +478,7 @@ current TOML-first foundation.
 The active bundle is not meant to stay limited to aliases and static metadata.
 It is still TOML-heavy today because static assets and host-owned behavior are
 kept declarative, but first-party shell helper behavior can now move into
-`kind = "source"` packs with bundle-local `.winux` code. That is a transitional
+`kind = "source"` packs with bundle-local `.niu` code. That is a transitional
 shape, not the final definition of a plugin ecosystem.
 The immediate gate is [Externalization Readiness](externalization-readiness.md):
 classify every pack before changing manifest schema or moving behavior into
@@ -493,7 +493,7 @@ oh-my-niu work:
 - Treat these asset/declarative packs separately from host-owned builtin
   behavior even while manifests still use today's schema.
 - Add code-bearing pack artifacts only through explicit runtime contracts:
-  - `.winux` source scripts for reviewed shell helpers;
+  - `.niu` source scripts for reviewed shell helpers;
   - WASM modules for sandboxed providers and commands;
   - process manifests for adapters around existing native tools.
 - Do not add arbitrary zsh, legacy `.winsh`, or user-discovered rc source

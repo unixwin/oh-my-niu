@@ -19,4 +19,4 @@ keybindings = []
 themes = []
 
 [source]
-entry = "packs/starship/init.winux"
+entry = "packs/starship/init.niu"

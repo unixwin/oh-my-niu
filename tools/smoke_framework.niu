@@ -1,7 +1,7 @@
 # Smoke test the directory-first Oh My Niu framework with Niubash.
 #
 # Usage:
-#   niubash tools/smoke_framework.winux C:/path/to/oh-my-niu
+#   niubash tools/smoke_framework.niu C:/path/to/oh-my-niu
 
 ROOT="${1:-$PWD}"
 failures=0
@@ -42,7 +42,7 @@ source_framework() {
   NIUBASH="$ROOT"
   NIU_CUSTOM="$ROOT/.smoke-custom"
   export NIUBASH NIU_CUSTOM
-  . "$NIUBASH/oh-my-niu.winux"
+  . "$NIUBASH/oh-my-niu.niu"
 }
 
 cd $ROOT || {

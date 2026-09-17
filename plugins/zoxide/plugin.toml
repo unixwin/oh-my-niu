@@ -1,7 +1,7 @@
 name = "zoxide"
 version = "1.0.1"
 kind = "source"
-entry = "zoxide.plugin.winux"
+entry = "zoxide.plugin.niu"
 summary = "zoxide-powered z/zi navigation and directory tracking hooks."
 permissions = ["shell:source", "cwd:read", "shell:cwd:write", "process:run:zoxide"]
 required_binaries = ["zoxide"]

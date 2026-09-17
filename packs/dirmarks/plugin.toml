@@ -19,4 +19,4 @@ keybindings = []
 themes = []
 
 [source]
-entry = "packs/dirmarks/init.winux"
+entry = "packs/dirmarks/init.niu"

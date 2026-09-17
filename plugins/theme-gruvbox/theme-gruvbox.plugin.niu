@@ -1,6 +1,6 @@
 # Gruvbox official theme plugin.
 
-[ -f "$NIUBASH/lib/prompt.winux" ] && . "$NIUBASH/lib/prompt.winux"
+[ -f "$NIUBASH/lib/prompt.niu" ] && . "$NIUBASH/lib/prompt.niu"
 
 NIU_ACTIVE_THEME=gruvbox
 NIU_THEME_FILE="$NIUBASH/themes/gruvbox.toml"

@@ -1,7 +1,7 @@
 name = "theme-pure"
 version = "1.0.1"
 kind = "source"
-entry = "theme-pure.plugin.winux"
+entry = "theme-pure.plugin.niu"
 summary = "Pure-inspired two-line official prompt theme plugin."
 permissions = ["shell:source"]
 required_binaries = []

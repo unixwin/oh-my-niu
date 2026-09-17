@@ -7,7 +7,7 @@
 #
 # Set NIU_GIT_FETCH_REMIND=0 to turn it off.
 
-[ -f "$NIUBASH/lib/hooks.winux" ] && . "$NIUBASH/lib/hooks.winux"
+[ -f "$NIUBASH/lib/hooks.niu" ] && . "$NIUBASH/lib/hooks.niu"
 
 NIU_GIT_FETCH_INTERVAL=${NIU_GIT_FETCH_INTERVAL:-600}
 export NIU_GIT_FETCH_INTERVAL

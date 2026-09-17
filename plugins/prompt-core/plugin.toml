@@ -1,7 +1,7 @@
 name = "prompt-core"
 version = "1.0.1"
 kind = "source"
-entry = "prompt-core.plugin.winux"
+entry = "prompt-core.plugin.niu"
 summary = "Prompt API, segment registry, and shared prompt data helpers."
 permissions = ["shell:source", "cwd:read", "process:run:git"]
 required_binaries = []

@@ -10,7 +10,7 @@
 # Bookmarks live in $NIU_MARKS_HOME (default ~/.niubash/marks), one file
 # per bookmark containing the target path.
 
-[ -f "$NIUBASH/lib/hooks.winux" ] && . "$NIUBASH/lib/hooks.winux"
+[ -f "$NIUBASH/lib/hooks.niu" ] && . "$NIUBASH/lib/hooks.niu"
 
 NIU_MARKS_HOME=${NIU_MARKS_HOME:-$HOME/.niubash/marks}
 export NIU_MARKS_HOME

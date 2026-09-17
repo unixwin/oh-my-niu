@@ -1,7 +1,7 @@
 name = "theme-spaceship"
 version = "1.0.1"
 kind = "source"
-entry = "theme-spaceship.plugin.winux"
+entry = "theme-spaceship.plugin.niu"
 summary = "Spaceship-style Nerd Font prompt theme plugin inspired by Oh My Posh."
 permissions = ["shell:source"]
 required_binaries = []

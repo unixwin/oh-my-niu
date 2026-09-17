@@ -49,13 +49,13 @@ niubash_prompt_refresh_starship_git() {
 niubash_use_theme() {
   __omw_theme_name="$1"
 
-  if [ -f "$NIU_CUSTOM/themes/$__omw_theme_name/$__omw_theme_name.theme.winux" ]; then
-    . "$NIU_CUSTOM/themes/$__omw_theme_name/$__omw_theme_name.theme.winux"
+  if [ -f "$NIU_CUSTOM/themes/$__omw_theme_name/$__omw_theme_name.theme.niu" ]; then
+    . "$NIU_CUSTOM/themes/$__omw_theme_name/$__omw_theme_name.theme.niu"
     return $?
   fi
 
-  if [ -f "$NIUBASH/themes/$__omw_theme_name/$__omw_theme_name.theme.winux" ]; then
-    . "$NIUBASH/themes/$__omw_theme_name/$__omw_theme_name.theme.winux"
+  if [ -f "$NIUBASH/themes/$__omw_theme_name/$__omw_theme_name.theme.niu" ]; then
+    . "$NIUBASH/themes/$__omw_theme_name/$__omw_theme_name.theme.niu"
     return $?
   fi
 

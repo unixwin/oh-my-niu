@@ -19,4 +19,4 @@ keybindings = []
 themes = []
 
 [source]
-entry = "packs/env-sync/init.winux"
+entry = "packs/env-sync/init.niu"

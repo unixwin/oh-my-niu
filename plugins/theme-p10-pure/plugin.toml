@@ -1,7 +1,7 @@
 name = "theme-p10-pure"
 version = "1.0.1"
 kind = "source"
-entry = "theme-p10-pure.plugin.winux"
+entry = "theme-p10-pure.plugin.niu"
 summary = "Powerlevel-style pure official prompt theme plugin."
 permissions = ["shell:source"]
 required_binaries = []

@@ -19,4 +19,4 @@ keybindings = []
 themes = []
 
 [source]
-entry = "packs/docker/init.winux"
+entry = "packs/docker/init.niu"

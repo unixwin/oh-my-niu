@@ -6,7 +6,7 @@ Each plugin should own its code and assets under one directory:
 
 ```text
 plugins/name/
-  name.plugin.winux
+  name.plugin.niu
   plugin.toml
   functions/
   completions/

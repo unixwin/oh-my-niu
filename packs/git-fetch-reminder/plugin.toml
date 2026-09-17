@@ -19,4 +19,4 @@ keybindings = []
 themes = []
 
 [source]
-entry = "packs/git-fetch-reminder/init.winux"
+entry = "packs/git-fetch-reminder/init.niu"

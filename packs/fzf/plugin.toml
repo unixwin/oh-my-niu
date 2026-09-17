@@ -19,4 +19,4 @@ keybindings = []
 themes = []
 
 [source]
-entry = "packs/fzf/init.winux"
+entry = "packs/fzf/init.niu"

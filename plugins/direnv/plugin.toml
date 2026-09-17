@@ -1,7 +1,7 @@
 name = "direnv"
 version = "1.0.1"
 kind = "source"
-entry = "direnv.plugin.winux"
+entry = "direnv.plugin.niu"
 summary = "direnv export bash adapter for the current shell."
 permissions = ["shell:source", "cwd:read", "env:write", "process:run:direnv"]
 required_binaries = ["direnv"]

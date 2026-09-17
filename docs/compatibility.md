@@ -11,7 +11,7 @@ oh-my-niu bundle.
 - Minimum host: `min_niubash = "1.0.0"`
 - Bundle API: `niubash:plugin-bundle@0.1.0`
 - Pack manifest API: `niubash:plugin@0.1.0`
-- Source plugin script suffix: `.winux`
+- Source plugin script suffix: `.niu`
 - Process plugin protocol: `niubash:process-plugin@0.1.0`
 - WASM plugin protocol: `niubash:wasm-plugin@0.1.0`
 
@@ -21,7 +21,7 @@ bundle safely.
 
 ## Runtime Surface
 
-- `source` packs load bundle-local `.winux` scripts into the current
+- `source` packs load bundle-local `.niu` scripts into the current
   interactive Niubash session during the `startup`, `precmd`, `preexec`,
   `postcmd`, `chpwd`, `period`, `zshaddhistory`, `zshexit`, `greeting`, and
   `title` lifecycle hooks. They are active for the interactive REPL and `-C`;

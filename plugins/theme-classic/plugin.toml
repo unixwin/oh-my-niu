@@ -1,7 +1,7 @@
 name = "theme-classic"
 version = "1.0.1"
 kind = "source"
-entry = "theme-classic.plugin.winux"
+entry = "theme-classic.plugin.niu"
 summary = "Classic two-line official prompt theme plugin."
 permissions = ["shell:source"]
 required_binaries = []

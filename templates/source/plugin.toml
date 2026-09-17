@@ -20,4 +20,4 @@ themes = []
 providers = []
 
 [source]
-entry = "packs/example-source/init.winux"
+entry = "packs/example-source/init.niu"
