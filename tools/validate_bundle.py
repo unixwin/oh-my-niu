@@ -134,6 +134,7 @@ EXPECTED_FRAMEWORK_PLUGINS = (
     "auto-env",
     "dirmarks",
     "git-fetch-reminder",
+    "jj",
     "theme-default",
     "theme-dark",
     "theme-light",
