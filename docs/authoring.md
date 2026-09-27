@@ -56,6 +56,21 @@ executing plugin code.
 External bundle sources are review-only in the current host; managed
 `plugin install` support waits for the third-party registry trust policy.
 
+## Scaffolding a New Pack
+
+A pack is wired into four directories and three registries; missing any of
+them fails Bundle CI only after the fact. Use the scaffolder so every piece
+lands together and the validator runs before you commit:
+
+```sh
+python tools/new_pack.py add mypack --summary "One line."     --required-binary mypack --with-completions
+python tools/new_pack.py remove mypack   # reverse everything cleanly
+```
+
+Both commands run `tools/validate_bundle.py` at the end and fail loudly if
+a registration anchor drifted. The jj pack (PR #10) landed with exactly the
+wiring mistakes this tool now prevents.
+
 ## Bundle Metadata
 
 `bundle.toml` must declare `api = "niubash:plugin-bundle@0.1.0"` and
