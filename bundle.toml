@@ -14,6 +14,7 @@ asset = "oh-my-niu-{version}.zip"
 [packs]
 default = ["git", "winuxcmd-core", "prompts", "keybindings", "themes"]
 available = [
+  "jj",
   "git",
   "winuxcmd-core",
   "docker",

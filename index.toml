@@ -34,6 +34,17 @@ permissions = []
 required_binaries = []
 
 [[packs]]
+name = "jj"
+version = "1.0.0"
+api = "niubash:plugin@0.1.0"
+kind = "source"
+category = "devtools"
+summary = "Jujutsu (jj) completions and a cached prompt segment."
+default = false
+permissions = ["shell:source", "cwd:read", "process:run:jj"]
+required_binaries = ["jj"]
+
+[[packs]]
 name = "docker"
 version = "2.0.0"
 api = "niubash:plugin@0.1.0"
