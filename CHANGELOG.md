@@ -8,6 +8,12 @@ changes, and user-visible asset changes.
 
 - Release artifact: `oh-my-niu-2.0.0.zip` (`api = "niubash:plugin-bundle@0.1.0"`,
   `min_niubash = "1.0.0"`).
+- Host compatibility: the `git` prompt segment (`[segments.git] id = "vcs"`
+  in `prompts/segments.toml`) now resolves to niubash's native
+  `SegmentId::Vcs` as of niubash 1.4.1 — branch / `branch*` / short SHA,
+  themed `[git_clean]` cyan / `[git_dirty]` yellow, rendered in-process with
+  zero child git processes. No bundle format change: every shipped preset
+  already carries the segment (the `lean` preset is the documented showcase).
 - Renamed the bundle from `oh-my-winuxsh` to `oh-my-niu` to match the
   niubash 1.0.0 brand. Installed `~/.oh-my-winuxsh` directories keep
   working: niubash discovers the pre-rename layout as a fallback.
