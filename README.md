@@ -8,6 +8,8 @@
 Official Oh My-style plugin framework and bundled plugin distribution for
 Niubash.
 
+Product page: [unixwin.dev/products/oh-my-niu](https://unixwin.dev/products/oh-my-niu/)
+
 This repository is not a zsh runtime and does not provide zsh plugin
 compatibility. It should, however, follow the useful shape of Oh My Zsh, fish
 plugin managers, and PowerShell prompt frameworks: plugins are directories,
