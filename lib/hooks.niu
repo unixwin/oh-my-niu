@@ -1,7 +1,11 @@
 # Hook registry for framework-loaded plugins.
 #
-# Niubash core calls these hook runners from its interactive lifecycle.
-# This shell-level registry makes the plugin contract visible and easy to port.
+# The runners in this file are framework-internal. Current Niubash does not
+# call them: the host's niu-native named-hook registry is not implemented
+# (the Niubash hooks documentation says so explicitly) and the host loads
+# an empty hook configuration at startup. The framework therefore wires
+# its own dispatchers onto the prompt surface the host does fire —
+# PROMPT_COMMAND and the DEBUG trap; see "Shell wiring" below.
 #
 # Supported hooks (comprehensive, matching ZSH/FISH capabilities):
 #
@@ -237,7 +241,8 @@ __niubash_period_check() {
 niubash_add_precmd_hook __niubash_period_check
 
 # --- Trap handlers ---
-# These functions are called by niubash core when signals are received
+# Framework-internal runners for the signal-trap registries above. No
+# host calls these; wire them to real traps yourself if you need them.
 
 __niubash_handle_trapdebug() {
   niubash_run_trapdebug_hooks
@@ -277,6 +282,92 @@ __niubash_handle_trapchld() {
 
 __niubash_handle_trappzerr() {
   niubash_run_trappzerr_hooks
+}
+
+# --- Shell wiring -----------------------------------------------------------
+#
+# The runners above are framework-internal: current Niubash does not call
+# them. The host's niu-native named-hook registry is not implemented (the
+# Niubash hooks documentation says so explicitly) and the host loads an
+# empty hook configuration at startup. What the host does fire is the
+# bash prompt surface:
+#
+#   - PROMPT_COMMAND entries run before each prompt, after the host sets
+#     NIU_LAST_EXIT_CODE;
+#   - PS1 / PS2 / PS0 assignments are read back by the host renderer;
+#   - traps, including the DEBUG trap set with `trap ... DEBUG`.
+#
+# So the entry point finishes loading by installing framework dispatchers
+# on that surface:
+#
+#   precmd  <- niubash_hook_dispatch_precmd (prepended to PROMPT_COMMAND,
+#              so it sees the previous command's exit status untouched)
+#   chpwd   <- working-directory check inside the precmd dispatcher
+#   preexec <- niubash_hook_dispatch_preexec (DEBUG trap; installed only
+#              when no DEBUG trap exists yet, so an existing user or
+#              debugger trap is never silently replaced)
+#
+# startup hooks need no wiring: the entry point runs them synchronously
+# after plugins load. Phases with no host surface (postcmd, greeting,
+# title, zshaddhistory, zshexit, the signal-trap registries; period is
+# already folded into precmd) stay manual: call their runners from your
+# own PROMPT_COMMAND entries or traps if you need them.
+#
+# The precmd dispatcher also records NIU_LAST_STATUS from $? before any
+# hook runs: the host prompt reads that variable but never sets it (only
+# NIU_LAST_EXIT_CODE is host-maintained), and prompt segments such as
+# {status} are documented against it.
+#
+# Set NIU_FRAMEWORK_HOOKS=off in the rc file, before sourcing the entry
+# point, to skip the wiring entirely.
+
+__NIU_HOOK_LAST_PWD=${__NIU_HOOK_LAST_PWD:-$PWD}
+__NIU_HOOK_PREEXEC_ACTIVE=${__NIU_HOOK_PREEXEC_ACTIVE:-}
+
+niubash_hook_dispatch_precmd() {
+  __niubash_dispatch_status=$?
+  NIU_LAST_STATUS=$__niubash_dispatch_status
+  if [ "$PWD" != "${__NIU_HOOK_LAST_PWD:-}" ]; then
+    __NIU_HOOK_LAST_PWD="$PWD"
+    niubash_run_chpwd_hooks
+  fi
+  ( exit $__niubash_dispatch_status )
+  niubash_run_precmd_hooks
+}
+
+niubash_hook_dispatch_preexec() {
+  if [ -n "${__NIU_HOOK_PREEXEC_ACTIVE:-}" ]; then
+    return 0
+  fi
+  case "${BASH_COMMAND:-}" in
+    niubash_hook_dispatch_*|niubash_run_*_hooks|__niubash_*|__omw_*)
+      return 0
+      ;;
+  esac
+  __NIU_HOOK_PREEXEC_ACTIVE=1
+  NIU_PREEXEC_COMMAND="${BASH_COMMAND:-}"
+  niubash_run_preexec_hooks "${BASH_COMMAND:-}"
+  __NIU_HOOK_PREEXEC_ACTIVE=
+  return 0
+}
+
+niubash_install_shell_hooks() {
+  if [ "${NIU_FRAMEWORK_HOOKS:-}" = "off" ]; then
+    return 0
+  fi
+  case ";${PROMPT_COMMAND:-};" in
+    *";niubash_hook_dispatch_precmd;"*) ;;
+    *)
+      if [ -n "${PROMPT_COMMAND:-}" ]; then
+        PROMPT_COMMAND="niubash_hook_dispatch_precmd;$PROMPT_COMMAND"
+      else
+        PROMPT_COMMAND="niubash_hook_dispatch_precmd"
+      fi
+      ;;
+  esac
+  if [ -z "$(trap -p DEBUG 2>/dev/null)" ]; then
+    trap 'niubash_hook_dispatch_preexec' DEBUG
+  fi
 }
 
 # --- Hook introspection ---

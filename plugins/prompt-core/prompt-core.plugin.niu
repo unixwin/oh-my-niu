@@ -1,8 +1,15 @@
 # Official prompt core plugin.
 #
-# This is the public prompt/plugin API layer. Git status is consumed as a
-# host-provided snapshot so prompt rendering never runs git or repaints the
-# active input line after a late async result.
+# This is the public prompt/plugin API layer. Git status reaches the
+# renderer as the NIU_PROMPT_GIT snapshot string so prompt rendering
+# never runs git or repaints the active input line after a late async
+# result. No host daemon supplies that snapshot on current Niubash (the
+# gitstatus-daemon design was never shipped and the built-in plugin
+# stack that consumed these variables was retired, niubash#145): the
+# snapshot is maintained by the framework itself — the legacy/shell
+# backend refreshes it from lib/git.niu, the starship backend from
+# Starship modules, and the native backend renders whatever snapshot
+# the user or another tool last wrote to NIU_PROMPT_GIT.
 
 [ -f "$NIUBASH/lib/prompt.niu" ] && . "$NIUBASH/lib/prompt.niu"
 
@@ -114,6 +121,7 @@ niubash_prompt_precmd() {
   if [ "${NIU_PROMPT_GIT_DIRTY:-0}" != "0" ]; then
     niubash_prompt_refresh_git_snapshot
   fi
+  niubash_prompt_apply
 }
 
 niubash_prompt_status() {
@@ -181,6 +189,17 @@ niubash_prompt_render_left() {
 
 niubash_prompt_render_right() {
   niubash_prompt_render_template "$NIU_PROMPT_RIGHT"
+}
+
+# Publish the rendered prompt. Earlier Niubash builds consumed
+# NIU_PROMPT_LEFT / NIU_PROMPT_RIGHT through a host prompt bridge; that
+# bridge was retired with the built-in plugin stack (niubash#145) and
+# current hosts only read PS1, so the framework renders its templates
+# itself and assigns PS1 from its precmd hook (driven by the
+# PROMPT_COMMAND dispatch in lib/hooks.niu). NIU_PROMPT_RIGHT has no
+# bash-surface equivalent and remains a framework-level value.
+niubash_prompt_apply() {
+  PS1="$(niubash_prompt_render_left)"
 }
 
 niubash_prompt_register_segment cwd niubash_prompt_cwd
