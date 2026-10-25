@@ -283,7 +283,14 @@ the shell/plugin boundary, not to any specific theme:
 - Prompt plugins may use native helpers, but shell core should treat those
   helpers as implementation details behind the API.
 
-Current host bridge:
+Host bridge status (re-audited 2026-10-25 against Niubash master
+`b53e6bff`): the bridge described below was retired with the built-in
+plugin stack (niubash#145). Current Niubash consumes none of
+`NIU_PROMPT_LEFT`, `NIU_PROMPT_RIGHT`, `NIU_ACTIVE_THEME`, or
+`NIU_PROMPT_GIT`. The framework therefore closes the circuit itself:
+`prompt-core`'s precmd hook renders the active template and assigns
+`PS1`, driven by the framework's `PROMPT_COMMAND` dispatch
+(`lib/hooks.niu`). The bridge design is kept here as history:
 
 - When the user has not set explicit TOML prompt fields, Niubash consumes
   `NIU_PROMPT_LEFT`, `NIU_PROMPT_RIGHT`, `NIU_ACTIVE_THEME`, and
@@ -305,6 +312,14 @@ The default prompt path should come from official plugins:
 - `git`: installs Git commands and workflow helpers, not the Git prompt owner.
 
 ## Gitstatus Service Direction
+
+Status (2026-10-25): no `--gitstatus-daemon` exists in current
+Niubash, and the host side of this design was retired with the
+built-in stack (niubash#145). The snapshot half of the design is
+live and owned by the framework: `prompt-core` renders only the
+`NIU_PROMPT_GIT` snapshot string, refreshed by its own backends.
+The daemon below remains an unbuilt design option, kept for the
+record.
 
 The current prompt rendering feels wrong when asynchronous Git status finishes
 after the prompt has already been drawn and then causes visible redraw churn.
@@ -337,15 +352,16 @@ The framework loader should be predictable:
    sources `oh-my-niu.niu`.
 2. Establish `NIUBASH`, `NIU_CUSTOM`, and plugin search paths.
 3. Source framework libraries from `lib/*.niu`.
-4. Resolve enabled plugins from managed TOML and shell arrays.
+4. Resolve enabled plugins from the rc shell arrays (`NIU_PLUGINS`).
 5. Source each plugin's `*.plugin.niu` in user-declared order.
 6. Register plugin-local functions, completions, hooks, and prompt providers.
 7. Source the selected theme plugin through `NIU_THEME_PLUGIN`.
 8. Return to `~/.niubashrc`; user code after the framework source overrides
-   plugin defaults. Keep `~/.winshrc` only as the host-level legacy fallback
-   when `~/.niubashrc` is absent.
+   plugin defaults. `~/.niubashrc` is the only rc the host reads for
+   this: current Niubash never reads `~/.winshrc` or `~/.winuxshrc`,
+   so there is no host-level legacy fallback to keep.
 
-Disable must mean disable. If `[plugins.git].enabled = false`, the Git plugin's
+Disable must mean disable. If `git` is absent from `NIU_PLUGINS`, the Git plugin's
 aliases, functions, completion exports, prompt segment, and theme hooks must all
 be absent unless the user re-adds them manually.
 

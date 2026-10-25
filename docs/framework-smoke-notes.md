@@ -22,20 +22,16 @@ The smoke currently verifies:
 - devtool plugin aliases/functions from `git`, `docker`, `kubectl`, and `npm`;
 - lifecycle hook execution through the `dotenv` plugin.
 
-Core-side regression tests currently cover:
-
-- `plugins/<name>/plugin.toml` inventory loading from an Oh My Niu bundle;
-- directory plugins replacing same-named legacy packs;
-- `bridge` plugin inventory display for Reedline/provider-owned surfaces;
-- source plugins receiving `NIUBASH` and `NIU_PLUGIN_BUNDLE_DIR`;
-- host prompt sync consuming `prompt-core`/theme plugin templates by default
-  while explicit TOML prompt configuration remains authoritative;
-- host prompt sync consuming `NIU_PROMPT_GIT` snapshots so `{git}` renders
-  from prompt-core state instead of recalculating Git during draw;
-- `[plugins.git].enabled = false` removing Git aliases and completion
-  definitions;
-- external bundles not borrowing official compiled aliases when their own
-  assets are missing.
+Host-side (Niubash) test coverage of this bundle on current master is
+limited to the prompt segment contract: `prompt_segments.rs` pins the
+segment ids and presets mirrored in `prompts/segments.toml` and
+resolves this repository's file in a test. The wider host-side
+regression list that used to be tracked here (bundle inventory
+loading, directory plugins replacing packs, host prompt sync consuming
+`NIU_PROMPT_*` and `NIU_PROMPT_GIT`, enablement gating host aliases and
+completions) covered the retired built-in plugin stack (niubash#145)
+and no longer exists on the host; the framework-side equivalents are
+covered by the smoke above.
 
 ## Runtime Findings
 
@@ -53,8 +49,8 @@ Core-side regression tests currently cover:
 
 ## Next Smoke Gates
 
-- Expand daemon-backed prompt snapshot smoke coverage for dirty/chpwd/git-command
-  invalidation.
+- Expand prompt snapshot smoke coverage for dirty/chpwd/git-command
+  invalidation through the framework's own precmd/preexec dispatch.
 - Add richer prompt API renderer tests once host prompt rendering can call
   plugin segment/provider functions directly instead of only consuming exported
   template variables.

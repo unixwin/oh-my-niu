@@ -1,8 +1,12 @@
 # Externalization Readiness
 This document classifies official bundle behavior during the framework-first
 migration. The active runtime target is `plugins/<name>/`; old `packs/`
-manifests remain a compatibility and review surface until Niubash loads
-directory plugins directly.
+manifests remain a packaging and review surface. Niubash does not load
+directory plugins — the host integration this classification was
+written against was retired with the built-in plugin stack
+(niubash#145) — so the framework entry point is the only loader, and
+"missing host API" below means "no host surface exists", not "pending
+host work" unless a row says otherwise.
 
 ## Current Bundle Facts
 - Static bundle assets still cover aliases, completion tables, prompt presets,
@@ -19,22 +23,25 @@ directory plugins directly.
 - WASM packs are command-only today. They can read args, cwd, and explicitly
   allowed env values, but they cannot act as completion, prompt, hook, or
   command-not-found or other providers yet.
-- Process packs can wrap native commands, lifecycle hooks, and Niubash
-  command-not-found provider binding, but they do not mutate the current shell;
-  source plugins are the current shell-effect path.
+- Process packs declare native commands and lifecycle metadata, but
+  current Niubash executes neither process packs nor any
+  command-not-found provider binding; source plugins are the current
+  shell-effect path.
 - Shell-mutating WASM/provider packs still need explicit host APIs before they
   can mutate env/cwd/history outside trusted source code.
-- Niubash plugin CLI review surfaces expose derived `execution_model`,
-  `externalization_class`, and readiness profile values for these rows. They
-  are not bundle manifest fields.
-- `exports.providers` is a guarded provider marker. In current Niubash, process
-  packs may use it for command-not-found with `command:diagnose`; it is not a
-  new runtime kind and does not make command-style WASM act as a provider.
+- The `execution_model`, `externalization_class`, and readiness profile
+  values for these rows are this document's own classification. An
+  earlier host release derived them on a `niu plugin review` surface;
+  that verb is retired and nothing exposes the values today.
+- `exports.providers` is a guarded provider marker only. No provider
+  binding is implemented in current Niubash — in particular there is
+  no command-not-found binding for `command:diagnose` — and the marker
+  does not make command-style WASM act as a provider.
 
 ## Pack Matrix
 | Feature | Current surface | Classification | Target runtime / execution model | Missing host API or decision | Shell-mutating | Fallback needed |
 | --- | --- | --- | --- | --- | --- | --- |
-| `prompt-core` | `plugins/prompt-core` | Prompt API source plugin | Prompt segment registry, render entry points, `NIU_PROMPT_GIT` host snapshot backed by a persistent gitstatus helper | Richer host prompt call-in | No direct mutation | Yes |
+| `prompt-core` | `plugins/prompt-core` | Prompt API source plugin | Prompt segment registry, render entry points, framework-maintained `NIU_PROMPT_GIT` snapshot | Richer host prompt call-in | No direct mutation | Yes |
 | `git` | `plugins/git` | Source workflow helper plus declarative assets | `.niu` aliases/functions plus alias/completion assets | Remove core fallback alias injection when plugin disabled | Yes, by trusted source | Minimal |
 | `common-aliases` | `plugins/common-aliases` | Source alias helper plus declarative asset | Small Oh My-style aliases owned by the plugin directory | None for current first-party helper scope | Yes, by trusted source | Minimal |
 | `docker` | `plugins/docker` | Source helper plus declarative assets | `.niu` helpers plus alias/completion assets | None for current first-party helper scope | Yes, by trusted source | Minimal |
@@ -52,15 +59,20 @@ directory plugins directly.
 | `keybindings` | `plugins/keybindings` | Bridge over Reedline assets | Directory plugin identity; Reedline still applies native actions | Completion of keybinding plugin API or asset-only schema | No | Minimal |
 | `command-not-found` | `plugins/command-not-found` | Bridge over host provider | Directory plugin identity; provider can later move to process/WASM provider ABI | Provider entrypoint and migration decision | No | Yes |
 | Old `prompts` pack | `packs/prompts` | Transitional compatibility asset | Fold prompt presets into `prompt-core`/theme plugins | Host prompt API and compatibility migration | No | Yes |
-| Old `themes` pack | `packs/themes` | Transitional compatibility asset | Superseded by `theme-*` plugins, including migrated `default`/`dark`/`light`/`colorful` and p10-style themes | Keep catalog compatibility until host loads plugin themes directly | No | Minimal |
+| Old `themes` pack | `packs/themes` | Transitional compatibility asset | Superseded by `theme-*` plugins, including migrated `default`/`dark`/`light`/`colorful` and p10-style themes | Keep as catalog/review metadata | No | Minimal |
 
 ## Next Bundle Work
-1. Wire Niubash managed config to the same directory loader as shell arrays.
-2. Stop host fallback injection when an equivalent directory plugin is disabled.
+1. (Done/obsolete) Managed-config parity: Niubash's managed config is
+   the ecosystem-sources spec in `~/.niubash/plugins.toml`, which does
+   not describe this bundle; the framework loader is driven by the rc
+   arrays only.
+2. (Done/obsolete) Host fallback injection: the host no longer injects
+   official aliases/completions at all (niubash#145), so there is no
+   fallback left to stop.
 3. Keep reducing legacy `packs/prompts` and `packs/themes` to package-review
    metadata now that `prompt-core` and `theme-*` plugins own prompt behavior.
-4. Broaden persistent gitstatus helper coverage around chpwd/git-command
+4. Broaden framework snapshot coverage around chpwd/git-command
    invalidation, dirty compact coloring, and stale snapshot handling.
 5. Use [command-not-found](command-not-found-provider-abi.md) to design the
-   first real provider migration after provider input/output, permission review,
-   timeout behavior, and bridge-disable rules are stable.
+   first real provider migration if a host ever grows a provider API;
+   no such binding exists today.

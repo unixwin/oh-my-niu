@@ -4,6 +4,17 @@ Status: living checklist for the framework-first migration. Update this file
 whenever a host-owned or manifest-only feature moves toward an Oh My-style
 plugin directory.
 
+> Host-integration re-audit, 2026-10-25, against Niubash master
+> `b53e6bff` (post-1.4.4): the "host bridge" integration this checklist
+> originally tracked was retired with Niubash's built-in plugin/theme
+> stack (niubash#145). Niubash no longer reads bundle inventories,
+> consumes `NIU_PROMPT_*` variables, gates bundled aliases/completions,
+> or ships a gitstatus daemon. The framework now performs those roles
+> itself (entry-point sourcing, PROMPT_COMMAND/DEBUG-trap hook wiring,
+> prompt-core publishing `PS1`). "Current Cut" below reflects that;
+> the coverage table's plugin rows are unchanged because they describe
+> bundle-side ownership, not host behavior.
+
 ## Goal
 
 Oh My Niu should feel like Oh My Zsh, fish plugin collections, and Oh My
@@ -70,23 +81,33 @@ Posh where that helps users:
 - `plugins/keybindings` and `plugins/command-not-found` are bridge plugins so
   users and docs see plugin-owned identity while Niubash still owns the
   Reedline/provider call sites.
-- Current Niubash core can read `plugins/<name>/plugin.toml` directly from the
-  bundle. Directory plugins replace same-named legacy packs, `prompt-core`
-  replaces the old `prompts` pack surface, and `theme-*` replaces the old
-  `themes` pack surface in the active inventory.
-- Plugin enablement now gates official aliases and command completion
-  definitions. Disabling `git` removes both the alias pack and Git completion
-  definitions; external bundles no longer borrow official compiled aliases when
-  their own alias assets are missing.
-- Niubash host prompt startup now consumes `NIU_PROMPT_LEFT`,
-  `NIU_PROMPT_RIGHT`, `NIU_ACTIVE_THEME`, and
-  `NIU_PROMPT_SYMBOL` exported by `prompt-core`/theme plugins when the user
-  has not set explicit TOML prompt fields. Native TOML prompt configuration
-  remains authoritative.
-- Niubash now starts a persistent `--gitstatus-daemon` helper behind the host
-  prompt bridge. `prompt-core` consumes `NIU_PROMPT_GIT` as the stable
-  snapshot for `{git}`/`{git_prompt}`; late Git work warms a later prompt
-  instead of repainting the active input line.
+- Directory plugins replaced same-named legacy packs inside this
+  bundle: `prompt-core` replaces the old `prompts` pack surface, and
+  `theme-*` replaces the old `themes` pack surface in the bundle
+  inventory. (An earlier host release also read `plugins/<name>/plugin.toml`
+  from the bundle into its own inventory; that host integration is
+  retired — `plugin.toml` is bundle-side metadata now.)
+- Framework enablement gates what the framework itself loads:
+  `NIU_PLUGINS` controls which plugin directories the entry point
+  sources, and disabling `git` therefore removes its aliases,
+  functions, and hooks from the session. (An earlier host release
+  also gated official aliases and completion definitions from the
+  host side; that host integration is retired, and host completion
+  tables load from user completion directories, not from enablement.)
+- `prompt-core` publishes the prompt itself: its precmd hook renders
+  `NIU_PROMPT_LEFT` and assigns `PS1`, driven by the framework's
+  `PROMPT_COMMAND` dispatch. (The earlier host prompt bridge that
+  consumed `NIU_PROMPT_LEFT`, `NIU_PROMPT_RIGHT`, `NIU_ACTIVE_THEME`,
+  and `NIU_PROMPT_SYMBOL` was retired with the built-in stack,
+  niubash#145. Native TOML prompt configuration on the host side is
+  unaffected — it belongs to sessions that do not load prompt-core.)
+- The Git prompt snapshot is framework-maintained: `prompt-core`
+  consumes `NIU_PROMPT_GIT` for `{git}`/`{git_prompt}`, refreshed by
+  its own backends (legacy/shell via `lib/git.niu`, starship via
+  Starship modules, native = externally supplied snapshot). No host
+  `--gitstatus-daemon` exists on current Niubash; late Git work warms
+  a later prompt instead of repainting the active input line because
+  rendering only reads the snapshot string.
 - The old manifest-first `packs/` tree remains only as compatibility and
   package-review metadata during migration.
 - `tools/smoke_framework.niu` verifies the directory loader, official themes,
