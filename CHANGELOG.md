@@ -14,14 +14,32 @@ changes, and user-visible asset changes.
   themed `[git_clean]` cyan / `[git_dirty]` yellow, rendered in-process with
   zero child git processes. No bundle format change: every shipped preset
   already carries the segment (the `lean` preset is the documented showcase).
+- Compatibility audit against niubash master (post-1.4.4, 2026-10-25):
+  the built-in plugin/theme stack this bundle was originally designed
+  against was retired by Niubash (niubash#145), so the framework now
+  wires its own lifecycle onto the bash prompt surface — `precmd` and
+  `chpwd` dispatch from `PROMPT_COMMAND`, `preexec` from the DEBUG
+  trap — and `prompt-core` publishes the rendered prompt to `PS1`
+  itself instead of relying on a host bridge consuming
+  `NIU_PROMPT_LEFT`. The entry point no longer derives bundle paths
+  from an unset `HOME` (niubash#546). Documentation (README,
+  compatibility, migration, authoring, design notes) was aligned with
+  the current host: rc is `~/.niubashrc`-only (legacy winshrc files
+  are never read), plugin CLI state lives in `~/.niubash/plugins.toml`,
+  bundle updates are manual, and the retired `niu plugin` bundle verbs
+  were removed from the guides. The framework smoke harness now
+  reloads the entry point explicitly (`--reload`) and asserts the
+  hook wiring end to end.
 - Renamed the bundle from `oh-my-winuxsh` to `oh-my-niu` to match the
   niubash 1.0.0 brand. Installed `~/.oh-my-winuxsh` directories keep
-  working: niubash discovers the pre-rename layout as a fallback.
+  working as bundle roots — point `NIUBASH` at the old tree and source
+  its entry point. Current Niubash has no bundle discovery of its own
+  and reads neither layout.
 - Bundle/plugin API identifiers move from the `winuxsh:` prefix to
   `niubash:` (`niubash:plugin-bundle@0.1.0`, `niubash:plugin@0.1.0`,
   `niubash:plugin-index@0.1.0`). Manifests may declare either
   `min_niubash` or the legacy `min_winuxsh` field.
-- Entry point renamed to `oh-my-niu.winux`; scripts now use the `NIU_*`
+- Entry point renamed to `oh-my-niu.niu`; scripts now use the `NIU_*`
   environment prefix (`NIU_PLUGINS`, `NIU_THEME`, `NIU_THEME_PLUGIN`)
   and the `NIUBASH` bundle-root variable.
 - New first-party plugins: `command-timer` (per-command duration and exit
