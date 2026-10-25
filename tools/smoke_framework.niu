@@ -42,7 +42,7 @@ source_framework() {
   NIUBASH="$ROOT"
   NIU_CUSTOM="$ROOT/.smoke-custom"
   export NIUBASH NIU_CUSTOM
-  . "$NIUBASH/oh-my-niu.niu"
+  . "$NIUBASH/oh-my-niu.niu" --reload
 }
 
 cd $ROOT || {
