@@ -25,13 +25,21 @@ Old model:
 
 New model:
 
-- ship the bundle with Niubash releases;
-- describe packs with `bundle.toml` and `packs/*/plugin.toml`;
-- let users enable packs and themes from `~/.niubashrc`;
-- keep `~/.winshrc.toml` for legacy/managed plugin CLI state, permissions,
-  bundle versions, migration blocks, and tests;
-- keep `~/.winshrc` only as a compatibility fallback;
-- support bundle update and rollback through Niubash plugin commands.
+- clone this repository (or unpack its release zip) anywhere and source
+  `oh-my-niu.niu` from `~/.niubashrc`; the bundle is not shipped with
+  Niubash releases (the built-in plugin stack was retired, niubash#145);
+- describe packs with `bundle.toml` and `packs/*/plugin.toml` as
+  bundle-side packaging/review metadata;
+- let users enable plugins and themes from `~/.niubashrc` through the
+  framework's `NIU_PLUGINS` / `NIU_THEME` variables;
+- keep Niubash's own plugin CLI state in `~/.niubash/plugins.toml`
+  (ecosystem sources) — `~/.winshrc.toml` is never read by current
+  Niubash and holds no state for either system;
+- `~/.winshrc` is not a compatibility fallback: current Niubash never
+  reads it (the only rc fallback is an opted-in `~/.bashrc`);
+- update the bundle manually (`git pull` or a newer release zip);
+  `niu plugin update` / `rollback` apply to ecosystem sources, not to
+  this bundle.
 
 ## Zsh and Oh My Zsh
 

@@ -42,7 +42,7 @@ source_framework() {
   NIUBASH="$ROOT"
   NIU_CUSTOM="$ROOT/.smoke-custom"
   export NIUBASH NIU_CUSTOM
-  . "$NIUBASH/oh-my-niu.niu"
+  . "$NIUBASH/oh-my-niu.niu" --reload
 }
 
 cd $ROOT || {
@@ -108,6 +108,24 @@ expect_eq "dotenv hook" "$OMW_FRAMEWORK_SMOKE" "ok"
 
 cd $ROOT || exit 2
 rm -rf "$smoke_dir"
+
+# Hook wiring: sourcing the entry must install the precmd dispatcher on
+# PROMPT_COMMAND, the dispatcher must run registered precmd hooks and
+# record NIU_LAST_STATUS, and prompt-core must publish the rendered
+# prompt to PS1 (current Niubash never consumes NIU_PROMPT_LEFT itself).
+case ";${PROMPT_COMMAND:-};" in
+  *";niubash_hook_dispatch_precmd;"*) ;;
+  *) fail "hook wiring: PROMPT_COMMAND missing niubash_hook_dispatch_precmd" ;;
+esac
+
+__smoke_precmd_marker() { SMOKE_PRECMD_RAN=1; }
+niubash_add_precmd_hook __smoke_precmd_marker
+SMOKE_PRECMD_RAN=
+( exit 7 )
+niubash_hook_dispatch_precmd
+expect_eq "precmd dispatch runs registered hooks" "${SMOKE_PRECMD_RAN:-}" "1"
+expect_eq "precmd dispatch records NIU_LAST_STATUS" "${NIU_LAST_STATUS:-}" "7"
+expect_nonempty "prompt-core publishes PS1" "${PS1:-}"
 
 if [ "$failures" -ne 0 ]; then
   echo "framework smoke failed: $failures failure(s)" >&2

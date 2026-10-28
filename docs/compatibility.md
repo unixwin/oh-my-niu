@@ -15,31 +15,59 @@ oh-my-niu bundle.
 - Process plugin protocol: `niubash:process-plugin@0.1.0`
 - WASM plugin protocol: `niubash:wasm-plugin@0.1.0`
 
-Niubash refuses bundle updates whose `min_niubash` is newer than the running
-host. Keep this field at the oldest host version that can validate and run the
-bundle safely.
+`min_niubash` is bundle-internal metadata today: current Niubash does
+not install or update this bundle (the host-side bundle updater was
+retired with the built-in plugin stack, niubash#145), so nothing on
+the host compares it against the running version. Keep this field at
+the oldest host version that can run the framework scripts safely;
+the bundle validator keeps it consistent across `bundle.toml`,
+`index.toml`, and the pack manifests.
+
+## Host Baseline
+
+This contract was last audited on 2026-10-25 against Niubash master
+`b53e6bff` (after the 1.4.4 release of 2026-10-22). Salient host facts
+the bundle relies on:
+
+- The host fires the bash prompt surface: `PROMPT_COMMAND` (after
+  setting `NIU_LAST_EXIT_CODE`), `PS1`/`PS2`/`PS0` assignments, and
+  traps. It does not call plugin lifecycle hooks, consume
+  `NIU_PROMPT_LEFT`/`NIU_THEME`, or load bundle inventories.
+- The prompt segment contract in `prompts/segments.toml` is still
+  mirrored by the host (`prompt_segments.rs` pins the same segment ids
+  and presets, with a test resolving this repository's file).
+- `$HOME` deliberately stays in Windows form (`C:/Users/you`) while
+  `$PWD` is POSIX form (niubash#522); framework code must not assume
+  the two share a form. On POSIX hosts, `HOME` may be entirely unset
+  (niubash#546).
 
 ## Runtime Surface
 
 - `source` packs load bundle-local `.niu` scripts into the current
-  interactive Niubash session during the `startup`, `precmd`, `preexec`,
-  `postcmd`, `chpwd`, `period`, `zshaddhistory`, `zshexit`, `greeting`, and
-  `title` lifecycle hooks. They are active for the interactive REPL and `-C`;
-  ordinary `-c`, script-file, and stdin execution stay clean by default.
-- `builtin` packs load first-party native behavior that still lives in Niubash
-  core. Official prompt and theme behavior belongs to source plugins.
+  interactive Niubash session. Their lifecycle is the framework's own
+  hook registry (see `lib/hooks.niu`): `startup` runs synchronously
+  from the entry point, `precmd`/`chpwd` are dispatched from
+  `PROMPT_COMMAND`, and `preexec` from the DEBUG trap. They are active
+  for the interactive REPL and `-C`; ordinary `-c`, script-file, and
+  stdin execution stay clean by default.
+- `builtin` packs are metadata-only on current hosts: the first-party
+  behaviors they named (keybindings, prompt presets, themes,
+  command-not-found hints) are host features configured through host
+  configuration, not behavior loaded from this bundle. Official
+  prompt and theme behavior belongs to source plugins.
 - `process` packs are explicit opt-in adapters for native commands. They must
   declare `required_binaries`, `process:run:<command>` permission, protocol,
-  command, arguments, and timeout.
-- `wasm` packs are explicit opt-in command modules. Current modules export
-  `niubash_plugin_main() -> i32`; Phase 14-17 add constrained
-  `niubash:plugin/host.stdout_write`, `stderr_write`, and `arg_*` imports
-  for deterministic stdout/stderr bytes, simple command arguments, and
-  permission-gated cwd/env reads through exported module memory.
+  command, arguments, and timeout. Current Niubash does not execute
+  them; the manifests are packaging/review metadata.
+- `wasm` packs are explicit opt-in command modules by manifest shape.
+  Current Niubash does not execute them either (no host loader for
+  `niubash_plugin_main` or the `niubash:plugin/host` imports remains);
+  the validator's artifact/digest checks are bundle-side only.
 - `exports.providers` is an optional compatibility marker, not a runtime. The
   current bundle may mark `command-not-found` as the first provider ABI
-  candidate, and process packs may use the implemented command-not-found
-  provider binding when `command:diagnose` is declared. WASM packs cannot
+  candidate, but no provider binding is implemented in current
+  Niubash — the host's missing-command surface is its own
+  `command-not-found-hint` policy. WASM packs cannot
   export providers until Niubash defines a separate WASM provider contract.
 - Shell-mutating WASM host APIs, arbitrary zsh source, WASI, unrestricted files,
   unrestricted processes, ZLE widgets, DLL plugins, and unbounded native process bridges
@@ -66,7 +94,8 @@ Every published release must include:
 - `docs/compatibility.md`
 
 The zip must be produced by `tools/package_bundle.py` so file ordering,
-timestamps, and permissions stay deterministic. Niubash host update policy
-validates `index.toml` against the bundle and pack manifests before install;
-checksum-required zip updates must pass SHA-256 verification before the active
-bundle lock is switched.
+timestamps, and permissions stay deterministic. Consistency of
+`index.toml` with the bundle and pack manifests is enforced by this
+repository's own validator (`tools/validate_bundle.py`); the SHA-256
+checksum is for manual verification of downloaded release zips, since
+current Niubash performs no host-side bundle install or lock switch.

@@ -8,6 +8,8 @@
 Official Oh My-style plugin framework and bundled plugin distribution for
 Niubash.
 
+Product page: [unixwin.dev/products/oh-my-niu](https://unixwin.dev/products/oh-my-niu/)
+
 This repository is not a zsh runtime and does not provide zsh plugin
 compatibility. It should, however, follow the useful shape of Oh My Zsh, fish
 plugin managers, and PowerShell prompt frameworks: plugins are directories,
@@ -35,11 +37,16 @@ The active direction is framework-first. See [docs/design.md](docs/design.md).
 The earlier manifest-first bundle design is retired in
 [docs/design-manifest-first-retired.md](docs/design-manifest-first-retired.md).
 
-- Niubash owns shell primitives, plugin loading, lifecycle dispatch, permission
-  review, update/rollback, and fast native helpers.
-- `oh-my-niu` owns framework libraries, plugin directories, themes, default
-  composition, and the official bundled distribution.
-- Bundled plugins may ship with Niubash, but bundled does not mean built in.
+- Niubash owns shell primitives, the plugin spec and generated loader
+  for external ecosystem sources (`~/.niubash/plugins.toml`), and fast
+  native helpers.
+- `oh-my-niu` owns framework libraries, plugin directories, themes,
+  default composition, the lifecycle wiring onto the bash prompt
+  surface (PROMPT_COMMAND / DEBUG trap), and the official bundled
+  distribution.
+- The bundle does not ship inside Niubash releases: Niubash retired
+  its built-in plugin/theme stack (niubash#145), and this repository
+  is installed and updated on its own.
 - `plugin.toml` is metadata for packaging, review, and updates. It should not be
   the only way to express local trusted shell behavior.
 
@@ -63,32 +70,37 @@ NIU_THEME=
 source "$NIUBASH/oh-my-niu.niu"
 ```
 
-Managed TOML should map onto the same plugin system:
+Niubash's own plugin system does not manage this bundle. Current
+Niubash installs external ecosystem sources (oh-my-bash, bash-it,
+bash-completion, wild file sources) declared in
+`~/.niubash/plugins.toml`:
 
 ```toml
-[plugins]
-enabled = true
-bundles = ["oh-my-niu"]
-load = ["prompt-core", "git", "docker", "zoxide"]
+schema = "niubash:plugin-spec@0.1.0"
 
-[theme]
-current_theme = "minimal"
-
-[plugins.git]
-enabled = true
-permissions = ["shell:source", "cwd:read", "process:run:git"]
+[[sources]]
+target = "oh-my-bash"        # catalog id | owner/repo | git url | local path
+enable = ["git", "npm"]      # manager-native selection
+theme  = "agnoster"          # optional; absent = unmanaged
 ```
 
-The bundle is still expected to ship with Niubash releases so users have an
-offline baseline, then update independently:
+oh-my-niu is not one of those sources. It is a framework you clone and
+source from `~/.niubashrc`, and its plugin/theme selection stays in
+the rc variables above; the `[plugins]`/`[theme]` TOML shape older
+versions of this README showed was never a format Niubash reads.
+Bundle updates are manual: `git pull` in the clone, or download the
+newer release zip from this repository's GitHub releases and unpack
+it over the old tree. The `niu plugin update oh-my-niu --from <zip>`
+and `niu plugin rollback oh-my-niu` flow belonged to the retired
+built-in stack; current `niu plugin update` / `niu plugin rollback`
+operate on ecosystem sources in `~/.niubash/plugins.toml`, not on
+this bundle.
 
-```sh
-niu plugin update oh-my-niu --from dist\oh-my-niu-1.0.1.zip --checksum-file dist\oh-my-niu-1.0.1.zip.sha256
-niu plugin rollback oh-my-niu
-```
-
-User shell code and normal plugin/theme selection belong in `~/.niubashrc`.
-`~/.winshrc` is only a legacy fallback when `~/.niubashrc` is absent:
+User shell code and normal plugin/theme selection belong in
+`~/.niubashrc`. Current Niubash never reads `~/.winshrc` or
+`~/.winuxshrc` — they are not fallbacks for a missing `~/.niubashrc`;
+the only rc fallback is an explicitly opted-in `~/.bashrc`
+(see `niu setup --rc-policy`):
 
 ```sh
 alias ll='ls -la'
@@ -102,10 +114,13 @@ is a small TOML file (not a plugin kind) that declares which WPM packages to
 install, which shell plugins to enable, and which environment variables to
 export. wpm owns package installation; `lib/env.niu` only orchestrates.
 
+`niu_env` is a shell function defined by `lib/env.niu` once the
+framework is sourced — there is no `niu env` host subcommand:
+
 ```sh
-niu env list          # list built-in and custom envs
-niu env show git      # inspect without changing anything
-niu env use git       # install packages, enable plugins, export variables
+niu_env list          # list built-in and custom envs
+niu_env show git      # inspect without changing anything
+niu_env use git       # install packages, enable plugins, export variables
 ```
 
 An env file looks like this:
@@ -311,10 +326,12 @@ plugins, and `prompt-core` owns the common prompt API.
 ## Transitional Packs
 
 `packs/`, `aliases/`, `completions/`, `prompts/`, `keybindings/`, and
-`themes/` remain in the repository because current Niubash releases and release
-tools still understand the manifest-first bundle layout. New behavior should
-land in `plugins/<name>/` first, then expose metadata through TOML for review,
-managed install, update, and rollback.
+`themes/` remain in the repository as packaging and review metadata
+for this bundle's own validator. Current Niubash does not load them —
+the manifest-first bundle layout was a contract with the retired
+built-in plugin stack (niubash#145). New behavior should land in
+`plugins/<name>/` first, then expose metadata through TOML for
+review.
 
 The old `prompts` and `themes` packs are compatibility assets. They are no
 longer the product model for prompt and theme behavior; `prompt-core` and
@@ -330,10 +347,6 @@ plugin-owned code/assets rather than Niubash `builtin` packs.
 ```sh
 python tools/validate_bundle.py
 python tools/package_bundle.py --check
-niu plugin review <pack>
-niu plugin search devtools
-niu plugin themes
-niu plugin doctor
 ```
 
 `plugin.toml` remains useful for package metadata, permissions, exports, and
@@ -365,7 +378,7 @@ python tools/package_bundle.py --check
 py tools\validate_bundle.py
 py tools\package_bundle.py --check
 # Runtime smoke with the selected Niubash binary:
-niu tools/smoke_framework.niu .
+niubash tools/smoke_framework.niu .
 ```
 
 The validator checks release documents, package index drift, release checksum
@@ -381,21 +394,21 @@ required binaries. The package script builds
 `--check`.
 WASM manifests must also declare a bundle-local `.wasm` module path and SHA-256;
 the validator checks that the artifact exists, matches the digest, and has a
-valid WASM binary header. The current Niubash host can execute explicit command
-modules that export `niubash_plugin_main() -> i32`, may write stdout/stderr,
-may read simple command arguments, read cwd when `cwd:read` is declared, and
-read explicitly permitted env values through `env:read:<NAME>` using the Phase
-14-17 `niubash:plugin/host` imports; broader WASI and
-shell-mutating host APIs remain future work.
+valid WASM binary header. That validation is bundle-side only: current
+Niubash does not execute plugin WASM or process modules — the
+process/WASM plugin execution model was part of the retired built-in
+stack (niubash#145), and no host code loads `niubash_plugin_main` or
+the `niubash:plugin/host` imports anymore. Treat process/WASM pack
+metadata as archival until a host grows a new provider API.
 
-Local release smoke test:
+Local release smoke test (manual — there is no host-side bundle
+installer anymore):
 
 ```sh
 py tools\package_bundle.py
-niu plugin update oh-my-niu --from dist\oh-my-niu-1.0.1.zip --checksum-file dist\oh-my-niu-1.0.1.zip.sha256
-niu plugin bundle status
-niu plugin search workflow
-niu plugin doctor
+:: unpack dist\oh-my-niu-<version>.zip into a scratch directory, then
+:: in Niubash, with NIUBASH pointing at the unpacked tree:
+niubash tools\smoke_framework.niu C:\path\to\unpacked\oh-my-niu
 ```
 
 ## License

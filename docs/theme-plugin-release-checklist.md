@@ -38,7 +38,7 @@ bundled source plugins.
 ## Core Tasks
 
 - [x] Keep `~/.niubashrc` as the primary interactive entry.
-- [x] Keep `~/.winshrc.toml` managed/legacy, not the normal user-authored path.
+- [x] Keep `~/.winshrc.toml` out of the picture entirely: current Niubash never reads it (plugin CLI state lives in `~/.niubash/plugins.toml`).
 - [x] Move official prompt/theme behavior into `oh-my-niu/plugins/*`.
 - [x] Keep Niubash core limited to prompt/theme/plugin APIs and native services.
 - [x] Add `niubash setup` as a repeatable theme/plugin wizard.
@@ -46,7 +46,7 @@ bundled source plugins.
 - [x] Preview each theme choice during setup with an actual sample prompt line.
 - [x] Render prompt cwd as `~` / `~/path` by default, with configurable full path.
 - [x] Keep Git prompt refresh from repainting the input line with unthemed text.
-- [x] Preserve Git status daemon flow: prompt render uses cached daemon state only.
+- [x] Preserve Git snapshot flow: prompt render uses the framework-maintained `NIU_PROMPT_GIT` snapshot only (no host daemon exists).
 - [x] Keep dirty Git compact markers on the dirty theme style instead of falling
   back to white/gray detail text.
 - [x] Resolve setup/prompt/config HOME through env-aware Windows path handling

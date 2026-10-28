@@ -153,10 +153,12 @@ Rules:
 - `exports.hooks` may contain `startup`, `precmd`, `preexec`, and `chpwd`.
 - Source plugins may define aliases, functions, exports, cwd-changing helpers,
   and shell lifecycle glue. Normal user-authored plugin lists and shell code
-  belong in `~/.niubashrc`; plugin CLI state and permissions remain in
-  legacy/managed `~/.winshrc.toml`.
-- User `~/.niubashrc` is the primary framework entry point. `~/.winshrc`
-  remains a fallback for older setups.
+  belong in `~/.niubashrc`; permissions in `plugin.toml` are bundle-side
+  review metadata (current Niubash does not read them), and Niubash's
+  own plugin CLI state lives in `~/.niubash/plugins.toml`.
+- User `~/.niubashrc` is the only framework entry point. Current
+  Niubash never reads `~/.winshrc`, so it cannot act as a fallback
+  for older setups.
 
 ### Builtin
 
