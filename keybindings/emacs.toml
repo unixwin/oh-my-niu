@@ -1,5 +1,5 @@
 name = "emacs"
-summary = "Native Emacs-style editing defaults inherited from Reedline."
+summary = "Native Emacs-style editing defaults inherited from the ruline (GNU readline-compatible) defaults."
 keymap = "emacs"
 
 [[bindings]]

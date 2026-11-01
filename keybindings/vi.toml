@@ -1,5 +1,5 @@
 name = "vi"
-summary = "Native Vi insert/normal editing presets inherited from Reedline."
+summary = "Native Vi insert/normal editing presets inherited from the ruline (GNU readline-compatible) defaults."
 keymap = "vi"
 
 [[bindings]]
