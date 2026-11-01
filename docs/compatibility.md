@@ -26,7 +26,15 @@ the bundle validator keeps it consistent across `bundle.toml`,
 ## Host Baseline
 
 This contract was last audited on 2026-10-25 against Niubash master
-`b53e6bff` (after the 1.4.4 release of 2026-10-22). Salient host facts
+`b53e6bff` (after the 1.4.4 release of 2026-10-22), and re-audited on
+2026-11-01 against Niubash master `7e13829` (pre-1.5.0). The 1.5.0
+host changes that touch this contract: the plugin spec and source
+registry are JSON (`~/.niubash/plugins.json`,
+`~/.niubash/sources/registry.json`); the pre-1.5.0 TOML files are
+converted exactly once by `niu plugin migrate` and no runtime path
+reads them (`niu plugin list`/`sync` do not convert implicitly).
+None of this affects the framework itself, which is cloned and
+sourced, never installed through the spec. Salient host facts
 the bundle relies on:
 
 - The host fires the bash prompt surface: `PROMPT_COMMAND` (after
