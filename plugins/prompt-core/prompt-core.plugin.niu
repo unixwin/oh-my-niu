@@ -8,8 +8,13 @@
 # stack that consumed these variables was retired, niubash#145): the
 # snapshot is maintained by the framework itself — the legacy/shell
 # backend refreshes it from lib/git.niu, the starship backend from
-# Starship modules, and the native backend renders whatever snapshot
-# the user or another tool last wrote to NIU_PROMPT_GIT.
+# Starship modules, and the native backend (the default) renders the
+# snapshot that this plugin refreshes from lib/git.niu whenever the
+# dirty flag is set (the chpwd hook and git commands set it), so the
+# segment appears without a host renderer ever running. Any other
+# backend value leaves the snapshot entirely to the user or another
+# tool: niubash_prompt_git_info prints it verbatim and refreshes never
+# overwrite it.
 
 [ -f "$NIUBASH/lib/prompt.niu" ] && . "$NIUBASH/lib/prompt.niu"
 
@@ -19,7 +24,7 @@
 : "${NIU_PROMPT_GIT_DIRTY:=0}"
 
 case "${NIU_PROMPT_GIT_BACKEND:-native}" in
-  legacy|shell)
+  legacy|shell|native|snapshot)
     [ -f "$NIUBASH/lib/git.niu" ] && . "$NIUBASH/lib/git.niu"
     ;;
 esac
@@ -95,7 +100,16 @@ niubash_prompt_git_info() {
 
 niubash_prompt_refresh_git_snapshot() {
   case "${NIU_PROMPT_GIT_BACKEND:-native}" in
-    legacy|shell)
+    legacy|shell|native|snapshot)
+      # The native backend has no host renderer behind it in a
+      # framework session (prompt-core owns PS1), so the framework
+      # maintains the snapshot itself. Refresh stays gated on the
+      # dirty flag by the precmd caller, so rendering never runs git;
+      # this function only recomputes after a cwd change, a git
+      # command, or at plugin load.
+      if ! command -v git_prompt_info >/dev/null 2>&1; then
+        [ -f "$NIUBASH/lib/git.niu" ] && . "$NIUBASH/lib/git.niu"
+      fi
       NIU_PROMPT_GIT="$(git_prompt_info)" || NIU_PROMPT_GIT=""
       export NIU_PROMPT_GIT
       ;;
