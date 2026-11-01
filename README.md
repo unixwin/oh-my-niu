@@ -50,6 +50,28 @@ The earlier manifest-first bundle design is retired in
 - `plugin.toml` is metadata for packaging, review, and updates. It should not be
   the only way to express local trusted shell behavior.
 
+## Install
+
+Clone the bundle (any path works; this is the conventional one):
+
+```sh
+git clone https://github.com/unixwin/oh-my-niu.git ~/.niubash/oh-my-niu
+```
+
+Then source the entry point from `~/.niubashrc`:
+
+```sh
+NIUBASH=~/.niubash/oh-my-niu
+NIU_PLUGINS=(prompt-core git)
+NIU_THEME=minimal
+source "$NIUBASH/oh-my-niu.niu"
+```
+
+`NIUBASH` may point at any clone or at an unpacked release zip. With
+`NIU_PLUGINS` unset the entry point loads `prompt-core` and `git`; with
+`NIU_THEME` unset it uses `minimal`. Updates are manual: `git pull` in
+the clone, or unpack a newer release zip over the old tree.
+
 ## Framework Model
 
 The target interactive setup is directory-first and familiar:
@@ -314,7 +336,6 @@ plugins, and `prompt-core` owns the common prompt API.
 | `theme-tokyonight` | Tokyo Night Nerd Font prompt theme plugin inspired by Oh My Posh | Off |
 | `starship` | Full Starship prompt integration through the Bash prompt contract | Off |
 | `git` | Git aliases, completions, and workflow helpers | On |
-| `winuxcmd-core` | Static completions for WinuxCmd core command links | On |
 | `common-aliases` | Small Oh My-style navigation/listing aliases | Off |
 | `docker` | Docker `.niu` helpers, aliases, completion metadata | Off |
 | `kubectl` | Kubernetes `.niu` helpers, aliases, completion metadata | Off |
@@ -327,7 +348,7 @@ plugins, and `prompt-core` owns the common prompt API.
 | `fzf` | `.niu` directory selector command shims | Off |
 | `last-working-dir` | `.niu` last-directory cache and restore hooks | Off |
 | `thefuck` | `.niu` correction shim for the previous command | Off |
-| `keybindings` | Bridge plugin for official Reedline keybinding assets | On |
+| `keybindings` | Installs the all-keymap keybinding preset into `NIU_BINDKEYS`; mode-scoped presets are reference data | Off |
 | `command-not-found` | Bridge plugin for the missing-command provider identity | Off |
 
 ## Transitional Packs
