@@ -155,7 +155,8 @@ Rules:
   and shell lifecycle glue. Normal user-authored plugin lists and shell code
   belong in `~/.niubashrc`; permissions in `plugin.toml` are bundle-side
   review metadata (current Niubash does not read them), and Niubash's
-  own plugin CLI state lives in `~/.niubash/plugins.toml`.
+  own plugin CLI state lives in `~/.niubash/plugins.json` (the
+  pre-1.5.0 `plugins.toml` converts once via `niu plugin migrate`).
 - User `~/.niubashrc` is the only framework entry point. Current
   Niubash never reads `~/.winshrc`, so it cannot act as a fallback
   for older setups.

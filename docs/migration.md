@@ -32,8 +32,9 @@ New model:
   bundle-side packaging/review metadata;
 - let users enable plugins and themes from `~/.niubashrc` through the
   framework's `NIU_PLUGINS` / `NIU_THEME` variables;
-- keep Niubash's own plugin CLI state in `~/.niubash/plugins.toml`
-  (ecosystem sources) — `~/.winshrc.toml` is never read by current
+- keep Niubash's own plugin CLI state in `~/.niubash/plugins.json`
+  (ecosystem sources; the pre-1.5.0 `plugins.toml` converts once via
+  `niu plugin migrate`) — `~/.winshrc.toml` is never read by current
   Niubash and holds no state for either system;
 - `~/.winshrc` is not a compatibility fallback: current Niubash never
   reads it (the only rc fallback is an opted-in `~/.bashrc`);

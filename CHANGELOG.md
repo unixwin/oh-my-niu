@@ -25,7 +25,8 @@ changes, and user-visible asset changes.
   from an unset `HOME` (niubash#546). Documentation (README,
   compatibility, migration, authoring, design notes) was aligned with
   the current host: rc is `~/.niubashrc`-only (legacy winshrc files
-  are never read), plugin CLI state lives in `~/.niubash/plugins.toml`,
+  are never read), plugin CLI state lives in `~/.niubash/plugins.json`
+  (a pre-1.5.0 `plugins.toml` is converted once by `niu plugin migrate`),
   bundle updates are manual, and the retired `niu plugin` bundle verbs
   were removed from the guides. The framework smoke harness now
   reloads the entry point explicitly (`--reload`) and asserts the

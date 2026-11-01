@@ -38,7 +38,7 @@ The earlier manifest-first bundle design is retired in
 [docs/design-manifest-first-retired.md](docs/design-manifest-first-retired.md).
 
 - Niubash owns shell primitives, the plugin spec and generated loader
-  for external ecosystem sources (`~/.niubash/plugins.toml`), and fast
+  for external ecosystem sources (`~/.niubash/plugins.json`), and fast
   native helpers.
 - `oh-my-niu` owns framework libraries, plugin directories, themes,
   default composition, the lifecycle wiring onto the bash prompt
@@ -73,16 +73,23 @@ source "$NIUBASH/oh-my-niu.niu"
 Niubash's own plugin system does not manage this bundle. Current
 Niubash installs external ecosystem sources (oh-my-bash, bash-it,
 bash-completion, wild file sources) declared in
-`~/.niubash/plugins.toml`:
+`~/.niubash/plugins.json`:
 
-```toml
-schema = "niubash:plugin-spec@0.1.0"
-
-[[sources]]
-target = "oh-my-bash"        # catalog id | owner/repo | git url | local path
-enable = ["git", "npm"]      # manager-native selection
-theme  = "agnoster"          # optional; absent = unmanaged
+```json
+{
+  "schema": "niubash:plugin-spec@0.1.0",
+  "sources": [
+    { "target": "oh-my-bash", "enable": ["git", "npm"], "theme": "agnoster" }
+  ]
+}
 ```
+
+(target: catalog id | owner/repo | git url | local path; `theme` is
+optional — absent means unmanaged.) Since the 1.5.0 product-TOML
+deletion the spec is JSON; a pre-1.5.0 `plugins.toml` in the same
+directory is converted exactly once by `niu plugin migrate` — no
+runtime path reads it, and `niu plugin list`/`sync` do not convert
+it implicitly.
 
 oh-my-niu is not one of those sources. It is a framework you clone and
 source from `~/.niubashrc`, and its plugin/theme selection stays in
@@ -93,7 +100,7 @@ newer release zip from this repository's GitHub releases and unpack
 it over the old tree. The `niu plugin update oh-my-niu --from <zip>`
 and `niu plugin rollback oh-my-niu` flow belonged to the retired
 built-in stack; current `niu plugin update` / `niu plugin rollback`
-operate on ecosystem sources in `~/.niubash/plugins.toml`, not on
+operate on ecosystem sources in `~/.niubash/plugins.json`, not on
 this bundle.
 
 User shell code and normal plugin/theme selection belong in
