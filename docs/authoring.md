@@ -1,19 +1,29 @@
 # Plugin Authoring
 
 This guide is the public authoring contract for the current Niubash-native
-plugin model. It is intentionally manifest-first: plugin trust, permissions,
-runtime kind, and exported surfaces are declared in TOML before Niubash runs
-anything.
+plugin model. The runtime model is directory-first: a plugin is shell code
+in a directory that the framework sources into the user's session because
+the user selected it in `~/.niubashrc`. The TOML manifests are bundle-side
+packaging and review metadata — they document permissions, runtime kind,
+and exported surfaces so reviewers can audit a pack before it ships, but
+Niubash has no plugin trust system: it does not read, score, or enforce
+them, and enabling a plugin is the user's own decision. The only
+host-side verification anywhere in the plugin story is one-shot and
+user-driven: a checksum the user supplies themselves (`--checksum` /
+`--checksum-file`) when installing an external ecosystem source through
+the host plugin CLI, verified once at install time.
 
 ## Current Scope
 
 - `oh-my-niu` is the official first-party bundle and reference layout. It
   is not the whole future plugin universe; third-party registries should use
-  the same manifest/index contract and be validated by Niubash host policy.
-- The current local update command accepts only the `oh-my-niu` bundle name.
+  the same manifest/index contract and are validated by this repository's
+  bundle validator, not by Niubash host policy.
+- Bundle updates are manual — `git pull` in the clone, or unpack a newer
+  release zip over the old tree. No host command updates this bundle.
 - `source` packs are the Oh My-style shell plugin path. They ship bundle-local
-  `.niu` code that Niubash sources into the current interactive session after
-  plugin review and enablement.
+  `.niu` code that the framework sources into the current interactive session
+  once the user enables the pack.
 - `builtin` packs are first-party fallback/native adapters because the Rust
   implementation lives in Niubash core.
 - `process` packs are explicit opt-in adapters for existing native tools.
@@ -38,23 +48,20 @@ python tools/validate_bundle.py
 python tools/package_bundle.py --check
 ```
 
-6. Smoke the host-side review surface:
+6. Smoke the result with the framework harness (see Validation in the
+   README): `niubash tools/smoke_framework.niu .` against the target
+   Niubash build.
 
-```sh
-niubash plugin update oh-my-niu --from dist\oh-my-niu-1.0.1.zip --checksum-file dist\oh-my-niu-1.0.1.zip.sha256
-niubash plugin doctor
-niubash plugin search <pack>
-niubash plugin review <pack>
-niubash plugin install <pack>
-```
-
-Use `--json` on `doctor`, `list`, `search`, `info`, `review`, and `themes` when
-wiring CI or release automation. Discovery, diagnostic, review, and theme JSON include
-`trust_source`, so automation can distinguish the official bundled registry
-surface, local override bundles, and future external bundle sources without
-executing plugin code.
-External bundle sources are review-only in the current host; managed
-`plugin install` support waits for the third-party registry trust policy.
+There is no host-side review or install step for this bundle. The host
+plugin CLI (`niu plugin ...`) manages only the external ecosystem
+sources declared in `~/.niubash/plugins.json` (oh-my-bash, bash-it,
+bash-completion, wild file sources) — a separate distribution channel
+this bundle deliberately does not use; oh-my-niu cannot be installed,
+reviewed, or updated through it. When a user installs one of those
+ecosystem sources (or any zip) through the host CLI, they may pass
+`--checksum` / `--checksum-file` with an expected value they obtained
+themselves; the host verifies that one download at install time and
+keeps no trust state afterwards.
 
 ## Scaffolding a New Pack
 
@@ -74,15 +81,19 @@ wiring mistakes this tool now prevents.
 ## Bundle Metadata
 
 `bundle.toml` must declare `api = "niubash:plugin-bundle@0.1.0"` and
-`min_niubash` as a semantic version. Niubash refuses bundle updates whose
-minimum host version is newer than the running shell.
+`min_niubash` as a semantic version. `min_niubash` is advisory packaging
+metadata for reviewers: the host does not gate this bundle against it,
+because the bundle is cloned and sourced manually.
 
 `index.toml` is the registry-facing release index. It must match `bundle.toml`
 and every pack manifest, set `release.checksum_required = true`, use
 `release.checksum_algorithm = "sha256"`, and set `release.signature =
-"unsupported"` until signing support exists. Zip updates must be installed
-with `--checksum` or `--checksum-file`; the host rejects checksum-required zip
-updates that skip verification.
+"unsupported"` until signing support exists. Those fields state the
+bundle's own release policy, enforced by the bundle validator: a release
+zip is always published with its `.sha256`, and a user installing any zip
+through a host CLI supplies the expected value with `--checksum` or
+`--checksum-file` and has it verified once, at install time. No signature
+or trust mechanism stands behind it.
 
 ## Manifest Schema
 
@@ -131,6 +142,16 @@ Field rules:
   providers until a separate WASM provider ABI exists.
 
 ## Runtime Contracts
+
+The contracts in this section govern the transitional `packs/` manifests
+and are enforced by this repository's bundle validator, not by the host.
+Two of the runtime kinds describe the retired built-in stack
+(niubash#145): current Niubash does not execute `process` or `wasm`
+plugin modules, so those manifests are archival packaging metadata. The
+live runtime surface is the directory plugin model —
+`plugins/<name>/<name>.plugin.niu` files the framework sources for the
+plugins selected in `NIU_PLUGINS` — with `source` packs as their
+transitional equivalent.
 
 ### Source
 
@@ -230,6 +251,12 @@ Rules:
 
 ## Permission Tokens
 
+Permissions are bundle-side review metadata: they document what a pack
+does so a reviewer can audit it before it ships. Current Niubash does
+not read or enforce them, and plugin code runs with the user's full
+shell privileges once the user enables it — the risk column is a
+review aid, not a host guarantee.
+
 | Token | Risk | Meaning |
 | --- | --- | --- |
 | `cwd:read` | low | Reads the current working directory or path context. |
@@ -242,7 +269,8 @@ Rules:
 | `fs:write:<path>` | high | Writes files below a declared path. |
 | `command:diagnose` | low | Reads command metadata for diagnostics. |
 
-Unknown tokens are treated as manual-review permissions by Niubash.
+Unknown tokens are treated as manual-review permissions by bundle
+reviewers.
 
 ## Asset Rules
 
@@ -263,8 +291,7 @@ Unknown tokens are treated as manual-review permissions by Niubash.
 
 - `python tools/validate_bundle.py`
 - `python tools/package_bundle.py --check`
-- `niubash plugin doctor --json`
-- `niubash plugin review <pack> --json`
+- `niubash tools/smoke_framework.niu .` against the target Niubash build
 - Changelog entry for any permission, default, runtime, or exported asset
   change.
 - Compatibility note when a pack requires a newer Niubash host API.
