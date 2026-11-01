@@ -61,7 +61,7 @@ Posh where that helps users:
 | Powerlevel rainbow theme | `plugins/theme-p10-rainbow` | Started | Official p10-style theme plugin using true-colour TOML. |
 | Powerlevel pure theme | `plugins/theme-p10-pure` | Started | Official p10-style theme plugin using true-colour TOML. |
 | Robby Russell theme | `plugins/theme-robbyrussell` | Started | Oh My-style default-theme analogue as an official plugin. |
-| Keybindings | `plugins/keybindings` | Bridge | Reedline application still host-bound; plugin owns asset identity. |
+| Keybindings | `plugins/keybindings` | Source | Installs the all-keymap preset into the `NIU_BINDKEYS` rc variable at load; the emacs/vi presets are reference data because `NIU_BINDKEYS` has no per-keymap scoping. |
 | command-not-found | `plugins/command-not-found` | Bridge | Provider still host-bound; plugin owns feature identity. |
 | Completion frontend | none | Host-bound | Keep in Niubash/Reedline until a stable completion-provider plugin API exists. |
 | Syntax highlighting | none | Host-bound | Keep in Niubash/Reedline until a stable highlighter plugin API exists. |
@@ -78,9 +78,11 @@ Posh where that helps users:
   additional style flags so theme plugins can be tuned at finer granularity.
 - `plugins/git` is workflow-only; prompt Git status belongs to
   `plugins/prompt-core`.
-- `plugins/keybindings` and `plugins/command-not-found` are bridge plugins so
-  users and docs see plugin-owned identity while Niubash still owns the
-  Reedline/provider call sites.
+- `plugins/command-not-found` is a bridge plugin so users and docs see
+  plugin-owned identity while Niubash still owns the provider call site.
+  `plugins/keybindings` stopped being one: no host keybinding bridge
+  exists, so the plugin now installs its all-keymap preset through the
+  `NIU_BINDKEYS` rc variable instead (see `keybindings/README.md`).
 - Directory plugins replaced same-named legacy packs inside this
   bundle: `prompt-core` replaces the old `prompts` pack surface, and
   `theme-*` replaces the old `themes` pack surface in the bundle
