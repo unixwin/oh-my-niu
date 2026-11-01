@@ -6,6 +6,13 @@ changes, and user-visible asset changes.
 
 ## 2.0.0 (unreleased)
 
+> Release state: a `v2.0.0` GitHub release dated 2026-09-12 already
+> exists, but it predates the framework-first code in this tree and
+> does not contain it. The 2.0.0 recorded here is cut fresh from
+> current master (in the Niubash 1.5.0 release sequence) and
+> supersedes that tag's contents; do not treat the 2026-09-12
+> artifact as this changelog's 2.0.0.
+
 - Release artifact: `oh-my-niu-2.0.0.zip` (`api = "niubash:plugin-bundle@0.1.0"`,
   `min_niubash = "1.0.0"`).
 - Host compatibility: the `git` prompt segment (`[segments.git] id = "vcs"`
@@ -50,6 +57,15 @@ changes, and user-visible asset changes.
   package manifest through any rclone remote).
 - All first-party pack manifests move to version 2.0.0 to match the
   bundle release.
+- Framework fixes from the 2026-11-01 viability audit against Niubash
+  master: `prompt-core` now maintains the `NIU_PROMPT_GIT` snapshot
+  itself under the default `native` backend (the `{git}` segment was
+  silently empty in framework sessions, where no host renderer runs),
+  and the `keybindings` plugin installs its all-keymap preset through
+  the `NIU_BINDKEYS` rc variable instead of claiming a
+  `reedline-keybindings` host bridge that does not exist — the
+  mode-scoped emacs/vi presets are reference data, because
+  `NIU_BINDKEYS` has no per-keymap scoping.
 
 ## 1.0.1 - 2026-08-02
 
