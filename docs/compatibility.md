@@ -6,7 +6,7 @@ oh-my-niu bundle.
 ## Current Release
 
 - Bundle name: `oh-my-niu`
-- Bundle version: `2.0.0`
+- Bundle version: `2.1.0`
 - Release channel: `stable`
 - Minimum host: `min_niubash = "1.0.0"`
 - Bundle API: `niubash:plugin-bundle@0.1.0`

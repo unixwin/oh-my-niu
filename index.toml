@@ -1,12 +1,12 @@
 schema = "niubash:plugin-index@0.1.0"
 bundle = "oh-my-niu"
-version = "2.0.0"
+version = "2.1.0"
 bundle_api = "niubash:plugin-bundle@0.1.0"
 min_niubash = "1.0.0"
 
 [release]
-artifact = "oh-my-niu-2.0.0.zip"
-checksum = "oh-my-niu-2.0.0.zip.sha256"
+artifact = "oh-my-niu-2.1.0.zip"
+checksum = "oh-my-niu-2.1.0.zip.sha256"
 checksum_algorithm = "sha256"
 checksum_required = true
 signature = "unsupported"

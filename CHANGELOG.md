@@ -4,16 +4,15 @@ All notable changes to the official oh-my-niu bundle are recorded here.
 Release entries describe bundle artifacts, host compatibility, permission
 changes, and user-visible asset changes.
 
-## 2.0.0 (unreleased)
+## 2.1.0 - 2026-11-02
 
 > Release state: a `v2.0.0` GitHub release dated 2026-09-12 already
 > exists, but it predates the framework-first code in this tree and
-> does not contain it. The 2.0.0 recorded here is cut fresh from
-> current master (in the Niubash 1.5.0 release sequence) and
-> supersedes that tag's contents; do not treat the 2026-09-12
-> artifact as this changelog's 2.0.0.
+> does not contain it. This section ships as v2.1.0, cut from
+> current master (in the Niubash 1.5.0 release sequence); do not
+> treat the 2026-09-12 artifact as this changelog's release.
 
-- Release artifact: `oh-my-niu-2.0.0.zip` (`api = "niubash:plugin-bundle@0.1.0"`,
+- Release artifact: `oh-my-niu-2.1.0.zip` (`api = "niubash:plugin-bundle@0.1.0"`,
   `min_niubash = "1.0.0"`).
 - Host compatibility: the `git` prompt segment (`[segments.git] id = "vcs"`
   in `prompts/segments.toml`) now resolves to niubash's native
