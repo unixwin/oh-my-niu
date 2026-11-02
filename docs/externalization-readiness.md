@@ -63,7 +63,7 @@ host work" unless a row says otherwise.
 
 ## Next Bundle Work
 1. (Done/obsolete) Managed-config parity: Niubash's managed config is
-   the ecosystem-sources spec in `~/.niubash/plugins.toml`, which does
+   the ecosystem-sources spec in `~/.niubash/plugins.json`, which does
    not describe this bundle; the framework loader is driven by the rc
    arrays only.
 2. (Done/obsolete) Host fallback injection: the host no longer injects

@@ -38,7 +38,7 @@ bundled source plugins.
 ## Core Tasks
 
 - [x] Keep `~/.niubashrc` as the primary interactive entry.
-- [x] Keep `~/.winshrc.toml` out of the picture entirely: current Niubash never reads it (plugin CLI state lives in `~/.niubash/plugins.toml`).
+- [x] Keep `~/.winshrc.toml` out of the picture entirely: current Niubash never reads it (plugin CLI state lives in `~/.niubash/plugins.json`).
 - [x] Move official prompt/theme behavior into `oh-my-niu/plugins/*`.
 - [x] Keep Niubash core limited to prompt/theme/plugin APIs and native services.
 - [x] Add `niubash setup` as a repeatable theme/plugin wizard.
